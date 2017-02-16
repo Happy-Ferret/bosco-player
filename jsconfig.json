@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "rootDir": "src",
+        "outFile": "bosco.js"
+    },
+    "files": [
+        "src/shebang.js",
+        "src/amd.js",
+        "src/GResource",
+        "src/Application",
+        "src/bosco.js"
+    ]
+}
