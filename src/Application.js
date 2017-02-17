@@ -13,7 +13,13 @@ Notify = imports.gi.Notify;
 
 import Project from 'Project';
 
-import ProjectViewer from 'ProjectViewer';
+import AvProperties from 'tabs/AvProperties';
+
+import ResProperties from 'tabs/ResProperties';
+
+import PkProperties from 'tabs/PkProperties';
+
+import SrcProperties from 'tabs/SrcProperties';
 
 
 /*
@@ -68,7 +74,7 @@ export default Application = (function() {
     this.headerbar.pack_end(this.buildOptions(config));
     this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
     this.window.add(this.buildNotebook());
-    this.window.set_default_size(1140, 720);
+    this.window.set_default_size(1040, 620);
     this.window.set_titlebar(this.headerbar);
     return this.window.show_all();
   };
@@ -175,7 +181,7 @@ export default Application = (function() {
   };
 
   Application.prototype.displayProject = function(path) {
-    var data, length, ref, ref1, success, ui, view;
+    var data, length, ref, ref1, success;
     this.projectFile = Gio.File.new_for_path(path);
     if (!this.projectFile.query_exists(null)) {
       return;
@@ -190,31 +196,50 @@ export default Application = (function() {
     ref1 = this.entitasFile.load_contents(null), success = ref1[0], data = ref1[1], length = ref1[2];
     this.entitas = JSON.parse(data);
     this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
-    view = new ProjectViewer(this.avprj);
-    ui = view.buildUI();
-    this.background.set_center_widget(ui);
-    this.background.get_style_context().add_provider(this.regularCss, 0);
-    ui.show();
+    this.avContent.set_center_widget(new AvProperties(this.avprj).buildUI());
+    this.avContent.get_style_context().add_provider(this.regularCss, 0);
+    this.resContent.set_center_widget(new ResProperties(this.avprj).buildUI());
+    this.resContent.get_style_context().add_provider(this.regularCss, 0);
+    this.pkContent.set_center_widget(new PkProperties(this.avprj).buildUI());
+    this.pkContent.get_style_context().add_provider(this.regularCss, 0);
+    this.srcContent.set_center_widget(new SrcProperties(this.avprj).buildUI());
+    this.srcContent.get_style_context().add_provider(this.regularCss, 0);
     this.window.show_all();
   };
 
   Application.prototype.buildNotebook = function() {
-    var content, notebook, title;
+    var notebook, title;
     notebook = new Gtk.Notebook();
     title = new Gtk.Label({
-      label: "Title 1"
+      label: "Autovala"
     });
-    content = new Gtk.Label({
-      label: "Content 1"
-    });
-    notebook.append_page(content, title);
+    this.avContent = new Gtk.Box();
+    notebook.append_page(this.avContent, title);
     title = new Gtk.Label({
-      label: "Title 2"
+      label: "Resources"
     });
-    content = new Gtk.Label({
-      label: "Content 2"
+    this.resContent = new Gtk.Box();
+    notebook.append_page(this.resContent, title);
+    title = new Gtk.Label({
+      label: "Packages"
     });
-    notebook.append_page(content, title);
+    this.pkContent = new Gtk.Box();
+    notebook.append_page(this.pkContent, title);
+    title = new Gtk.Label({
+      label: "Source"
+    });
+    this.srcContent = new Gtk.Box();
+    notebook.append_page(this.srcContent, title);
+    title = new Gtk.Label({
+      label: "Entitas"
+    });
+    this.entitasContent = new Gtk.Box();
+    notebook.append_page(this.entitasContent, title);
+    title = new Gtk.Label({
+      label: "Build"
+    });
+    this.buildContent = new Gtk.Box();
+    notebook.append_page(this.buildContent, title);
     return notebook;
   };
 

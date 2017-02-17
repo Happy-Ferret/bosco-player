@@ -5,7 +5,10 @@ Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
 
 import Project from 'Project'
-import ProjectViewer from 'ProjectViewer' 
+import AvProperties from 'tabs/AvProperties' 
+import ResProperties from 'tabs/ResProperties' 
+import PkProperties from 'tabs/PkProperties' 
+import SrcProperties from 'tabs/SrcProperties' 
 ###
  *
  * Main Application class
@@ -50,7 +53,7 @@ export default class Application
         @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
         #@window.add(@buildBackground(config))
         @window.add(@buildNotebook())
-        @window.set_default_size(1140, 720)
+        @window.set_default_size(1040, 620)
         @window.set_titlebar(@headerbar)
         @window.show_all()
 
@@ -143,24 +146,49 @@ export default class Application
 
         @window.set_title("#{@avprj.get('project_name')} - #{@config.app_name}")
 
-        view = new ProjectViewer(@avprj)
-        ui = view.buildUI()
-        @background.set_center_widget(ui)
-        @background.get_style_context().add_provider(@regularCss, 0)
-        ui.show()
+        @avContent.set_center_widget(new AvProperties(@avprj).buildUI())
+        @avContent.get_style_context().add_provider(@regularCss, 0)
+
+        @resContent.set_center_widget(new ResProperties(@avprj).buildUI())
+        @resContent.get_style_context().add_provider(@regularCss, 0)
+
+        @pkContent.set_center_widget(new PkProperties(@avprj).buildUI())
+        @pkContent.get_style_context().add_provider(@regularCss, 0)
+
+        @srcContent.set_center_widget(new SrcProperties(@avprj).buildUI())
+        @srcContent.get_style_context().add_provider(@regularCss, 0)
+
         @window.show_all()
         return
     
 
     buildNotebook: () ->
         notebook = new Gtk.Notebook()
-        title = new Gtk.Label(label: "Title 1")
-        content = new Gtk.Label(label: "Content 1")
-        notebook.append_page(content, title)
 
-        title = new Gtk.Label(label: "Title 2")
-        content = new Gtk.Label(label: "Content 2")
-        notebook.append_page(content, title)
+        title = new Gtk.Label(label: "Autovala")
+        @avContent = new Gtk.Box()
+        notebook.append_page(@avContent, title)
+
+        title = new Gtk.Label(label: "Resources")
+        @resContent = new Gtk.Box()
+        notebook.append_page(@resContent, title)
+
+        title = new Gtk.Label(label: "Packages")
+        @pkContent = new Gtk.Box()
+        notebook.append_page(@pkContent, title)
+
+        title = new Gtk.Label(label: "Source")
+        @srcContent = new Gtk.Box()
+        notebook.append_page(@srcContent, title)
+
+        title = new Gtk.Label(label: "Entitas")
+        @entitasContent = new Gtk.Box()
+        notebook.append_page(@entitasContent, title)
+
+        title = new Gtk.Label(label: "Build")
+        @buildContent = new Gtk.Box()
+        notebook.append_page(@buildContent, title)
+
         notebook
         
 
