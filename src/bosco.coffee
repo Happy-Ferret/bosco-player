@@ -4,6 +4,11 @@ Gdk = imports.gi.Gdk
 Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
 
+# import App from 'App'
+# app = new App()
+# app.run(ARGV)
+
+
 ###
  * Main entry point
  * 
@@ -23,6 +28,6 @@ config.res_name = config.res_name ? res_name_default
 config.res_prefix = config.res_prefix ? res_prefix_default
 config.app_name = "Player"
 Notify.init(config.app_name)
-    
-app = new Application(config)
-app.application.run(ARGV)
+
+new Application(config).application.run(ARGV)
+

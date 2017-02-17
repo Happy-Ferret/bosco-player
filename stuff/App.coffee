@@ -9,7 +9,7 @@ readFile = (filename) ->
   data
 
 
-s
+
 App = Lang.Class
   Name: 'App'
   Extends: Gtk.Application
@@ -23,6 +23,7 @@ App = Lang.Class
     @window.present()
     return
 
+export default App
 
 AppWindow = Lang.Class
   Name: 'AppWindow'
