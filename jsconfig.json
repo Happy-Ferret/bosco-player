@@ -8,8 +8,6 @@
     "files": [
         "src/shebang.js",
         "src/amd.js",
-        "src/Application.js",
-        "src/TreeViewer.js",
         "src/bosco.js"
     ]
 }

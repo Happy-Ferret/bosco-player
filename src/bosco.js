@@ -20,8 +20,6 @@ Notify = imports.gi.Notify;
 
 import Application from 'Application';
 
-import TreeViewer from 'TreeViewer';
-
 res_name_default = "custom.gresource";
 
 res_prefix_default = "/com/darkoverlordofdata/custom";

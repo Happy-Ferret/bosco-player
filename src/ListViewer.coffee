@@ -1,10 +1,15 @@
-#!/usr/bin/gjs
-
 GObject = imports.gi.GObject
 Gtk = imports.gi.Gtk
 Pango = imports.gi.Pango
 
-export default class TreeViewer 
+###
+ *
+ * ListViewer class - 
+ *
+ * parses autovala data
+ *
+###
+export default class ListViewer 
     # Create the application itself
     constructor:() ->
     

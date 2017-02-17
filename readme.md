@@ -3,13 +3,19 @@
 Bosco Player should provide a gui to 
 * manage component definitions (entitas.json)
 * organize assets and update the resource xml - look at grrr.js
-* manage autovala options
+* edit .desktop file
+* select icon
+* start in debugger
+* rebuild autovala
+* rebuild code
+
 
 Future?
-* display profiling data while running the game
+* profile while running the game (see ts version of entitas)
 * manage entity definitions
 * adjust pool sizes
 * scripting
+
 
 
 ### gjs + coffeescript + tsc

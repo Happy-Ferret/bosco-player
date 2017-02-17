@@ -13,7 +13,7 @@ Notify = imports.gi.Notify;
 
 import Project from 'Project';
 
-import TreeViewer from 'TreeViewer';
+import ProjectViewer from 'ProjectViewer';
 
 
 /*
@@ -67,7 +67,7 @@ export default Application = (function() {
     this.headerbar.pack_start(this.buildOpen(config));
     this.headerbar.pack_end(this.buildOptions(config));
     this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
-    this.window.add(this.buildBackground(config));
+    this.window.add(this.buildNotebook());
     this.window.set_default_size(1140, 720);
     this.window.set_titlebar(this.headerbar);
     return this.window.show_all();
@@ -175,7 +175,7 @@ export default Application = (function() {
   };
 
   Application.prototype.displayProject = function(path) {
-    var data, label, length, ref, ref1, success, treeview;
+    var data, length, ref, ref1, success, ui, view;
     this.projectFile = Gio.File.new_for_path(path);
     if (!this.projectFile.query_exists(null)) {
       return;
@@ -190,12 +190,32 @@ export default Application = (function() {
     ref1 = this.entitasFile.load_contents(null), success = ref1[0], data = ref1[1], length = ref1[2];
     this.entitas = JSON.parse(data);
     this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
-    treeview = new TreeViewer();
-    label = treeview.buildUI();
-    this.background.set_center_widget(label);
+    view = new ProjectViewer(this.avprj);
+    ui = view.buildUI();
+    this.background.set_center_widget(ui);
     this.background.get_style_context().add_provider(this.regularCss, 0);
-    label.show();
+    ui.show();
     this.window.show_all();
+  };
+
+  Application.prototype.buildNotebook = function() {
+    var content, notebook, title;
+    notebook = new Gtk.Notebook();
+    title = new Gtk.Label({
+      label: "Title 1"
+    });
+    content = new Gtk.Label({
+      label: "Content 1"
+    });
+    notebook.append_page(content, title);
+    title = new Gtk.Label({
+      label: "Title 2"
+    });
+    content = new Gtk.Label({
+      label: "Content 2"
+    });
+    notebook.append_page(content, title);
+    return notebook;
   };
 
 

@@ -5,7 +5,7 @@ Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
 
 import Project from 'Project'
-import TreeViewer from 'TreeViewer' 
+import ProjectViewer from 'ProjectViewer' 
 ###
  *
  * Main Application class
@@ -48,7 +48,8 @@ export default class Application
         @headerbar.pack_end(@buildOptions(config))
 
         @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
-        @window.add(@buildBackground(config))
+        #@window.add(@buildBackground(config))
+        @window.add(@buildNotebook())
         @window.set_default_size(1140, 720)
         @window.set_titlebar(@headerbar)
         @window.show_all()
@@ -142,15 +143,27 @@ export default class Application
 
         @window.set_title("#{@avprj.get('project_name')} - #{@config.app_name}")
 
-        treeview = new TreeViewer()
-        label = treeview.buildUI()
-        @background.set_center_widget(label)
+        view = new ProjectViewer(@avprj)
+        ui = view.buildUI()
+        @background.set_center_widget(ui)
         @background.get_style_context().add_provider(@regularCss, 0)
-        
-        label.show()
+        ui.show()
         @window.show_all()
         return
     
+
+    buildNotebook: () ->
+        notebook = new Gtk.Notebook()
+        title = new Gtk.Label(label: "Title 1")
+        content = new Gtk.Label(label: "Content 1")
+        notebook.append_page(content, title)
+
+        title = new Gtk.Label(label: "Title 2")
+        content = new Gtk.Label(label: "Content 2")
+        notebook.append_page(content, title)
+        notebook
+        
+
     ###
     # build project options editor
     #   

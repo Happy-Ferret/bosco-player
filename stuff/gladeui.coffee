@@ -9,7 +9,7 @@ readFile = (filename) ->
   data
 
 
-
+s
 App = Lang.Class
   Name: 'App'
   Extends: Gtk.Application

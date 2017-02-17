@@ -10,12 +10,6 @@ Notify = imports.gi.Notify
  * load the configuration and start gtk
 ###
 import Application from 'Application'
-import TreeViewer from 'TreeViewer'
-
-# Run the application
-# app = new TreeViewer()
-# app.application.run(ARGV)
-
 
 res_name_default = "custom.gresource"
 res_prefix_default = "/com/darkoverlordofdata/custom"
