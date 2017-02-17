@@ -4,8 +4,16 @@ Gdk = imports.gi.Gdk
 Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
 
+import Project from 'Project'
+import TreeViewer from 'TreeViewer' 
+###
+ *
+ * Main Application class
+ *
+###
 export default class Application
-    constructor: (config) ->
+
+    constructor: (@config) ->
         @projectPath = ""
         @application = new Gtk.Application(
             application_id: "com.darkoverlordofdata.bosco",
@@ -13,12 +21,44 @@ export default class Application
         )
 
         @application.connect "activate", => @window.present()
-        @application.connect "startup", => 
-            @buildMenu()
-            @buildUI(config)
+        @application.connect "startup", => @buildUI(@config)
+
+        @regularCss = new Gtk.CssProvider()
+        @regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }")
+        
+        @logoCss = new Gtk.CssProvider()
+        @logoCss.load_from_data("* { font-family: OpenDyslexic ; font-size: 32px }")
 
 
-    buildMenu: () ->
+    ###
+    # buildUI
+    #   
+    # @param config
+    ###
+    buildUI: (config) ->
+        @buildAppMenu()
+        @window = new Gtk.ApplicationWindow(
+            application: @application
+            window_position: Gtk.WindowPosition.CENTER
+            title: config.app_name 
+        )
+
+        @headerbar = new Gtk.HeaderBar(title: config.app_name, show_close_button: true)
+        @headerbar.pack_start(@buildOpen(config))
+        @headerbar.pack_end(@buildOptions(config))
+
+        @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
+        @window.add(@buildBackground(config))
+        @window.set_default_size(1140, 720)
+        @window.set_titlebar(@headerbar)
+        @window.show_all()
+
+    ###
+    # builds the Application Menu
+    #
+    # main app menu
+    ###
+    buildAppMenu: () ->
         menu = new Gio.Menu()
         menu.append("New",'app.new')
         menu.append("About", 'app.about')
@@ -37,29 +77,86 @@ export default class Application
         quitAction.connect 'activate', => @window.destroy()
         @application.add_action(quitAction)
         return
+
     ###
-    # buildUI
+    # builds the client background
     #   
     # @param config
     ###
-    buildUI: (config) ->
-        @window = new Gtk.ApplicationWindow(
-            application: @application
-            window_position: Gtk.WindowPosition.CENTER
-            title: config.app_name
-        )
+    buildBackground: (config) ->
+        background = new Gtk.Box()
+        background.set_vexpand(true)
+        background.set_hexpand(true)
 
-        try 
-            @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
-        catch e 
-            printerr(e)
+        label = new Gtk.Label( label: "Bosco Player" )
+        background.set_center_widget(label)
+        background.get_style_context().add_provider(@logoCss, 0)
+        @background = background
+
+    ###
+    # build open project button
+    #   
+    # @param config
+    ###
+    buildOpen: (config) ->
+        openButton = new Gtk.Button()
+        openButton.add(new Gtk.Image(
+            icon_name: "document-open-symbolic"
+            icon_size: Gtk.IconSize.SMALL_TOOLBAR
+        ))
+
+        openButton.connect "clicked", () => 
+            chooser = new Gtk.FileChooserDialog(
+                title: "Select Project File"
+                action: Gtk.FileChooserAction.OPEN
+                transient_for: @window
+                modal: true
+            )
+
+            chooser.set_select_multiple(false)
+            chooser.add_button("Open", Gtk.ResponseType.OK)
+            chooser.add_button("Cancel", Gtk.ResponseType.CANCEL)
+            chooser.set_default_response(Gtk.ResponseType.OK)
+
+            chooser.connect "response", (dialog, response) => 
+                @projectPath = dialog.get_filenames()[0]
+                dialog.destroy()
+                @displayProject(@projectPath)
+
+            chooser.run()
+        openButton
+
+    displayProject: (path) ->
+        @projectFile = Gio.File.new_for_path(path)
+        if not @projectFile.query_exists(null) then return
+
+        [success, data, length] = @projectFile.load_contents(null)
+        @avprj = new Project(String(data))
+
+        path = path.substring(0, path.lastIndexOf("/"))
+        @entitasFile = Gio.File.new_for_path("#{path}/entitas.json")
+        if not @entitasFile.query_exists(null) then return
+
+        [success, data, length] = @entitasFile.load_contents(null)
+        @entitas = JSON.parse(data)
+
+        @window.set_title("#{@avprj.get('project_name')} - #{@config.app_name}")
+
+        treeview = new TreeViewer()
+        label = treeview.buildUI()
+        @background.set_center_widget(label)
+        @background.get_style_context().add_provider(@regularCss, 0)
         
-
-        @headerbar = new Gtk.HeaderBar(
-            title: config.app_name
-            show_close_button: true
-        )
-
+        label.show()
+        @window.show_all()
+        return
+    
+    ###
+    # build project options editor
+    #   
+    # @param config
+    ###
+    buildOptions: (config) ->
         # Add options to set the name and the prefix
         grid = new Gtk.Grid(
             column_spacing: 10,
@@ -70,33 +167,23 @@ export default class Application
         grid.set_column_homogeneous(true)
 
         namelabel = new Gtk.Label(label: "File name:")
-
         namelabel.set_halign(Gtk.Align.END)
-
         nameentry = new Gtk.Entry()
-
-        nameentry.connect("changed", () => config.res_name = nameentry.get_text())
-
+        nameentry.connect "changed", () => config.res_name = nameentry.get_text()
         nameentry.set_placeholder_text(config.res_name)
-
         grid.attach(namelabel, 0, 0, 1, 1)
         grid.attach_next_to(nameentry, namelabel, Gtk.PositionType.RIGHT, 2, 1)
 
         prefixlabel = new Gtk.Label(label: "Resource prefix:")
-
         prefixlabel.set_halign(Gtk.Align.END)
-
         prefixentry = new Gtk.Entry()
-
         prefixentry.set_placeholder_text(config.res_prefix)
-
-        prefixentry.connect("changed", () => res_prefix = prefixentry.get_text())
+        prefixentry.connect "changed", () => res_prefix = prefixentry.get_text()
 
         grid.attach(prefixlabel, 0, 1, 1, 1)
         grid.attach_next_to(prefixentry, prefixlabel, Gtk.PositionType.RIGHT, 2, 1)
 
         menubutton = new Gtk.ToggleButton()
-
         menubutton.add(new Gtk.Image(
             icon_name: "open-menu-symbolic"
             icon_size: Gtk.IconSize.SMALL_TOOLBAR
@@ -105,17 +192,12 @@ export default class Application
         menubutton.connect "clicked", () => 
             if menubutton.get_active()
                 menu.show_all()
-            
-        
 
         menu = new Gtk.Popover()
-
         menu.set_relative_to(menubutton)
-
         menu.connect "show", () => 
             nameentry.set_text(config.res_name)
             prefixentry.set_text(config.res_prefix)
-        
 
         menu.connect "closed", () => 
             if menubutton.get_active()
@@ -147,54 +229,8 @@ export default class Application
                 outputstream.close(null)
 
         menu.add(grid)
+        menubutton
 
-        @headerbar.pack_end(menubutton)
-
-        background = new Gtk.Box()
-
-        background.set_vexpand(true)
-        background.set_hexpand(true)
-
-        label = new Gtk.Label( label: "Welcome to Bosco Player" )
-        background.set_center_widget(label)
-        css = new Gtk.CssProvider()
-        css.load_from_data("* { font-family: OpenDyslexic ; font-size: xx-large }")
-        background.get_style_context().add_provider(css, 0)
-        @window.add(background)
-
-        addbutton = new Gtk.Button()
-        addbutton.add(new Gtk.Image(
-            icon_name: "document-open-symbolic"
-            icon_size: Gtk.IconSize.SMALL_TOOLBAR
-        ))
-
-        addbutton.connect "clicked", () => 
-            chooser = new Gtk.FileChooserDialog(
-                title: "Select Project Folder"
-                action: Gtk.FileChooserAction.SELECT_FOLDER
-                transient_for: @window
-                modal: true
-            )
-
-            chooser.set_select_multiple(false)
-
-            chooser.add_button("Open", Gtk.ResponseType.OK)
-            chooser.add_button("Cancel", Gtk.ResponseType.CANCEL)
-
-            chooser.set_default_response(Gtk.ResponseType.OK)
-
-            chooser.connect "response", (dialog, response) => 
-                @projectPath = dialog.get_uris()
-                dialog.destroy()
-                if response == Gtk.ResponseType.OK && @projectPath && @projectPath.length
-                    print "Selected #{@projectPath}"
-            chooser.run()
-
-        @headerbar.pack_start(addbutton)
-        @window.set_default_size(800, 600)
-        @window.set_titlebar(@headerbar)
-        @window.show_all()
-    
     ###
     # New project dialog
     ###

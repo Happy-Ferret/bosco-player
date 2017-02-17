@@ -4,27 +4,26 @@ Gdk = imports.gi.Gdk
 Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
 
+###
+ * Main entry point
+ * 
+ * load the configuration and start gtk
+###
 import Application from 'Application'
+import TreeViewer from 'TreeViewer'
+
+# Run the application
+# app = new TreeViewer()
+# app.application.run(ARGV)
+
 
 res_name_default = "custom.gresource"
 res_prefix_default = "/com/darkoverlordofdata/custom"
 config = {}
 config_file = Gio.File.new_for_path(GLib.get_user_data_dir() + "/bosco/config.json")
-
 if config_file.query_exists(null) 
-    size = config_file.query_info("standard::size",
-            Gio.FileQueryInfoFlags.NONE,
-            null).get_size()
-
-    try 
-        data = config_file.read(null).read_bytes(size, null).get_data()
-        config = JSON.parse(data)
-        
-    catch e
-        printerr(e)
-
-print "res_name_default = #{res_name_default}"
-print "res_prefix_default = #{res_prefix_default}"
+    [success, data, length] = file.load_contents(null)
+    config = JSON.parse(data)
 
 config.res_name = config.res_name ? res_name_default
 config.res_prefix = config.res_prefix ? res_prefix_default

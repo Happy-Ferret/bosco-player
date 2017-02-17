@@ -11,8 +11,20 @@ Gtk = imports.gi.Gtk;
 
 Notify = imports.gi.Notify;
 
+import Project from 'Project';
+
+import TreeViewer from 'TreeViewer';
+
+
+/*
+ *
+ * Main Application class
+ *
+ */
+
 export default Application = (function() {
-  function Application(config) {
+  function Application(config1) {
+    this.config = config1;
     this.projectPath = "";
     this.application = new Gtk.Application({
       application_id: "com.darkoverlordofdata.bosco",
@@ -25,13 +37,50 @@ export default Application = (function() {
     })(this));
     this.application.connect("startup", (function(_this) {
       return function() {
-        _this.buildMenu();
-        return _this.buildUI(config);
+        return _this.buildUI(_this.config);
       };
     })(this));
+    this.regularCss = new Gtk.CssProvider();
+    this.regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }");
+    this.logoCss = new Gtk.CssProvider();
+    this.logoCss.load_from_data("* { font-family: OpenDyslexic ; font-size: 32px }");
   }
 
-  Application.prototype.buildMenu = function() {
+
+  /*
+   * buildUI
+   *   
+   * @param config
+   */
+
+  Application.prototype.buildUI = function(config) {
+    this.buildAppMenu();
+    this.window = new Gtk.ApplicationWindow({
+      application: this.application,
+      window_position: Gtk.WindowPosition.CENTER,
+      title: config.app_name
+    });
+    this.headerbar = new Gtk.HeaderBar({
+      title: config.app_name,
+      show_close_button: true
+    });
+    this.headerbar.pack_start(this.buildOpen(config));
+    this.headerbar.pack_end(this.buildOptions(config));
+    this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
+    this.window.add(this.buildBackground(config));
+    this.window.set_default_size(1140, 720);
+    this.window.set_titlebar(this.headerbar);
+    return this.window.show_all();
+  };
+
+
+  /*
+   * builds the Application Menu
+   *
+   * main app menu
+   */
+
+  Application.prototype.buildAppMenu = function() {
     var aboutAction, menu, newAction, quitAction;
     menu = new Gio.Menu();
     menu.append("New", 'app.new');
@@ -69,28 +118,95 @@ export default Application = (function() {
 
 
   /*
-   * buildUI
+   * builds the client background
    *   
    * @param config
    */
 
-  Application.prototype.buildUI = function(config) {
-    var addbutton, background, css, e, grid, label, menu, menubutton, nameentry, namelabel, prefixentry, prefixlabel;
-    this.window = new Gtk.ApplicationWindow({
-      application: this.application,
-      window_position: Gtk.WindowPosition.CENTER,
-      title: config.app_name
+  Application.prototype.buildBackground = function(config) {
+    var background, label;
+    background = new Gtk.Box();
+    background.set_vexpand(true);
+    background.set_hexpand(true);
+    label = new Gtk.Label({
+      label: "Bosco Player"
     });
-    try {
-      this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
-    } catch (error) {
-      e = error;
-      printerr(e);
+    background.set_center_widget(label);
+    background.get_style_context().add_provider(this.logoCss, 0);
+    return this.background = background;
+  };
+
+
+  /*
+   * build open project button
+   *   
+   * @param config
+   */
+
+  Application.prototype.buildOpen = function(config) {
+    var openButton;
+    openButton = new Gtk.Button();
+    openButton.add(new Gtk.Image({
+      icon_name: "document-open-symbolic",
+      icon_size: Gtk.IconSize.SMALL_TOOLBAR
+    }));
+    openButton.connect("clicked", (function(_this) {
+      return function() {
+        var chooser;
+        chooser = new Gtk.FileChooserDialog({
+          title: "Select Project File",
+          action: Gtk.FileChooserAction.OPEN,
+          transient_for: _this.window,
+          modal: true
+        });
+        chooser.set_select_multiple(false);
+        chooser.add_button("Open", Gtk.ResponseType.OK);
+        chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
+        chooser.set_default_response(Gtk.ResponseType.OK);
+        chooser.connect("response", function(dialog, response) {
+          _this.projectPath = dialog.get_filenames()[0];
+          dialog.destroy();
+          return _this.displayProject(_this.projectPath);
+        });
+        return chooser.run();
+      };
+    })(this));
+    return openButton;
+  };
+
+  Application.prototype.displayProject = function(path) {
+    var data, label, length, ref, ref1, success, treeview;
+    this.projectFile = Gio.File.new_for_path(path);
+    if (!this.projectFile.query_exists(null)) {
+      return;
     }
-    this.headerbar = new Gtk.HeaderBar({
-      title: config.app_name,
-      show_close_button: true
-    });
+    ref = this.projectFile.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
+    this.avprj = new Project(String(data));
+    path = path.substring(0, path.lastIndexOf("/"));
+    this.entitasFile = Gio.File.new_for_path(path + "/entitas.json");
+    if (!this.entitasFile.query_exists(null)) {
+      return;
+    }
+    ref1 = this.entitasFile.load_contents(null), success = ref1[0], data = ref1[1], length = ref1[2];
+    this.entitas = JSON.parse(data);
+    this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
+    treeview = new TreeViewer();
+    label = treeview.buildUI();
+    this.background.set_center_widget(label);
+    this.background.get_style_context().add_provider(this.regularCss, 0);
+    label.show();
+    this.window.show_all();
+  };
+
+
+  /*
+   * build project options editor
+   *   
+   * @param config
+   */
+
+  Application.prototype.buildOptions = function(config) {
+    var grid, menu, menubutton, nameentry, namelabel, prefixentry, prefixlabel;
     grid = new Gtk.Grid({
       column_spacing: 10,
       row_spacing: 10,
@@ -177,50 +293,7 @@ export default Application = (function() {
       };
     })(this));
     menu.add(grid);
-    this.headerbar.pack_end(menubutton);
-    background = new Gtk.Box();
-    background.set_vexpand(true);
-    background.set_hexpand(true);
-    label = new Gtk.Label({
-      label: "Welcome to Bosco Player"
-    });
-    background.set_center_widget(label);
-    css = new Gtk.CssProvider();
-    css.load_from_data("* { font-family: OpenDyslexic ; font-size: xx-large }");
-    background.get_style_context().add_provider(css, 0);
-    this.window.add(background);
-    addbutton = new Gtk.Button();
-    addbutton.add(new Gtk.Image({
-      icon_name: "document-open-symbolic",
-      icon_size: Gtk.IconSize.SMALL_TOOLBAR
-    }));
-    addbutton.connect("clicked", (function(_this) {
-      return function() {
-        var chooser;
-        chooser = new Gtk.FileChooserDialog({
-          title: "Select Project Folder",
-          action: Gtk.FileChooserAction.SELECT_FOLDER,
-          transient_for: _this.window,
-          modal: true
-        });
-        chooser.set_select_multiple(false);
-        chooser.add_button("Open", Gtk.ResponseType.OK);
-        chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
-        chooser.set_default_response(Gtk.ResponseType.OK);
-        chooser.connect("response", function(dialog, response) {
-          _this.projectPath = dialog.get_uris();
-          dialog.destroy();
-          if (response === Gtk.ResponseType.OK && _this.projectPath && _this.projectPath.length) {
-            return print("Selected " + _this.projectPath);
-          }
-        });
-        return chooser.run();
-      };
-    })(this));
-    this.headerbar.pack_start(addbutton);
-    this.window.set_default_size(800, 600);
-    this.window.set_titlebar(this.headerbar);
-    return this.window.show_all();
+    return menubutton;
   };
 
 

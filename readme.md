@@ -1,6 +1,6 @@
-### Bosco ###
+### Bosco Player ###
 
-Bosco should provide a gui to 
+Bosco Player should provide a gui to 
 * manage component definitions (entitas.json)
 * organize assets and update the resource xml - look at grrr.js
 * manage autovala options
@@ -10,8 +10,6 @@ Future?
 * manage entity definitions
 * adjust pool sizes
 * scripting
-
-
 
 
 ### gjs + coffeescript + tsc

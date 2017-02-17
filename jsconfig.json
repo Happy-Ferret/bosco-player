@@ -8,8 +8,8 @@
     "files": [
         "src/shebang.js",
         "src/amd.js",
-        "src/GResource",
-        "src/Application",
+        "src/Application.js",
+        "src/TreeViewer.js",
         "src/bosco.js"
     ]
 }
