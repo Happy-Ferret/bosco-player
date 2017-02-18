@@ -17,6 +17,7 @@ readFile = (filename) ->
 
 
 export default class AppWindow
+    # inner GObject proxy used for loading glade
     Gjs_AppWindow = Lang.Class
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
@@ -41,19 +42,15 @@ export default class AppWindow
     # @param config
     ###
     buildUI: (config) ->
-        # @window = new Gtk.ApplicationWindow(
-        #     application: @application
-        #     window_position: Gtk.WindowPosition.CENTER
-        #     title: config.app_name 
-        # )
+        @config = config
 
         @headerbar = new Gtk.HeaderBar(title: config.app_name, show_close_button: true)
         @headerbar.pack_start(@buildOpen(config))
         @headerbar.pack_end(@buildOptions(config))
 
         @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
-        #@window.add(@buildBackground(config))
-        @window.add(@buildNotebook())
+        @window.background.add(@buildNotebook())
+
         @window.set_default_size(1040, 620)
         @window.set_titlebar(@headerbar)
         @window.show_all()

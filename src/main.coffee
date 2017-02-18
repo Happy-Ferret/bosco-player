@@ -5,22 +5,18 @@ Gtk = imports.gi.Gtk
 import AppWindow from 'AppWindow'
 
 export default class App
-    constructor: (config) ->
+    constructor: () ->
         @application = new Gtk.Application(
             application_id: 'com.darkoverlordodfdata.player',
             flags: Gio.ApplicationFlags.FLAGS_NONE
         )
-        @application.connect 'activate', => @activate()
-        #@application.connect "startup", => @appWindow.buildUI(config)
-        
-
-    activate: () ->
-        @buildAppMenu()
-        @appWindow = new AppWindow(application: @application)
-        @appWindow.buildUI(config)
-        @window = @appWindow.window
-        @window.present()
-        return
+        @application.connect 'activate', => 
+            @buildAppMenu()
+            @appWindow = new AppWindow(application: @application)
+            @appWindow.buildUI(@getConfig())
+            @window = @appWindow.window
+            @window.present()
+            return
 
 
     ###
@@ -68,19 +64,20 @@ export default class App
         about.run()
         about.destroy()
 
+    getConfig:() ->
+        res_name_default = "custom.gresource"
+        res_prefix_default = "/com/darkoverlordofdata/custom"
+        config = {}
+        config_file = Gio.File.new_for_path(GLib.get_user_data_dir() + "/bosco/config.json")
+        if config_file.query_exists(null) 
+            [success, data, length] = file.load_contents(null)
+            config = JSON.parse(data)
 
+        config.res_name = config.res_name ? res_name_default
+        config.res_prefix = config.res_prefix ? res_prefix_default
+        config.app_name = "Player"
+        config
+    
 
-res_name_default = "custom.gresource"
-res_prefix_default = "/com/darkoverlordofdata/custom"
-config = {}
-config_file = Gio.File.new_for_path(GLib.get_user_data_dir() + "/bosco/config.json")
-if config_file.query_exists(null) 
-    [success, data, length] = file.load_contents(null)
-    config = JSON.parse(data)
-
-config.res_name = config.res_name ? res_name_default
-config.res_prefix = config.res_prefix ? res_prefix_default
-config.app_name = "Player"
-
-app = new App(config)
+app = new App()
 app.application.run(ARGV)

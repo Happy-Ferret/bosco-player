@@ -17,6 +17,9 @@ Future?
 * scripting
 
 ### gjs - inheriting gobject
+
+https://gist.github.com/bhanuc/b8e6b5408fb50e93ccc9
+
 Prefer composition over inheritance.
 
 We could use Lang.Class to proxy Gtk framework objects
