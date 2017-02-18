@@ -36,9 +36,6 @@ export default class NotebookTab
             expand: true,
             model: @listStore)
     
-        # Create the label that shows details for the name you select
-        @label = new Gtk.Label(label: "")
-
         # Get which item is selected
         @selection = @treeView.get_selection()
 
@@ -77,13 +74,13 @@ export default class NotebookTab
         	hscrollbar_policy: Gtk.PolicyType.NEVER,
         	vscrollbar_policy: Gtk.PolicyType.AUTOMATIC })
         @scrollView.add(@treeView)
-        # Attach the treeview and label to the grid
+        # Attach the treeview to the grid
         @grid.attach(@scrollView, 0, 0, 1, 1)
-        #@grid.attach(@label, 0, 1, 1, 1)
         
 
     ###
      # Add data to the list store
+     # call from subclass buildUI
     ###
     add: (arg...) ->
         @listStore.set(@listStore.append(), [0, 1, 2],
@@ -97,7 +94,7 @@ export default class NotebookTab
         # Grab a treeiter pointing to the current selection
         [ isSelected, model, iter ] = @selection.get_selected()
 
-        # Set the label to read off the values stored in the current selection
+        # Set the status to read off the values stored in the current selection
         @status.push(@id, 
             @listStore.get_value(iter, 0) + " " +
             @listStore.get_value(iter, 1) + " " +

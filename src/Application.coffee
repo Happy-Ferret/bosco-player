@@ -17,7 +17,7 @@ export default class Application
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
         Template: Util.readFile('data/player.ui')
-        Children: ['background', 'statusbar']
+        Children: ['background', 'status']
         _init: (params) -> @parent(params)
             
 
@@ -43,7 +43,8 @@ export default class Application
         @headerbar.pack_end(@buildOptions(config))
 
         @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
-        @window.background.add(@buildNotebook())
+        @window.background.add(@buildBackground())
+        # @window.background.add(@buildNotebook())
 
         @window.set_default_size(1040, 620)
         @window.set_titlebar(@headerbar)
@@ -131,6 +132,9 @@ export default class Application
         @projectFile = Gio.File.new_for_path(path)
         if not @projectFile.query_exists(null) then return
 
+        @window.background.remove(@background)
+        @window.background.add(@buildNotebook())
+
         [success, data, length] = @projectFile.load_contents(null)
         @avprj = new Project(String(data))
 
@@ -145,16 +149,16 @@ export default class Application
 
         @window.set_title("#{@avprj.get('project_name')} - #{@config.app_name}")
 
-        @avContent.pack_start(new AutovalaTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
+        @avContent.pack_start(new AutovalaTab(@avprj, @window.status).buildUI(), true, true, 0)
         @avContent.get_style_context().add_provider(@regularCss, 0)
 
-        @resContent.pack_start(new ResourceTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
+        @resContent.pack_start(new ResourceTab(@avprj, @window.status).buildUI(), true, true, 0)
         @resContent.get_style_context().add_provider(@regularCss, 0)
 
-        @pkContent.pack_start(new PackageTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
+        @pkContent.pack_start(new PackageTab(@avprj, @window.status).buildUI(), true, true, 0)
         @pkContent.get_style_context().add_provider(@regularCss, 0)
 
-        @srcContent.pack_start(new SourceTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
+        @srcContent.pack_start(new SourceTab(@avprj, @window.status).buildUI(), true, true, 0)
         @srcContent.get_style_context().add_provider(@regularCss, 0)
 
         @window.show_all()

@@ -30,7 +30,7 @@ export default Application = (function() {
     Name: 'AppWindow',
     Extends: Gtk.ApplicationWindow,
     Template: Util.readFile('data/player.ui'),
-    Children: ['background', 'statusbar'],
+    Children: ['background', 'status'],
     _init: function(params) {
       return this.parent(params);
     }
@@ -60,7 +60,7 @@ export default Application = (function() {
     this.headerbar.pack_start(this.buildOpen(config));
     this.headerbar.pack_end(this.buildOptions(config));
     this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
-    this.window.background.add(this.buildNotebook());
+    this.window.background.add(this.buildBackground());
     this.window.set_default_size(1040, 620);
     this.window.set_titlebar(this.headerbar);
     return this.window.show_all();
@@ -180,6 +180,8 @@ export default Application = (function() {
     if (!this.projectFile.query_exists(null)) {
       return;
     }
+    this.window.background.remove(this.background);
+    this.window.background.add(this.buildNotebook());
     ref = this.projectFile.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
     this.avprj = new Project(String(data));
     path = path.substring(0, path.lastIndexOf("/"));
@@ -191,13 +193,13 @@ export default Application = (function() {
       this.entitas = null;
     }
     this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
-    this.avContent.pack_start(new AutovalaTab(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+    this.avContent.pack_start(new AutovalaTab(this.avprj, this.window.status).buildUI(), true, true, 0);
     this.avContent.get_style_context().add_provider(this.regularCss, 0);
-    this.resContent.pack_start(new ResourceTab(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+    this.resContent.pack_start(new ResourceTab(this.avprj, this.window.status).buildUI(), true, true, 0);
     this.resContent.get_style_context().add_provider(this.regularCss, 0);
-    this.pkContent.pack_start(new PackageTab(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+    this.pkContent.pack_start(new PackageTab(this.avprj, this.window.status).buildUI(), true, true, 0);
     this.pkContent.get_style_context().add_provider(this.regularCss, 0);
-    this.srcContent.pack_start(new SourceTab(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+    this.srcContent.pack_start(new SourceTab(this.avprj, this.window.status).buildUI(), true, true, 0);
     this.srcContent.get_style_context().add_provider(this.regularCss, 0);
     this.window.show_all();
   };

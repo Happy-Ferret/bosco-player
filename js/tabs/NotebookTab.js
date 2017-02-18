@@ -47,9 +47,6 @@ export default NotebookTab = (function() {
       expand: true,
       model: this.listStore
     });
-    this.label = new Gtk.Label({
-      label: ""
-    });
     this.selection = this.treeView.get_selection();
     this.selection.connect('changed', (function(_this) {
       return function() {
@@ -90,6 +87,7 @@ export default NotebookTab = (function() {
 
   /*
     * Add data to the list store
+    * call from subclass buildUI
    */
 
   NotebookTab.prototype.add = function() {

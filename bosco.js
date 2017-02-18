@@ -145,9 +145,6 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
                 expand: true,
                 model: this.listStore
             });
-            this.label = new Gtk.Label({
-                label: ""
-            });
             this.selection = this.treeView.get_selection();
             this.selection.connect('changed', (function (_this) {
                 return function () {
@@ -186,6 +183,7 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
         };
         /*
           * Add data to the list store
+          * call from subclass buildUI
          */
         NotebookTab.prototype.add = function () {
             var arg;
@@ -340,7 +338,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             Name: 'AppWindow',
             Extends: Gtk.ApplicationWindow,
             Template: Util_1.default.readFile('data/player.ui'),
-            Children: ['background', 'statusbar'],
+            Children: ['background', 'status'],
             _init: function (params) {
                 return this.parent(params);
             }
@@ -366,7 +364,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             this.headerbar.pack_start(this.buildOpen(config));
             this.headerbar.pack_end(this.buildOptions(config));
             this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
-            this.window.background.add(this.buildNotebook());
+            this.window.background.add(this.buildBackground());
             this.window.set_default_size(1040, 620);
             this.window.set_titlebar(this.headerbar);
             return this.window.show_all();
@@ -474,6 +472,8 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             if (!this.projectFile.query_exists(null)) {
                 return;
             }
+            this.window.background.remove(this.background);
+            this.window.background.add(this.buildNotebook());
             ref = this.projectFile.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
             this.avprj = new Project_1.default(String(data));
             path = path.substring(0, path.lastIndexOf("/"));
@@ -486,13 +486,13 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
                 this.entitas = null;
             }
             this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
-            this.avContent.pack_start(new AutovalaTab_1.default(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+            this.avContent.pack_start(new AutovalaTab_1.default(this.avprj, this.window.status).buildUI(), true, true, 0);
             this.avContent.get_style_context().add_provider(this.regularCss, 0);
-            this.resContent.pack_start(new ResourceTab_1.default(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+            this.resContent.pack_start(new ResourceTab_1.default(this.avprj, this.window.status).buildUI(), true, true, 0);
             this.resContent.get_style_context().add_provider(this.regularCss, 0);
-            this.pkContent.pack_start(new PackageTab_1.default(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+            this.pkContent.pack_start(new PackageTab_1.default(this.avprj, this.window.status).buildUI(), true, true, 0);
             this.pkContent.get_style_context().add_provider(this.regularCss, 0);
-            this.srcContent.pack_start(new SourceTab_1.default(this.avprj, this.window.statusbar).buildUI(), true, true, 0);
+            this.srcContent.pack_start(new SourceTab_1.default(this.avprj, this.window.status).buildUI(), true, true, 0);
             this.srcContent.get_style_context().add_provider(this.regularCss, 0);
             this.window.show_all();
         };
