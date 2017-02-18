@@ -16,7 +16,15 @@ Future?
 * adjust pool sizes
 * scripting
 
+### gjs - inheriting gobject
+Prefer composition over inheritance.
 
+We could use Lang.Class to proxy Gtk framework objects
+I think this makes the code less clear, due to the non-standard inheritance syntax
+I also don't like inheriting big framework objects, especially poorly documented ones.
+You end up overriding or colliding with properties & methods, and javascipt doesn't warn you.
+This leads to unexpected behavior and brittle base class.
+Using composition also allows me to use my own class hierarchy scheme for my classes. 
 
 ### gjs + coffeescript + tsc
 
