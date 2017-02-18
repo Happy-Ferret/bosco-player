@@ -22,16 +22,10 @@ export default AppWindow = (function() {
   GladeAppWindow = Lang.Class({
     Name: 'AppWindow',
     Extends: Gtk.ApplicationWindow,
-    Template: readFile('data/hello.glade'),
-    Children: ['label', 'button'],
+    Template: readFile('data/main.ui'),
+    Children: ['background'],
     _init: function(params, outer) {
       this.parent(params);
-      this.label.set_text('Hello, World!');
-      this.button.connect('clicked', (function(_this) {
-        return function() {
-          return _this.application.quit();
-        };
-      })(this));
     }
   });
 

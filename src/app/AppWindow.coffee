@@ -12,16 +12,34 @@ export default class AppWindow
     GladeAppWindow = Lang.Class
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
-        Template: readFile('data/hello.glade')
-        Children: ['label', 'button']
+        Template: readFile('data/main.ui')
+        Children: ['background']
         _init: (params, outer) ->
             @parent(params)
-            @label.set_text('Hello, World!')
-            @button.connect 'clicked', => @application.quit()
+            # @label.set_text('Hello, World!')
+            # @menuQuit.connect 'activate', => @application.quit()
             return
 
     constructor: (params) ->
         @window = new GladeAppWindow(params, this)
+
+
+
+
+# export default class AppWindow
+#     GladeAppWindow = Lang.Class
+#         Name: 'AppWindow'
+#         Extends: Gtk.ApplicationWindow
+#         Template: readFile('data/hello.glade')
+#         Children: ['label', 'button']
+#         _init: (params, outer) ->
+#             @parent(params)
+#             @label.set_text('Hello, World!')
+#             @button.connect 'clicked', => @application.quit()
+#             return
+
+#     constructor: (params) ->
+#         @window = new GladeAppWindow(params, this)
 
 
 
