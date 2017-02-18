@@ -8,28 +8,11 @@ readFile = (filename) ->
   [success, data, length] = file.load_contents(null)
   data
 
-
-
-class App
-    constructor: () ->
-        @application = new Gtk.Application(
-            application_id: 'org.example.myapp',
-            flags: Gio.ApplicationFlags.FLAGS_NONE
-        )
-
-        @application.connect('activate', => @activate())
-
-    activate: () ->
-        @window = new AppWindow(application: @application).window
-        @window.present()
-        return
-
-
-class AppWindow
+export default class AppWindow
     GladeAppWindow = Lang.Class
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
-        Template: readFile('../data/hello.glade')
+        Template: readFile('data/hello.glade')
         Children: ['label', 'button']
         _init: (params, outer) ->
             @parent(params)
@@ -42,6 +25,3 @@ class AppWindow
 
 
 
-
-app = new App()
-app.application.run(ARGV)

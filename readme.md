@@ -26,6 +26,8 @@ You end up overriding or colliding with properties & methods, and javascipt does
 This leads to unexpected behavior and brittle base class.
 Using composition also allows me to use my own class hierarchy scheme for my classes. 
 
+One place I will use Lang.Class, because it's the only solution, is for glade files.
+
 ### gjs + coffeescript + tsc
 
 compile coffeescript to javascript, then

@@ -3,12 +3,6 @@ Gio = imports.gi.Gio
 Gdk = imports.gi.Gdk
 Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
-
-# import App from 'App'
-# app = new App()
-# app.run(ARGV)
-
-
 ###
  * Main entry point
  * 

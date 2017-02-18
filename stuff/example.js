@@ -105,13 +105,13 @@
           return row.data !== 'Fail';
         };
       })(this);
-      listbox2.set_sort_func(sortFunc, null, false);
-      listbox2.set_filter_func(filterFunc, null, false);
       listbox2.connect("row-activated", (function(_this) {
         return function(widget, row) {
           return print(row.data);
         };
       })(this));
+      listbox2.set_sort_func(sortFunc, null, false);
+      listbox2.set_filter_func(filterFunc, null, false);
       box_outer.pack_start(listbox2, true, true, 0);
       listbox2.show_all();
     }

@@ -70,12 +70,12 @@ class ListBoxWindow
 
         filterFunc = (row, data, notifyDestroy) => 
             (row.data != 'Fail')
+            
+        listbox2.connect "row-activated", (widget, row) => 
+            print(row.data)
 
         listbox2.set_sort_func sortFunc, null, false
         listbox2.set_filter_func filterFunc, null, false
-
-        listbox2.connect "row-activated", 
-            (widget, row) => print(row.data)
 
         box_outer.pack_start listbox2, true, true, 0
         listbox2.show_all()

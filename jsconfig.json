@@ -6,8 +6,8 @@
         "outFile": "bosco.js"
     },
     "files": [
-        "src/shebang.js",
-        "src/amd.js",
-        "src/bosco.js"
+        "js/shebang.js",
+        "js/amd.js",
+        "js/main.js"
     ]
 }
