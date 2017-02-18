@@ -139,23 +139,25 @@ export default class Application
 
         path = path.substring(0, path.lastIndexOf("/"))
         @entitasFile = Gio.File.new_for_path("#{path}/entitas.json")
-        if not @entitasFile.query_exists(null) then return
+        if @entitasFile.query_exists(null) 
 
-        [success, data, length] = @entitasFile.load_contents(null)
-        @entitas = JSON.parse(data)
+            [success, data, length] = @entitasFile.load_contents(null)
+            @entitas = JSON.parse(data)
+
+        else @entitas = null
 
         @window.set_title("#{@avprj.get('project_name')} - #{@config.app_name}")
 
-        @avContent.set_center_widget(new AvProperties(@avprj).buildUI())
+        @avContent.pack_start(new AvProperties(@avprj).buildUI(), true, true, 0)
         @avContent.get_style_context().add_provider(@regularCss, 0)
 
-        @resContent.set_center_widget(new ResProperties(@avprj).buildUI())
+        @resContent.pack_start(new ResProperties(@avprj).buildUI(), true, true, 0)
         @resContent.get_style_context().add_provider(@regularCss, 0)
 
-        @pkContent.set_center_widget(new PkProperties(@avprj).buildUI())
+        @pkContent.pack_start(new PkProperties(@avprj).buildUI(), true, true, 0)
         @pkContent.get_style_context().add_provider(@regularCss, 0)
 
-        @srcContent.set_center_widget(new SrcProperties(@avprj).buildUI())
+        @srcContent.pack_start(new SrcProperties(@avprj).buildUI(), true, true, 0)
         @srcContent.get_style_context().add_provider(@regularCss, 0)
 
         @window.show_all()
@@ -169,7 +171,7 @@ export default class Application
         @avContent = new Gtk.Box()
         notebook.append_page(@avContent, title)
 
-        title = new Gtk.Label(label: "Resources")
+        title = new Gtk.Label(label: "GResources")
         @resContent = new Gtk.Box()
         notebook.append_page(@resContent, title)
 

@@ -28,39 +28,15 @@ export default AvProperties = (function(superClass) {
   }
 
   AvProperties.prototype.buildUI = function() {
-    var bold, item, key, normal, readonly, ref, value;
+    var item, key, ref;
     AvProperties.__super__.buildUI.call(this);
     ref = this.prj.data;
     for (key in ref) {
       item = ref[key];
       if (!Array.isArray(item)) {
-        this.listStore.set(this.listStore.append(), [0, 1, 2], [String(key), String(item.value), String(item.readonly)]);
+        this.add(key, item.value, item.readonly);
       }
     }
-    key = new Gtk.TreeViewColumn({
-      title: "Key"
-    });
-    value = new Gtk.TreeViewColumn({
-      title: "Value"
-    });
-    readonly = new Gtk.TreeViewColumn({
-      title: "Readonly"
-    });
-    bold = new Gtk.CellRendererText({
-      weight: Pango.Weight.BOLD
-    });
-    normal = new Gtk.CellRendererText();
-    key.pack_start(bold, true);
-    value.pack_start(normal, true);
-    readonly.pack_start(normal, true);
-    key.add_attribute(bold, "text", 0);
-    value.add_attribute(normal, "text", 1);
-    readonly.add_attribute(normal, "text", 2);
-    this.treeView.insert_column(key, 0);
-    this.treeView.insert_column(value, 1);
-    this.treeView.insert_column(readonly, 2);
-    this.grid.attach(this.treeView, 0, 0, 1, 1);
-    this.grid.attach(this.label, 0, 1, 1, 1);
     return this.grid;
   };
 

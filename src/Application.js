@@ -190,19 +190,20 @@ export default Application = (function() {
     this.avprj = new Project(String(data));
     path = path.substring(0, path.lastIndexOf("/"));
     this.entitasFile = Gio.File.new_for_path(path + "/entitas.json");
-    if (!this.entitasFile.query_exists(null)) {
-      return;
+    if (this.entitasFile.query_exists(null)) {
+      ref1 = this.entitasFile.load_contents(null), success = ref1[0], data = ref1[1], length = ref1[2];
+      this.entitas = JSON.parse(data);
+    } else {
+      this.entitas = null;
     }
-    ref1 = this.entitasFile.load_contents(null), success = ref1[0], data = ref1[1], length = ref1[2];
-    this.entitas = JSON.parse(data);
     this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
-    this.avContent.set_center_widget(new AvProperties(this.avprj).buildUI());
+    this.avContent.pack_start(new AvProperties(this.avprj).buildUI(), true, true, 0);
     this.avContent.get_style_context().add_provider(this.regularCss, 0);
-    this.resContent.set_center_widget(new ResProperties(this.avprj).buildUI());
+    this.resContent.pack_start(new ResProperties(this.avprj).buildUI(), true, true, 0);
     this.resContent.get_style_context().add_provider(this.regularCss, 0);
-    this.pkContent.set_center_widget(new PkProperties(this.avprj).buildUI());
+    this.pkContent.pack_start(new PkProperties(this.avprj).buildUI(), true, true, 0);
     this.pkContent.get_style_context().add_provider(this.regularCss, 0);
-    this.srcContent.set_center_widget(new SrcProperties(this.avprj).buildUI());
+    this.srcContent.pack_start(new SrcProperties(this.avprj).buildUI(), true, true, 0);
     this.srcContent.get_style_context().add_provider(this.regularCss, 0);
     this.window.show_all();
   };
@@ -216,7 +217,7 @@ export default Application = (function() {
     this.avContent = new Gtk.Box();
     notebook.append_page(this.avContent, title);
     title = new Gtk.Label({
-      label: "Resources"
+      label: "GResources"
     });
     this.resContent = new Gtk.Box();
     notebook.append_page(this.resContent, title);

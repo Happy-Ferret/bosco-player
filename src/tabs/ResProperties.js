@@ -28,38 +28,16 @@ export default ResProperties = (function(superClass) {
   }
 
   ResProperties.prototype.buildUI = function() {
-    var bold, i, item, key, len, name, normal, path, readonly, ref, ref1, value;
+    var i, item, len, name, path, ref, ref1;
     ResProperties.__super__.buildUI.call(this);
-    ref = this.prj.data.gresource;
-    for (i = 0, len = ref.length; i < len; i++) {
-      item = ref[i];
-      ref1 = String(item.value).split(' '), name = ref1[0], path = ref1[1];
-      this.listStore.set(this.listStore.append(), [0, 1, 2], [name, path, String(item.readonly)]);
+    if (this.prj.data.gresource != null) {
+      ref = this.prj.data.gresource;
+      for (i = 0, len = ref.length; i < len; i++) {
+        item = ref[i];
+        ref1 = String(item.value).split(' '), name = ref1[0], path = ref1[1];
+        this.add(name, path, item.readonly);
+      }
     }
-    key = new Gtk.TreeViewColumn({
-      title: "Key"
-    });
-    value = new Gtk.TreeViewColumn({
-      title: "Value"
-    });
-    readonly = new Gtk.TreeViewColumn({
-      title: "Readonly"
-    });
-    bold = new Gtk.CellRendererText({
-      weight: Pango.Weight.BOLD
-    });
-    normal = new Gtk.CellRendererText();
-    key.pack_start(bold, true);
-    value.pack_start(normal, true);
-    readonly.pack_start(normal, true);
-    key.add_attribute(bold, "text", 0);
-    value.add_attribute(normal, "text", 1);
-    readonly.add_attribute(normal, "text", 2);
-    this.treeView.insert_column(key, 0);
-    this.treeView.insert_column(value, 1);
-    this.treeView.insert_column(readonly, 2);
-    this.grid.attach(this.treeView, 0, 0, 1, 1);
-    this.grid.attach(this.label, 0, 1, 1, 1);
     return this.grid;
   };
 

@@ -4,29 +4,6 @@
  *
  * Project class - 
  *
- * parses autovala data
- *
- *
- * autovala_version (24)
- * project_name
- * vala_version
- * custom
- * vapidir
- * vala_binary 
- * compile_options
- * compile_c_options
- * c_library
- * po
- * data
- * doc
- * desktop
- * full_icon
- * gresource #
- * use_gresource #
- * vala_check_package #
- * vala_source #
- * translate #
- *
  *
  */
 var Project;

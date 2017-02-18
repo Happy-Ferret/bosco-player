@@ -28,37 +28,13 @@ export default PkProperties = (function(superClass) {
   }
 
   PkProperties.prototype.buildUI = function() {
-    var bold, i, item, key, len, normal, readonly, ref, value;
+    var i, item, len, ref;
     PkProperties.__super__.buildUI.call(this);
     ref = this.prj.data.vala_check_package;
     for (i = 0, len = ref.length; i < len; i++) {
       item = ref[i];
-      this.listStore.set(this.listStore.append(), [0, 1, 2], [String(item.value), "", String(item.readonly)]);
+      this.add(item.value, "", item.readonly);
     }
-    key = new Gtk.TreeViewColumn({
-      title: "Key"
-    });
-    value = new Gtk.TreeViewColumn({
-      title: "Value"
-    });
-    readonly = new Gtk.TreeViewColumn({
-      title: "Readonly"
-    });
-    bold = new Gtk.CellRendererText({
-      weight: Pango.Weight.BOLD
-    });
-    normal = new Gtk.CellRendererText();
-    key.pack_start(bold, true);
-    value.pack_start(normal, true);
-    readonly.pack_start(normal, true);
-    key.add_attribute(bold, "text", 0);
-    value.add_attribute(normal, "text", 1);
-    readonly.add_attribute(normal, "text", 2);
-    this.treeView.insert_column(key, 0);
-    this.treeView.insert_column(value, 1);
-    this.treeView.insert_column(readonly, 2);
-    this.grid.attach(this.treeView, 0, 0, 1, 1);
-    this.grid.attach(this.label, 0, 1, 1, 1);
     return this.grid;
   };
 
