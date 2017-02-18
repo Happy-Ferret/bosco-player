@@ -6,24 +6,23 @@ Notify = imports.gi.Notify
 
 import Util from 'Util'
 import Project from 'Project'
-import AvProperties from 'tabs/AvProperties' 
-import ResProperties from 'tabs/ResProperties' 
-import PkProperties from 'tabs/PkProperties' 
-import SrcProperties from 'tabs/SrcProperties' 
+import SourceTab from 'tabs/SourceTab' 
+import PackageTab from 'tabs/PackageTab' 
+import ResourceTab from 'tabs/ResourceTab' 
+import AutovalaTab from 'tabs/AutovalaTab' 
 
 export default class Application
     # inner GObject proxy used for loading glade
-    Gjs_AppWindow = Lang.Class
+    AppWindow = Lang.Class
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
-        Template: Util.readFile('data/main.ui')
-        Children: ['background']
-        _init: (params, outer) ->
-            @parent(params)
-            return
+        Template: Util.readFile('data/player.ui')
+        Children: ['background', 'statusbar']
+        _init: (params) -> @parent(params)
+            
 
     constructor: (params) ->
-        @window = new Gjs_AppWindow(params, this)
+        @window = new AppWindow(params)
         @regularCss = new Gtk.CssProvider()
         @regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }")
         
@@ -146,16 +145,16 @@ export default class Application
 
         @window.set_title("#{@avprj.get('project_name')} - #{@config.app_name}")
 
-        @avContent.pack_start(new AvProperties(@avprj).buildUI(), true, true, 0)
+        @avContent.pack_start(new AutovalaTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
         @avContent.get_style_context().add_provider(@regularCss, 0)
 
-        @resContent.pack_start(new ResProperties(@avprj).buildUI(), true, true, 0)
+        @resContent.pack_start(new ResourceTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
         @resContent.get_style_context().add_provider(@regularCss, 0)
 
-        @pkContent.pack_start(new PkProperties(@avprj).buildUI(), true, true, 0)
+        @pkContent.pack_start(new PackageTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
         @pkContent.get_style_context().add_provider(@regularCss, 0)
 
-        @srcContent.pack_start(new SrcProperties(@avprj).buildUI(), true, true, 0)
+        @srcContent.pack_start(new SourceTab(@avprj, @window.statusbar).buildUI(), true, true, 0)
         @srcContent.get_style_context().add_provider(@regularCss, 0)
 
         @window.show_all()

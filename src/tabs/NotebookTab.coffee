@@ -8,12 +8,13 @@ Pango = imports.gi.Pango
  * view autovala data
  *
 ###
-export default class PropertyViewer 
+export default class NotebookTab 
     ###
      # set the autovala project data 
      # @param prj:Project 
      ###
-    constructor:(@prj) ->
+    constructor:(@prj, @status) ->
+        @id = @status.get_context_id(@constructor.name)
 
     ###
      #
@@ -78,8 +79,8 @@ export default class PropertyViewer
         @scrollView.add(@treeView)
         # Attach the treeview and label to the grid
         @grid.attach(@scrollView, 0, 0, 1, 1)
-        @grid.attach(@label, 0, 1, 1, 1)
-
+        #@grid.attach(@label, 0, 1, 1, 1)
+        
 
     ###
      # Add data to the list store
@@ -97,9 +98,9 @@ export default class PropertyViewer
         [ isSelected, model, iter ] = @selection.get_selected()
 
         # Set the label to read off the values stored in the current selection
-        @label.set_label("\n" +
+        @status.push(@id, 
             @listStore.get_value(iter, 0) + " " +
             @listStore.get_value(iter, 1) + " " +
-            @listStore.get_value(iter, 2) + "\n")
+            @listStore.get_value(iter, 2))
 
 

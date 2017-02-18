@@ -2,7 +2,7 @@ GObject = imports.gi.GObject
 Gtk = imports.gi.Gtk
 Pango = imports.gi.Pango
 
-import PropertyViewer from 'tabs/PropertyViewer'
+import NotebookTab from 'tabs/NotebookTab'
 ###
  *
  * ProjectViewer class - 
@@ -10,9 +10,7 @@ import PropertyViewer from 'tabs/PropertyViewer'
  * view autovala data
  *
 ###
-export default class ResProperties extends PropertyViewer
-    # Create the application itself
-    constructor:(@prj) ->
+export default class ResourceTab extends NotebookTab
     
     # Build the application's UI
     buildUI:() ->
