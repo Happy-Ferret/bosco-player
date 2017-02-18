@@ -1,31 +1,29 @@
+Lang = imports.lang
 GLib = imports.gi.GLib
 Gio = imports.gi.Gio
-Gdk = imports.gi.Gdk
 Gtk = imports.gi.Gtk
 Notify = imports.gi.Notify
 
+import Util from 'Util'
 import Project from 'Project'
 import AvProperties from 'tabs/AvProperties' 
 import ResProperties from 'tabs/ResProperties' 
 import PkProperties from 'tabs/PkProperties' 
 import SrcProperties from 'tabs/SrcProperties' 
-###
- *
- * Main Application class
- *
-###
+
 export default class Application
+    # inner GObject proxy used for loading glade
+    Gjs_AppWindow = Lang.Class
+        Name: 'AppWindow'
+        Extends: Gtk.ApplicationWindow
+        Template: Util.readFile('data/main.ui')
+        Children: ['background']
+        _init: (params, outer) ->
+            @parent(params)
+            return
 
-    constructor: (@config) ->
-        @projectPath = ""
-        @application = new Gtk.Application(
-            application_id: "com.darkoverlordofdata.bosco",
-            flags: Gio.ApplicationFlags.FLAGS_NONE
-        )
-
-        @application.connect "activate", => @window.present()
-        @application.connect "startup", => @buildUI(@config)
-
+    constructor: (params) ->
+        @window = new Gjs_AppWindow(params, this)
         @regularCss = new Gtk.CssProvider()
         @regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }")
         
@@ -39,20 +37,15 @@ export default class Application
     # @param config
     ###
     buildUI: (config) ->
-        @buildAppMenu()
-        @window = new Gtk.ApplicationWindow(
-            application: @application
-            window_position: Gtk.WindowPosition.CENTER
-            title: config.app_name 
-        )
+        @config = config
 
         @headerbar = new Gtk.HeaderBar(title: config.app_name, show_close_button: true)
         @headerbar.pack_start(@buildOpen(config))
         @headerbar.pack_end(@buildOptions(config))
 
         @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
-        #@window.add(@buildBackground(config))
-        @window.add(@buildNotebook())
+        @window.background.add(@buildNotebook())
+
         @window.set_default_size(1040, 620)
         @window.set_titlebar(@headerbar)
         @window.show_all()
@@ -130,6 +123,11 @@ export default class Application
             chooser.run()
         openButton
 
+    ###
+    # display project
+    #   
+    # @param path
+    ###
     displayProject: (path) ->
         @projectFile = Gio.File.new_for_path(path)
         if not @projectFile.query_exists(null) then return
@@ -164,6 +162,10 @@ export default class Application
         return
     
 
+    ###
+    # build notebook
+    #   
+    ###
     buildNotebook: () ->
         notebook = new Gtk.Notebook()
 
@@ -250,8 +252,8 @@ export default class Application
             res_prefix = res_prefix || config.res_prefix
             write = false
 
-            if config.config.res_name != config.res_name
-                config.config.res_name = config.res_name
+            if config.res_name != config.res_name
+                config.res_name = config.res_name
                 write = true
 
             if config.res_prefix != res_prefix
@@ -273,24 +275,3 @@ export default class Application
 
         menu.add(grid)
         menubutton
-
-    ###
-    # New project dialog
-    ###
-    showNew: () ->
-        print "Not implemented"
-
-    ###
-    # About dialog
-    ###
-    showAbout: () ->
-        about = new Gtk.AboutDialog()
-        about.set_program_name("Bosco Player")
-        about.set_version("1.0")
-        about.set_comments("If it's not dark, it's not data")
-        about.set_website("http://darkoverlordofdata.com")
-        about.set_website_label("Dark Overlord of Data")
-        about.set_authors(["bruce davidson"])
-        about.run()
-        about.destroy()
-
