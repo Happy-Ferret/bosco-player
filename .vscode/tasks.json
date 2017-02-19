@@ -11,7 +11,7 @@
         {
             "isBuildCommand": true,
             "taskName": "build",
-            "args": ["coffee -o js -c src && tsc -p ./jsconfig.json"]
+            "args": ["coffee --no-header -o js -c src && tsc -p ./jsconfig.json"]
         }
     ]
 }

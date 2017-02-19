@@ -13,7 +13,7 @@ import AutovalaTab from 'tabs/AutovalaTab'
 
 export default class Application
 
-    # inner GObject proxy for composite widget template
+    # inner GObject proxy used for loading main app window template
     AppWindow = Lang.Class {
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
@@ -21,6 +21,15 @@ export default class Application
         Children: ['background', 'status']
         _init: (params) -> @parent(params)
     }
+
+    # # inner GObject proxy used for loading project notebook template
+    # PrjWidget = Lang.Class {
+    #     Name: 'PrjWidget'
+    #     Extends: Gtk.Notebook
+    #     Template: Util.readFile(GLib.get_user_data_dir()+'/bosco/project.ui')
+    #     Children: ['build']
+    #     _init: (params) -> @parent(params)
+    # }
 
     constructor: (@params) ->
         @window = new AppWindow(@params)

@@ -1,5 +1,7 @@
 /**
- * AMD Compatible module loader
+ *  Copyright 2017 darkoverlordofdata 
+ * 
+ * AMD loader
  * 
  * @param root object
  * @returns module loader function define
