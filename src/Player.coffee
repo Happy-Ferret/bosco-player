@@ -12,7 +12,7 @@ import Application from 'Application'
 export default class Player
     constructor: () ->
         @application = new Gtk.Application(
-            application_id: 'com.darkoverlordodfdata.player',
+            # application_id: 'com.darkoverlordodfdata.playery',
             flags: Gio.ApplicationFlags.FLAGS_NONE
         )
         @application.connect 'activate', => 

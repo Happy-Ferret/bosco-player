@@ -21,7 +21,6 @@ import Application from 'Application';
 export default Player = (function() {
   function Player() {
     this.application = new Gtk.Application({
-      application_id: 'com.darkoverlordodfdata.player',
       flags: Gio.ApplicationFlags.FLAGS_NONE
     });
     this.application.connect('activate', (function(_this) {

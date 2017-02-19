@@ -36,7 +36,7 @@ public class Juego : Gtk.Application {
         app_window.destroy.connect(Gtk.main_quit);
 
         show_button.clicked.connect(() => {
-            var notification = new Notification(_("Hello World"));
+            var notification = new Notification(_("Bosco Player"));
             var image = new Gtk.Image.from_icon_name("dialog-warning", Gtk.IconSize.DIALOG);
             notification.set_icon(image.gicon);            
             notification.set_body(_("This is my first notification!"));

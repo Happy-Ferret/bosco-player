@@ -17,9 +17,9 @@ class Application {
 
     // create the UI
     _buildUI() {
-        this._window = new Gtk.ApplicationWindow({application: this.application, title: "Hello World!"})
+        this._window = new Gtk.ApplicationWindow({application: this.application, title: "Bosco Player!"})
         this._window.set_default_size(200, 200)
-        this.label = new Gtk.Label({label: "Hello World"})
+        this.label = new Gtk.Label({label: "Bosco Player"})
         this._window.add(this.label)
     }
     // handler for 'activate' signal

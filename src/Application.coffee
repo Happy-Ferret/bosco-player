@@ -17,7 +17,7 @@ export default class Application
     AppWindow = Lang.Class {
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
-        Template: Util.readFile('data/player.ui')
+        Template: Util.readFile(GLib.get_user_data_dir()+'/bosco/player.ui')
         Children: ['background', 'status']
         _init: (params) -> @parent(params)
     }
@@ -26,7 +26,7 @@ export default class Application
     PrjWidget = Lang.Class {
         Name: 'PrjWidget'
         Extends: Gtk.Notebook
-        Template: Util.readFile('data/project.ui')
+        Template: Util.readFile(GLib.get_user_data_dir()+'/bosco/project.ui')
         Children: ['build']
         _init: (params) -> @parent(params)
     }

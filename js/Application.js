@@ -29,7 +29,7 @@ export default Application = (function() {
   AppWindow = Lang.Class({
     Name: 'AppWindow',
     Extends: Gtk.ApplicationWindow,
-    Template: Util.readFile('data/player.ui'),
+    Template: Util.readFile(GLib.get_user_data_dir() + '/bosco/player.ui'),
     Children: ['background', 'status'],
     _init: function(params) {
       return this.parent(params);
@@ -39,7 +39,7 @@ export default Application = (function() {
   PrjWidget = Lang.Class({
     Name: 'PrjWidget',
     Extends: Gtk.Notebook,
-    Template: Util.readFile('data/project.ui'),
+    Template: Util.readFile(GLib.get_user_data_dir() + '/bosco/project.ui'),
     Children: ['build'],
     _init: function(params) {
       return this.parent(params);
