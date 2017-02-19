@@ -26,8 +26,22 @@ define("Util", ["require", "exports"], function (require, exports) {
         Util.readFile = function (filename) {
             var data, file, length, ref, success;
             file = Gio.file_new_for_path(filename);
-            ref = file.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
-            return data;
+            if (file.query_exists(null)) {
+                ref = file.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
+                return data;
+            }
+            else {
+                return null;
+            }
+        };
+        Util.toBytes = function (str) {
+            var buf, bufView, i, j, ref, strLen;
+            buf = new ArrayBuffer(str.length * 2);
+            bufView = new Uint16Array(buf);
+            for (i = j = 0, ref = strLen = str.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+                bufView[i] = str.charCodeAt(i);
+            }
+            return buf;
         };
         return Util;
     })();
@@ -333,7 +347,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
     Notify = imports.gi.Notify;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Application = (function () {
-        var AppWindow;
+        var AppWindow, PrjWidget;
         AppWindow = Lang.Class({
             Name: 'AppWindow',
             Extends: Gtk.ApplicationWindow,
@@ -343,8 +357,18 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
                 return this.parent(params);
             }
         });
-        function Application(params) {
-            this.window = new AppWindow(params);
+        PrjWidget = Lang.Class({
+            Name: 'PrjWidget',
+            Extends: Gtk.Notebook,
+            Template: Util_1.default.readFile('data/project.ui'),
+            Children: ['build'],
+            _init: function (params) {
+                return this.parent(params);
+            }
+        });
+        function Application(params1) {
+            this.params = params1;
+            this.window = new AppWindow(this.params);
             this.regularCss = new Gtk.CssProvider();
             this.regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }");
             this.logoCss = new Gtk.CssProvider();
@@ -363,7 +387,6 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             });
             this.headerbar.pack_start(this.buildOpen(config));
             this.headerbar.pack_end(this.buildOptions(config));
-            this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
             this.window.background.add(this.buildBackground());
             this.window.set_default_size(1040, 620);
             this.window.set_titlebar(this.headerbar);
@@ -472,7 +495,12 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             if (!this.projectFile.query_exists(null)) {
                 return;
             }
-            this.window.background.remove(this.background);
+            if (this.notebook != null) {
+                this.window.background.remove(this.notebook);
+            }
+            else {
+                this.window.background.remove(this.background);
+            }
             this.window.background.add(this.buildNotebook());
             ref = this.projectFile.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
             this.avprj = new Project_1.default(String(data));
@@ -502,7 +530,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
          */
         Application.prototype.buildNotebook = function () {
             var notebook, title;
-            notebook = new Gtk.Notebook();
+            notebook = new PrjWidget();
             title = new Gtk.Label({
                 label: "Autovala"
             });
@@ -528,12 +556,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             });
             this.entitasContent = new Gtk.Box();
             notebook.append_page(this.entitasContent, title);
-            title = new Gtk.Label({
-                label: "Build"
-            });
-            this.buildContent = new Gtk.Box();
-            notebook.append_page(this.buildContent, title);
-            return notebook;
+            return this.notebook = notebook;
         };
         /*
          * build project options editor
@@ -583,7 +606,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             menubutton.connect("clicked", (function (_this) {
                 return function () {
                     if (menubutton.get_active()) {
-                        return menu.show_all();
+                        menu.show_all();
                     }
                 };
             })(this));
@@ -624,7 +647,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
                         }
                         outputstream = config_file.create(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
                         outputstream.write_all(JSON.stringify(config), null);
-                        return outputstream.close(null);
+                        outputstream.close(null);
                     }
                 };
             })(this));
@@ -634,7 +657,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
         return Application;
     })();
 });
-define("Player", ["require", "exports", "Application"], function (require, exports, Application_1) {
+define("Player", ["require", "exports", "Util", "Application"], function (require, exports, Util_2, Application_1) {
     "use strict";
     // Generated by CoffeeScript 1.11.1
     var GLib, Gio, Gtk, Player;
@@ -650,7 +673,7 @@ define("Player", ["require", "exports", "Application"], function (require, expor
             });
             this.application.connect('activate', (function (_this) {
                 return function () {
-                    _this.buildAppMenu();
+                    _this.buildUI();
                     _this.appWindow = new Application_1.default({
                         application: _this.application
                     });
@@ -661,11 +684,11 @@ define("Player", ["require", "exports", "Application"], function (require, expor
             })(this));
         }
         /*
-         * builds the Application Menu
+         * build the Application Menu
          *
          * main app menu
          */
-        Player.prototype.buildAppMenu = function () {
+        Player.prototype.buildUI = function () {
             var aboutAction, menu, newAction, quitAction;
             menu = new Gio.Menu();
             menu.append("New", 'app.new');
@@ -712,6 +735,7 @@ define("Player", ["require", "exports", "Application"], function (require, expor
         Player.prototype.showAbout = function () {
             var about;
             about = new Gtk.AboutDialog();
+            about.set_transient_for(this.window);
             about.set_program_name("Bosco Player");
             about.set_version("1.0");
             about.set_comments("If it's not dark, it's not data");
@@ -725,18 +749,14 @@ define("Player", ["require", "exports", "Application"], function (require, expor
          * load configuration
          */
         Player.prototype.getConfig = function () {
-            var config, config_file, data, length, ref, ref1, ref2, res_name_default, res_prefix_default, success;
+            var config, data, ref, ref1, res_name_default, res_prefix_default;
             res_name_default = "custom.gresource";
             res_prefix_default = "/com/darkoverlordofdata/custom";
-            config = {};
-            config_file = Gio.File.new_for_path(GLib.get_user_data_dir() + "/bosco/config.json");
-            if (config_file.query_exists(null)) {
-                ref = file.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
-                config = JSON.parse(data);
-            }
-            config.res_name = (ref1 = config.res_name) != null ? ref1 : res_name_default;
-            config.res_prefix = (ref2 = config.res_prefix) != null ? ref2 : res_prefix_default;
+            data = Util_2.default.readFile(GLib.get_user_data_dir() + "/bosco/config.json");
+            config = data != null ? JSON.parse(data) : {};
             config.app_name = "Player";
+            config.res_name = (ref = config.res_name) != null ? ref : res_name_default;
+            config.res_prefix = (ref1 = config.res_prefix) != null ? ref1 : res_prefix_default;
             return config;
         };
         return Player;

@@ -7,7 +7,16 @@ Gio = imports.gi.Gio;
 
 Gtk = imports.gi.Gtk;
 
+import Util from 'Util';
+
 import Application from 'Application';
+
+
+/*
+ * Bosco Player 
+ *
+ * top level application object
+ */
 
 export default Player = (function() {
   function Player() {
@@ -17,7 +26,7 @@ export default Player = (function() {
     });
     this.application.connect('activate', (function(_this) {
       return function() {
-        _this.buildAppMenu();
+        _this.buildUI();
         _this.appWindow = new Application({
           application: _this.application
         });
@@ -30,12 +39,12 @@ export default Player = (function() {
 
 
   /*
-   * builds the Application Menu
+   * build the Application Menu
    *
    * main app menu
    */
 
-  Player.prototype.buildAppMenu = function() {
+  Player.prototype.buildUI = function() {
     var aboutAction, menu, newAction, quitAction;
     menu = new Gio.Menu();
     menu.append("New", 'app.new');
@@ -88,6 +97,7 @@ export default Player = (function() {
   Player.prototype.showAbout = function() {
     var about;
     about = new Gtk.AboutDialog();
+    about.set_transient_for(this.window);
     about.set_program_name("Bosco Player");
     about.set_version("1.0");
     about.set_comments("If it's not dark, it's not data");
@@ -104,18 +114,14 @@ export default Player = (function() {
    */
 
   Player.prototype.getConfig = function() {
-    var config, config_file, data, length, ref, ref1, ref2, res_name_default, res_prefix_default, success;
+    var config, data, ref, ref1, res_name_default, res_prefix_default;
     res_name_default = "custom.gresource";
     res_prefix_default = "/com/darkoverlordofdata/custom";
-    config = {};
-    config_file = Gio.File.new_for_path(GLib.get_user_data_dir() + "/bosco/config.json");
-    if (config_file.query_exists(null)) {
-      ref = file.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
-      config = JSON.parse(data);
-    }
-    config.res_name = (ref1 = config.res_name) != null ? ref1 : res_name_default;
-    config.res_prefix = (ref2 = config.res_prefix) != null ? ref2 : res_prefix_default;
+    data = Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json");
+    config = data != null ? JSON.parse(data) : {};
     config.app_name = "Player";
+    config.res_name = (ref = config.res_name) != null ? ref : res_name_default;
+    config.res_prefix = (ref1 = config.res_prefix) != null ? ref1 : res_prefix_default;
     return config;
   };
 

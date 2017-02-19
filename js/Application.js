@@ -24,7 +24,7 @@ import ResourceTab from 'tabs/ResourceTab';
 import AutovalaTab from 'tabs/AutovalaTab';
 
 export default Application = (function() {
-  var AppWindow;
+  var AppWindow, PrjWidget;
 
   AppWindow = Lang.Class({
     Name: 'AppWindow',
@@ -36,8 +36,19 @@ export default Application = (function() {
     }
   });
 
-  function Application(params) {
-    this.window = new AppWindow(params);
+  PrjWidget = Lang.Class({
+    Name: 'PrjWidget',
+    Extends: Gtk.Notebook,
+    Template: Util.readFile('data/project.ui'),
+    Children: ['build'],
+    _init: function(params) {
+      return this.parent(params);
+    }
+  });
+
+  function Application(params1) {
+    this.params = params1;
+    this.window = new AppWindow(this.params);
     this.regularCss = new Gtk.CssProvider();
     this.regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }");
     this.logoCss = new Gtk.CssProvider();
@@ -59,7 +70,6 @@ export default Application = (function() {
     });
     this.headerbar.pack_start(this.buildOpen(config));
     this.headerbar.pack_end(this.buildOptions(config));
-    this.window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png");
     this.window.background.add(this.buildBackground());
     this.window.set_default_size(1040, 620);
     this.window.set_titlebar(this.headerbar);
@@ -180,7 +190,11 @@ export default Application = (function() {
     if (!this.projectFile.query_exists(null)) {
       return;
     }
-    this.window.background.remove(this.background);
+    if (this.notebook != null) {
+      this.window.background.remove(this.notebook);
+    } else {
+      this.window.background.remove(this.background);
+    }
     this.window.background.add(this.buildNotebook());
     ref = this.projectFile.load_contents(null), success = ref[0], data = ref[1], length = ref[2];
     this.avprj = new Project(String(data));
@@ -212,7 +226,7 @@ export default Application = (function() {
 
   Application.prototype.buildNotebook = function() {
     var notebook, title;
-    notebook = new Gtk.Notebook();
+    notebook = new PrjWidget();
     title = new Gtk.Label({
       label: "Autovala"
     });
@@ -238,12 +252,7 @@ export default Application = (function() {
     });
     this.entitasContent = new Gtk.Box();
     notebook.append_page(this.entitasContent, title);
-    title = new Gtk.Label({
-      label: "Build"
-    });
-    this.buildContent = new Gtk.Box();
-    notebook.append_page(this.buildContent, title);
-    return notebook;
+    return this.notebook = notebook;
   };
 
 
@@ -296,7 +305,7 @@ export default Application = (function() {
     menubutton.connect("clicked", (function(_this) {
       return function() {
         if (menubutton.get_active()) {
-          return menu.show_all();
+          menu.show_all();
         }
       };
     })(this));
@@ -336,7 +345,7 @@ export default Application = (function() {
           }
           outputstream = config_file.create(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
           outputstream.write_all(JSON.stringify(config), null);
-          return outputstream.close(null);
+          outputstream.close(null);
         }
       };
     })(this));

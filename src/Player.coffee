@@ -2,8 +2,13 @@ GLib = imports.gi.GLib
 Gio = imports.gi.Gio
 Gtk = imports.gi.Gtk
 
+import Util from 'Util'
 import Application from 'Application'
-
+###
+# Bosco Player 
+#
+# top level application object
+###
 export default class Player
     constructor: () ->
         @application = new Gtk.Application(
@@ -11,7 +16,7 @@ export default class Player
             flags: Gio.ApplicationFlags.FLAGS_NONE
         )
         @application.connect 'activate', => 
-            @buildAppMenu()
+            @buildUI()
             @appWindow = new Application(application: @application)
             @appWindow.buildUI(@getConfig())
             @window = @appWindow.window
@@ -20,11 +25,11 @@ export default class Player
 
 
     ###
-    # builds the Application Menu
+    # build the Application Menu
     #
     # main app menu
     ###
-    buildAppMenu: () ->
+    buildUI: () ->
         menu = new Gio.Menu()
         menu.append("New",'app.new')
         menu.append("About", 'app.about')
@@ -55,6 +60,7 @@ export default class Player
     ###
     showAbout: () ->
         about = new Gtk.AboutDialog()
+        about.set_transient_for(@window)
         about.set_program_name("Bosco Player")
         about.set_version("1.0")
         about.set_comments("If it's not dark, it's not data")
@@ -70,15 +76,13 @@ export default class Player
     getConfig:() ->
         res_name_default = "custom.gresource"
         res_prefix_default = "/com/darkoverlordofdata/custom"
-        config = {}
-        config_file = Gio.File.new_for_path(GLib.get_user_data_dir() + "/bosco/config.json")
-        if config_file.query_exists(null) 
-            [success, data, length] = file.load_contents(null)
-            config = JSON.parse(data)
 
+        data = Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json")
+        config = if data? then JSON.parse(data) else {}
+
+        config.app_name = "Player"
         config.res_name = config.res_name ? res_name_default
         config.res_prefix = config.res_prefix ? res_prefix_default
-        config.app_name = "Player"
         config
     
 

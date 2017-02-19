@@ -12,17 +12,28 @@ import ResourceTab from 'tabs/ResourceTab'
 import AutovalaTab from 'tabs/AutovalaTab' 
 
 export default class Application
-    # inner GObject proxy used for loading glade
-    AppWindow = Lang.Class
+
+    # inner GObject proxy used for loading main app window
+    AppWindow = Lang.Class {
         Name: 'AppWindow'
         Extends: Gtk.ApplicationWindow
         Template: Util.readFile('data/player.ui')
         Children: ['background', 'status']
         _init: (params) -> @parent(params)
-            
+    }
 
-    constructor: (params) ->
-        @window = new AppWindow(params)
+    # inner GObject proxy used for loading project notebook
+    PrjWidget = Lang.Class {
+        Name: 'PrjWidget'
+        Extends: Gtk.Notebook
+        Template: Util.readFile('data/project.ui')
+        Children: ['build']
+        _init: (params) -> @parent(params)
+    }
+
+    constructor: (@params) ->
+        @window = new AppWindow(@params)
+
         @regularCss = new Gtk.CssProvider()
         @regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }")
         
@@ -42,7 +53,6 @@ export default class Application
         @headerbar.pack_start(@buildOpen(config))
         @headerbar.pack_end(@buildOptions(config))
 
-        @window.set_icon_from_file("/home/bruce/gjs/bosco/data/bosco.png")
         @window.background.add(@buildBackground())
         # @window.background.add(@buildNotebook())
 
@@ -132,7 +142,10 @@ export default class Application
         @projectFile = Gio.File.new_for_path(path)
         if not @projectFile.query_exists(null) then return
 
-        @window.background.remove(@background)
+        if @notebook?
+            @window.background.remove(@notebook)
+        else
+            @window.background.remove(@background)
         @window.background.add(@buildNotebook())
 
         [success, data, length] = @projectFile.load_contents(null)
@@ -170,7 +183,7 @@ export default class Application
     #   
     ###
     buildNotebook: () ->
-        notebook = new Gtk.Notebook()
+        notebook = new PrjWidget()
 
         title = new Gtk.Label(label: "Autovala")
         @avContent = new Gtk.Box()
@@ -192,11 +205,11 @@ export default class Application
         @entitasContent = new Gtk.Box()
         notebook.append_page(@entitasContent, title)
 
-        title = new Gtk.Label(label: "Build")
-        @buildContent = new Gtk.Box()
-        notebook.append_page(@buildContent, title)
+        # title = new Gtk.Label(label: "Build")
+        # @buildContent = new Gtk.Box()
+        # notebook.append_page(@buildContent, title)
 
-        notebook
+        @notebook = notebook
         
 
     ###
@@ -240,6 +253,7 @@ export default class Application
         menubutton.connect "clicked", () => 
             if menubutton.get_active()
                 menu.show_all()
+            return
 
         menu = new Gtk.Popover()
         menu.set_relative_to(menubutton)
@@ -275,6 +289,7 @@ export default class Application
                 outputstream = config_file.create(Gio.FileCreateFlags.REPLACE_DESTINATION, null)
                 outputstream.write_all(JSON.stringify(config), null)
                 outputstream.close(null)
+            return
 
         menu.add(grid)
         menubutton
