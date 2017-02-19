@@ -19,8 +19,10 @@ var define = (function (modules) {
 }({}));
 define("Util", ["require", "exports"], function (require, exports) {
     "use strict";
-    var Gio, Util;
+    var Gio, Gtk, Lang, Util;
     Gio = imports.gi.Gio;
+    Gtk = imports.gi.Gtk;
+    Lang = imports.lang;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Util = (function () {
         function Util() { }
@@ -35,14 +37,18 @@ define("Util", ["require", "exports"], function (require, exports) {
                 return null;
             }
         };
-        Util.toBytes = function (str) {
-            var buf, bufView, i, j, ref, strLen;
-            buf = new ArrayBuffer(str.length * 2);
-            bufView = new Uint16Array(buf);
-            for (i = j = 0, ref = strLen = str.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-                bufView[i] = str.charCodeAt(i);
-            }
-            return buf;
+        Util.loadTemplate = function (name, path, children, params) {
+            var klass;
+            klass = Lang.Class({
+                Name: name,
+                Extends: Gtk.ApplicationWindow,
+                Template: Util.readFile(path),
+                Children: children,
+                _init: function (params) {
+                    return this.parent(params);
+                }
+            });
+            return new klass(params);
         };
         return Util;
     })();
@@ -333,27 +339,18 @@ define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function 
 });
 define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab", "tabs/PackageTab", "tabs/ResourceTab", "tabs/AutovalaTab"], function (require, exports, Util_1, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
     "use strict";
-    var Application, GLib, Gio, Gtk, Lang, Notify;
-    Lang = imports.lang;
+    var Application, GLib, Gio, Gtk, Notify;
     GLib = imports.gi.GLib;
     Gio = imports.gi.Gio;
     Gtk = imports.gi.Gtk;
     Notify = imports.gi.Notify;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Application = (function () {
-        var AppWindow;
-        AppWindow = Lang.Class({
-            Name: 'AppWindow',
-            Extends: Gtk.ApplicationWindow,
-            Template: Util_1.default.readFile(GLib.get_user_data_dir() + '/bosco/player.ui'),
-            Children: ['background', 'status'],
-            _init: function (params) {
-                return this.parent(params);
-            }
-        });
-        function Application(params1) {
-            this.params = params1;
-            this.window = new AppWindow(this.params);
+        function Application(params) {
+            var path;
+            this.params = params;
+            path = GLib.get_user_data_dir() + '/bosco/player.ui';
+            this.window = Util_1.default.loadTemplate('AppWindow', path, ['background', 'status'], this.params);
             this.regularCss = new Gtk.CssProvider();
             this.regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }");
             this.logoCss = new Gtk.CssProvider();
@@ -516,8 +513,8 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
         Application.prototype.buildNotebook = function () {
             var builder, notebook, title;
             builder = new Gtk.Builder();
-            builder.add_from_file("/home/bruce/gjs/bosco/src/ui/notepad.glade");
-            notebook = builder.get_object("PrjWidget");
+            builder.add_from_file("/home/bruce/gjs/bosco/src/ui/project.glade");
+            notebook = builder.get_object("project");
             title = new Gtk.Label({
                 label: "Autovala"
             });

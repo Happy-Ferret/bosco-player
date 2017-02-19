@@ -1,6 +1,10 @@
-var Gio, Util;
+var Gio, Gtk, Lang, Util;
 
 Gio = imports.gi.Gio;
+
+Gtk = imports.gi.Gtk;
+
+Lang = imports.lang;
 
 export default Util = (function() {
   function Util() {}
@@ -16,14 +20,18 @@ export default Util = (function() {
     }
   };
 
-  Util.toBytes = function(str) {
-    var buf, bufView, i, j, ref, strLen;
-    buf = new ArrayBuffer(str.length * 2);
-    bufView = new Uint16Array(buf);
-    for (i = j = 0, ref = strLen = str.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-      bufView[i] = str.charCodeAt(i);
-    }
-    return buf;
+  Util.loadTemplate = function(name, path, children, params) {
+    var klass;
+    klass = Lang.Class({
+      Name: name,
+      Extends: Gtk.ApplicationWindow,
+      Template: Util.readFile(path),
+      Children: children,
+      _init: function(params) {
+        return this.parent(params);
+      }
+    });
+    return new klass(params);
   };
 
   return Util;

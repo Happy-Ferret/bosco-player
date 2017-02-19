@@ -1,6 +1,4 @@
-var Application, GLib, Gio, Gtk, Lang, Notify;
-
-Lang = imports.lang;
+var Application, GLib, Gio, Gtk, Notify;
 
 GLib = imports.gi.GLib;
 
@@ -23,21 +21,11 @@ import ResourceTab from 'tabs/ResourceTab';
 import AutovalaTab from 'tabs/AutovalaTab';
 
 export default Application = (function() {
-  var AppWindow;
-
-  AppWindow = Lang.Class({
-    Name: 'AppWindow',
-    Extends: Gtk.ApplicationWindow,
-    Template: Util.readFile(GLib.get_user_data_dir() + '/bosco/player.ui'),
-    Children: ['background', 'status'],
-    _init: function(params) {
-      return this.parent(params);
-    }
-  });
-
-  function Application(params1) {
-    this.params = params1;
-    this.window = new AppWindow(this.params);
+  function Application(params) {
+    var path;
+    this.params = params;
+    path = GLib.get_user_data_dir() + '/bosco/player.ui';
+    this.window = Util.loadTemplate('AppWindow', path, ['background', 'status'], this.params);
     this.regularCss = new Gtk.CssProvider();
     this.regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }");
     this.logoCss = new Gtk.CssProvider();
@@ -216,8 +204,8 @@ export default Application = (function() {
   Application.prototype.buildNotebook = function() {
     var builder, notebook, title;
     builder = new Gtk.Builder();
-    builder.add_from_file("/home/bruce/gjs/bosco/src/ui/notepad.glade");
-    notebook = builder.get_object("PrjWidget");
+    builder.add_from_file("/home/bruce/gjs/bosco/src/ui/project.glade");
+    notebook = builder.get_object("project");
     title = new Gtk.Label({
       label: "Autovala"
     });

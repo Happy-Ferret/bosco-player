@@ -1,19 +1,22 @@
 Gio = imports.gi.Gio
-
+Gtk = imports.gi.Gtk
+Lang = imports.lang
 
 export default class Util
 
-    @readFile = (filename) ->
+    @readFile: (filename) ->
         file = Gio.file_new_for_path(filename)
         if file.query_exists(null)
             [success, data, length] = file.load_contents(null)
             data
         else null
 
-    @toBytes = (str) ->
-        buf = new ArrayBuffer(str.length*2) # 2 bytes for each char
-        bufView = new Uint16Array(buf)
-        for i in [0...strLen=str.length]
-            bufView[i] = str.charCodeAt(i)
-        
-        return buf
+    @loadTemplate: (name, path, children, params) ->
+        klass = Lang.Class {
+            Name: name
+            Extends: Gtk.ApplicationWindow
+            Template: Util.readFile(path)
+            Children: children
+            _init: (params) -> @parent(params)
+        }
+        new klass(params)

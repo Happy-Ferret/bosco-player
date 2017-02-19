@@ -1,4 +1,4 @@
-Lang = imports.lang
+# Lang = imports.lang
 GLib = imports.gi.GLib
 Gio = imports.gi.Gio
 Gtk = imports.gi.Gtk
@@ -13,17 +13,12 @@ import AutovalaTab from 'tabs/AutovalaTab'
 
 export default class Application
 
-    # inner GObject proxy for composite widget template
-    AppWindow = Lang.Class {
-        Name: 'AppWindow'
-        Extends: Gtk.ApplicationWindow
-        Template: Util.readFile(GLib.get_user_data_dir()+'/bosco/player.ui')
-        Children: ['background', 'status']
-        _init: (params) -> @parent(params)
-    }
-
     constructor: (@params) ->
-        @window = new AppWindow(@params)
+        # path to template
+        path = GLib.get_user_data_dir()+'/bosco/player.ui'
+
+        # load Composite Widget
+        @window = Util.loadTemplate('AppWindow', path, ['background', 'status'], @params)
 
         @regularCss = new Gtk.CssProvider()
         @regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }")
@@ -174,11 +169,9 @@ export default class Application
     #   
     ###
     buildNotebook: () ->
-        #notebook = new PrjWidget()
-
         builder = new Gtk.Builder()
-        builder.add_from_file("/home/bruce/gjs/bosco/src/ui/notepad.glade")
-        notebook = builder.get_object("PrjWidget")
+        builder.add_from_file("/home/bruce/gjs/bosco/src/ui/project.glade")
+        notebook = builder.get_object("project")
 
         title = new Gtk.Label(label: "Autovala")
         @avContent = new Gtk.Box()
@@ -199,10 +192,6 @@ export default class Application
         title = new Gtk.Label(label: "Entitas")
         @entitasContent = new Gtk.Box()
         notebook.append_page(@entitasContent, title)
-
-        # title = new Gtk.Label(label: "Build")
-        # @buildContent = new Gtk.Box()
-        # notebook.append_page(@buildContent, title)
 
         @notebook = notebook
         
