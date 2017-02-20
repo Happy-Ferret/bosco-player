@@ -1,6 +1,11 @@
 ### Bosco Player ###
 
-Bosco Player should provide a gui to 
+Gtk application written with CoffeeScript
+
+right now, just a gui shell that displays autovala values
+
+
+Bosco Player will? 
 * manage component definitions (entitas.json)
 * organize assets and update the resource xml - look at grrr.js
 * edit .desktop file
@@ -16,11 +21,28 @@ Future?
 * adjust pool sizes
 * scripting
 
+### build
 
-### where is autogen?
-it's all gnu to me. I like npm, and their tools are more js specific anyway.
-Since I'm cleaning this up with coffeescript, I will switch to a Cakefile.
+I use vscode. ctrl-b to build, f5 to run
+or...
+```
+coffee --no-header -o js -c src
+tsc -p ./jsconfig.json
+```
 
+
+### install
+
+this doesn't use the autogen style install recomended by gnome.
+it's a coffeescript app, and uses a Cakefile for installation.
+
+```
+npm install -g coffeescript
+git clone git@github.com:darkoverlordofdata/bosco-player.git
+cd bosco-player
+npm install
+cake install
+```
 
 ### gjs + coffeescript + tsc
 

@@ -1,4 +1,3 @@
-# Lang = imports.lang
 GLib = imports.gi.GLib
 Gio = imports.gi.Gio
 Gtk = imports.gi.Gtk
@@ -14,11 +13,8 @@ import AutovalaTab from 'tabs/AutovalaTab'
 export default class Application
 
     constructor: (@params) ->
-        # path to template
-        path = "#{PREFIX}/player.ui"
-
         # load Composite Widget
-        @window = Util.loadTemplate('AppWindow', path, ['background', 'status'], @params)
+        @window = Util.loadTemplate('AppWindow', "#{PREFIX}/player.ui", ['background', 'status'], @params)
 
         @regularCss = new Gtk.CssProvider()
         @regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }")
