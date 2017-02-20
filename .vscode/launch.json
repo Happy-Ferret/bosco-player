@@ -7,7 +7,7 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "program": "/usr/bin/gjs",
-            "args": ["./bosco"]
+            "args": ["bin/bosco-player"]
         }
     ]
 }

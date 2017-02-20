@@ -8,7 +8,6 @@
     <property name="window_position">center</property>
     <property name="default_width">940</property>
     <property name="default_height">640</property>
-    <property name="icon">/home/bruce/.local/share/bosco/bosco.png</property>
     <child>
       <object class="GtkBox" id="base">
         <property name="visible">True</property>

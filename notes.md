@@ -1,3 +1,26 @@
+### installing stuf
+
+dev/test/prod
+
+dev - run in the ide
+test - runs from ~/.local
+prod - runs from  /usr/local
+
+it needs to run smoothly in all locations
+but the bits are in different locations and reference each other.
+
+code references locations
+.ui references icon location - not a good idea
+.desktop file references locations
+
+1st part of code:
+```
+#!/usr/bin/env gjs
+const PREFIX = "/home/bruce/gjs/bosco/"
+const PREFIX = "/home/bruce/.local/"
+const PREFIX = "/usr/local/"
+```
+use sed to reset the prefix during install.
 
 
 ### autovala fields of interest

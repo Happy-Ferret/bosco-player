@@ -16,30 +16,19 @@ Future?
 * adjust pool sizes
 * scripting
 
-### gjs - inheriting gobject
 
-https://gist.github.com/bhanuc/b8e6b5408fb50e93ccc9
+### where is autogen?
+it's all gnu to me. I like npm, and their tools are more js specific anyway.
+Since I'm cleaning this up with coffeescript, I will switch to a Cakefile.
 
-Prefer composition over inheritance.
-
-We could use Lang.Class to proxy Gtk framework objects
-I think this makes the code less clear, due to the non-standard inheritance syntax
-I also don't like inheriting big framework objects, especially poorly documented ones.
-You end up overriding or colliding with properties & methods, and javascipt doesn't warn you.
-This leads to unexpected behavior and brittle base class.
-Using composition also allows me to use my own class hierarchy scheme for my classes. 
-
-One place I will use Lang.Class, because it's the only solution, is for glade files.
 
 ### gjs + coffeescript + tsc
 
 compile coffeescript to javascript, then
 use tsc to ensure es5 compatible and packege up with dependencies.
 
+Cakefile to manage installation
+
 The result is sort of like a webpack or browserify bundle.
 Uses amd compatible module definitions.
-
-
-The downside - gjs is linux only.
-But I would have to do dev on windows for that to matter...
 

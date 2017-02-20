@@ -24,7 +24,7 @@ export default Application = (function() {
   function Application(params) {
     var path;
     this.params = params;
-    path = GLib.get_user_data_dir() + '/bosco/player.ui';
+    path = PREFIX + "/player.ui";
     this.window = Util.loadTemplate('AppWindow', path, ['background', 'status'], this.params);
     this.regularCss = new Gtk.CssProvider();
     this.regularCss.load_from_data("* { font-family: Dejavu ; font-size: medium }");
@@ -50,6 +50,7 @@ export default Application = (function() {
     this.window.background.add(this.buildBackground());
     this.window.set_default_size(1040, 620);
     this.window.set_titlebar(this.headerbar);
+    this.window.set_icon_from_file(PREFIX + "/bosco.png");
     return this.window.show_all();
   };
 
@@ -204,7 +205,7 @@ export default Application = (function() {
   Application.prototype.buildNotebook = function() {
     var builder, notebook, title;
     builder = new Gtk.Builder();
-    builder.add_from_file("/home/bruce/gjs/bosco/src/ui/project.glade");
+    builder.add_from_file(PREFIX + "/project.glade");
     notebook = builder.get_object("project");
     title = new Gtk.Label({
       label: "Autovala"

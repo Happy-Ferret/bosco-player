@@ -15,7 +15,7 @@ export default class Application
 
     constructor: (@params) ->
         # path to template
-        path = GLib.get_user_data_dir()+'/bosco/player.ui'
+        path = "#{PREFIX}/player.ui"
 
         # load Composite Widget
         @window = Util.loadTemplate('AppWindow', path, ['background', 'status'], @params)
@@ -44,6 +44,7 @@ export default class Application
 
         @window.set_default_size(1040, 620)
         @window.set_titlebar(@headerbar)
+        @window.set_icon_from_file("#{PREFIX}/bosco.png")
         @window.show_all()
 
     ###
@@ -170,7 +171,7 @@ export default class Application
     ###
     buildNotebook: () ->
         builder = new Gtk.Builder()
-        builder.add_from_file("/home/bruce/gjs/bosco/src/ui/project.glade")
+        builder.add_from_file("#{PREFIX}/project.glade")
         notebook = builder.get_object("project")
 
         title = new Gtk.Label(label: "Autovala")
