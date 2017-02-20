@@ -60,7 +60,7 @@ install = (prefix) ->
 
 ###
 #
-#   cake install:local
+#   cake install
 #
 #   copy executable to ~/.local/bin
 #   copy resources to ~/.local/share/bosco

@@ -1,5 +1,3 @@
-#!/usr/bin/env gjs
-const PREFIX = "/home/bruce/gjs/bosco/share/bosco"
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -60,7 +58,7 @@ define("Util", ["require", "exports"], function (require, exports) {
 });
 define("Project", ["require", "exports"], function (require, exports) {
     "use strict";
-    /**
+    /*
      *
      * Project class -
      *
@@ -131,7 +129,7 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
     var GObject = imports.gi.GObject;
     var Gtk = imports.gi.Gtk;
     var Pango = imports.gi.Pango;
-    /**
+    /*
      *
      * Abstract Class ProjectViewer -
      *
@@ -139,7 +137,7 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
      *
      */
     var NotebookTab = (function () {
-        /**
+        /*
           * set the autovala project data
           * @param prj:Project
          */
@@ -148,7 +146,7 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
             this.status = status;
             this.id = this.status.get_context_id(this.constructor.name);
         }
-        /**
+        /*
           *
           *  buildUI
           *
@@ -199,22 +197,21 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
             this.scrollView.add(this.treeView);
             return this.grid.attach(this.scrollView, 0, 0, 1, 1);
         };
-        /**
+        /*
           * Add data to the list store
           * call from subclass buildUI
          */
         NotebookTab.prototype.add = function (p1, p2, p3) {
             return this.listStore.set(this.listStore.append(), [0, 1, 2], [String(p1), String(p2), String(p3)]);
         };
-        /**
+        /*
           * show the current selected row
          */
         NotebookTab.prototype.onSelectionChanged = function () {
             _a = this.selection.get_selected(), isSelected = _a[0], model = _a[1], iter = _a[2];
-            this.status.push(this.id, this.listStore.get_value(iter, 0)
+            return this.status.push(this.id, this.listStore.get_value(iter, 0)
                 + " " + this.listStore.get_value(iter, 1)
                 + " " + this.listStore.get_value(iter, 2));
-            return;
             var _a;
         };
         return NotebookTab;
@@ -224,45 +221,38 @@ define("tabs/NotebookTab", ["require", "exports"], function (require, exports) {
 });
 define("tabs/SourceTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_1) {
     "use strict";
-    var GObject = imports.gi.GObject;
-    var Gtk = imports.gi.Gtk;
-    var Pango = imports.gi.Pango;
-    /**
-     *
-     * ProjectViewer class -
-     *
-     * view autovala data
-     *
-     */
-    var SourceTab = (function (_super) {
-        __extends(SourceTab, _super);
+    var GObject, Gtk, Pango, SourceTab, extend = function (child, parent) { for (var key in parent) {
+        if (hasProp.call(parent, key))
+            child[key] = parent[key];
+    } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; }, hasProp = {}.hasOwnProperty;
+    GObject = imports.gi.GObject;
+    Gtk = imports.gi.Gtk;
+    Pango = imports.gi.Pango;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = SourceTab = (function (superClass) {
+        extend(SourceTab, superClass);
         function SourceTab() {
-            _super.apply(this, arguments);
+            return SourceTab.__super__.constructor.apply(this, arguments);
         }
-        SourceTab.prototype.costructor = function (prj, status) {
-            _super.call(this, prj, status);
-        };
         SourceTab.prototype.buildUI = function () {
-            _super.prototype.buildUI.call(this);
-            if (this.prj.data.gresource != null) {
-                for (var _i = 0, _a = this.prj.data.vala_source; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    this.add(item.value, "", item.readonly);
-                }
+            var i, item, len, ref;
+            SourceTab.__super__.buildUI.call(this);
+            ref = this.prj.data.vala_source;
+            for (i = 0, len = ref.length; i < len; i++) {
+                item = ref[i];
+                this.add(item.value, "", item.readonly);
             }
             return this.grid;
         };
         return SourceTab;
-    }(NotebookTab_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = SourceTab;
+    })(NotebookTab_1.default);
 });
 define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_2) {
     "use strict";
     var GObject = imports.gi.GObject;
     var Gtk = imports.gi.Gtk;
     var Pango = imports.gi.Pango;
-    /**
+    /*
      *
      * ProjectViewer class -
      *
@@ -290,46 +280,41 @@ define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (
 });
 define("tabs/ResourceTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_3) {
     "use strict";
-    var GObject = imports.gi.GObject;
-    var Gtk = imports.gi.Gtk;
-    var Pango = imports.gi.Pango;
-    /**
-     *
-     * ProjectViewer class -
-     *
-     * view autovala data
-     *
-     */
-    var ResourceTab = (function (_super) {
-        __extends(ResourceTab, _super);
+    var GObject, Gtk, Pango, ResourceTab, extend = function (child, parent) { for (var key in parent) {
+        if (hasProp.call(parent, key))
+            child[key] = parent[key];
+    } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; }, hasProp = {}.hasOwnProperty;
+    GObject = imports.gi.GObject;
+    Gtk = imports.gi.Gtk;
+    Pango = imports.gi.Pango;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = ResourceTab = (function (superClass) {
+        extend(ResourceTab, superClass);
         function ResourceTab() {
-            _super.apply(this, arguments);
+            return ResourceTab.__super__.constructor.apply(this, arguments);
         }
-        ResourceTab.prototype.costructor = function (prj, status) {
-            _super.call(this, prj, status);
-        };
         ResourceTab.prototype.buildUI = function () {
-            _super.prototype.buildUI.call(this);
+            var i, item, len, name, path, ref, ref1;
+            ResourceTab.__super__.buildUI.call(this);
             if (this.prj.data.gresource != null) {
-                for (var _i = 0, _a = this.prj.data.gresource; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    var _b = String(item.value).split(' '), name_1 = _b[0], path = _b[1];
-                    this.add(name_1, path, item.readonly);
+                ref = this.prj.data.gresource;
+                for (i = 0, len = ref.length; i < len; i++) {
+                    item = ref[i];
+                    ref1 = String(item.value).split(' '), name = ref1[0], path = ref1[1];
+                    this.add(name, path, item.readonly);
                 }
             }
             return this.grid;
         };
         return ResourceTab;
-    }(NotebookTab_3.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ResourceTab;
+    })(NotebookTab_3.default);
 });
 define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_4) {
     "use strict";
     var GObject = imports.gi.GObject;
     var Gtk = imports.gi.Gtk;
     var Pango = imports.gi.Pango;
-    /**
+    /*
      *
      * ProjectViewer class -
      *
@@ -346,9 +331,9 @@ define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function 
         };
         AutovalaTab.prototype.buildUI = function () {
             _super.prototype.buildUI.call(this);
-            var data = this.prj.data;
-            for (var key in data) {
-                var item = data[key];
+            var ref = this.prj.data;
+            for (var key in ref) {
+                var item = ref[key];
                 if (!Array.isArray(item)) {
                     this.add(key, item.value, item.readonly);
                 }
@@ -366,19 +351,17 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
     var Gio = imports.gi.Gio;
     var Gtk = imports.gi.Gtk;
     var Notify = imports.gi.Notify;
-    /**
-     * Top level Application
-     */
     var Application = (function () {
         function Application(params) {
             this.params = params;
-            this.window = Util_1.default.loadTemplate('AppWindow', PREFIX + "/player.ui", ['background', 'status'], this.params);
+            var path = PREFIX + "/player.ui";
+            this.window = Util_1.default.loadTemplate('AppWindow', path, ['background', 'status'], this.params);
             this.regularCss = new Gtk.CssProvider();
             this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }");
             this.logoCss = new Gtk.CssProvider();
             this.logoCss.load_from_data("* { font-family: OpenDyslexic;  font-size: 32px }");
         }
-        /**
+        /*
          * buildUI
          *
          * @param config
@@ -397,7 +380,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             this.window.set_icon_from_file(PREFIX + "/bosco.png");
             return this.window.show_all();
         };
-        /**
+        /*
          * builds the Application Menu
          *
          * main app menu
@@ -431,7 +414,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             });
             this.application.add_action(quitAction);
         };
-        /**
+        /*
          * builds the client background
          *
          * @param config
@@ -447,7 +430,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             background.get_style_context().add_provider(this.logoCss, 0);
             return this.background = background;
         };
-        /**
+        /*
          * build open project button
          *
          * @param config
@@ -479,7 +462,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             });
             return openButton;
         };
-        /**
+        /*
          * display project
          *
          * @param path
@@ -501,8 +484,8 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             path = path.substring(0, path.lastIndexOf("/"));
             this.entitasFile = Gio.File.new_for_path(path + "/entitas.json");
             if (this.entitasFile.query_exists(null)) {
-                _b = this.entitasFile.load_contents(null), success = _b[0], data = _b[1], length = _b[2];
-                this.entitas = JSON.parse(data);
+                var _b = this.entitasFile.load_contents(null), success_1 = _b[0], data_1 = _b[1], length_2 = _b[2];
+                this.entitas = JSON.parse(data_1);
             }
             else {
                 this.entitas = null;
@@ -517,9 +500,8 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             this.srcContent.pack_start(new SourceTab_1.default(this.avprj, this.window.status).buildUI(), true, true, 0);
             this.srcContent.get_style_context().add_provider(this.regularCss, 0);
             this.window.show_all();
-            var _b;
         };
-        /**
+        /*
          * build notebook
          *
          */
@@ -554,7 +536,7 @@ define("Application", ["require", "exports", "Util", "Project", "tabs/SourceTab"
             notebook.append_page(this.entitasContent, title);
             return this.notebook = notebook;
         };
-        /**
+        /*
          * build project options editor
          *
          * @param config
@@ -650,7 +632,7 @@ define("Player", ["require", "exports", "Util", "Application"], function (requir
     var GLib = imports.gi.GLib;
     var Gio = imports.gi.Gio;
     var Gtk = imports.gi.Gtk;
-    /**
+    /*
      * Bosco Player
      *
      * top level application object
@@ -671,7 +653,7 @@ define("Player", ["require", "exports", "Util", "Application"], function (requir
                 _this.window.present();
             });
         }
-        /**
+        /*
          * build the Application Menu
          *
          * main app menu
@@ -705,13 +687,13 @@ define("Player", ["require", "exports", "Util", "Application"], function (requir
             });
             this.application.add_action(quitAction);
         };
-        /**
+        /*
          * New project dialog
          */
         Player.prototype.showNew = function () {
             return print("Not implemented");
         };
-        /**
+        /*
          * About dialog
          */
         Player.prototype.showAbout = function () {
@@ -726,7 +708,7 @@ define("Player", ["require", "exports", "Util", "Application"], function (requir
             about.run();
             return about.destroy();
         };
-        /**
+        /*
          * load configuration
          */
         Player.prototype.getConfig = function () {

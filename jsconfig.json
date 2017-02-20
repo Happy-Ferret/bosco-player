@@ -6,8 +6,7 @@
         "outFile": "bin/bosco-player"
     },
     "files": [
-        "js/shebang.js",
-        "js/amd.js",
-        "js/main.js"
+        "src/amd.js",
+        "src/main.js"
     ]
 }

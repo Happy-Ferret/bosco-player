@@ -11,7 +11,7 @@
         {
             "isBuildCommand": true,
             "taskName": "build",
-            "args": ["coffee --no-header -o js -c src && tsc -p ./jsconfig.json"]
+            "args": ["tsc -p ./jsconfig.json && cat src/shebang.js bin/bosco-player > bin/tmp && mv bin/tmp bin/bosco-player && chmod +x bin/bosco-player"]
         }
     ]
 }

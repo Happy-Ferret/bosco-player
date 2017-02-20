@@ -7,7 +7,7 @@
  * @returns module loader function define
  *
  */
-var define = (function (modules) {
+const define = (function (modules) {
     return (name, deps, callback) => {
         modules[name] = { id: name, exports: {} }
         let args = [(name) => modules[name].exports, modules[name].exports]
