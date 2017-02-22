@@ -1,16 +1,13 @@
 
 import * as Gio from 'Gio'
 import * as Gtk from 'Gtk'
-
+import * as xml2js from 'xml2js'
 import Util from 'Util'
 import Project from 'Project'
 import SourceTab from 'tabs/SourceTab'
 import PackageTab from 'tabs/PackageTab'
 import ResourceTab from 'tabs/ResourceTab'
 import AutovalaTab from 'tabs/AutovalaTab'
-
-const {parseString} = require('xml2js')
-
 /**
  * Top level Application
  */
@@ -38,7 +35,7 @@ export default class Application {
 
   constructor(params) {
 
-    parseString("<root>Hello xml2js!</root>", (err, res) => {
+    xml2js.parseString("<root>Hello xml2js!</root>", (err, res) => {
       print("Parsed")
       print(JSON.stringify(res, null, 2))
     })

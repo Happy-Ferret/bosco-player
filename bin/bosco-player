@@ -10,11 +10,10 @@ var PREFIX = "/home/bruce/gjs/bosco/share/bosco"; /* data location */
  *
  * AMD loader for gjs
  *
- * implementation for use with typescript
- * supports the inclusion of nodejs modules via browserify
- *
- * @param root object
- * @returns module loader function define
+ * ties together
+ * * builtin gir modules
+ * * node modules (via browserify)
+ * * local project modules
  *
  */
 var define = (function (modules) {
@@ -41,8 +40,8 @@ var define = (function (modules) {
     Notify: { id: 'Notify', exports: imports.gi.Notify },
     GObject: { id: 'GObject', exports: imports.gi.GObject }
 }));
-define['amd'] = true;
-define['version'] = '0.0.1';
+define.amd = true;
+define.version = '0.0.1';
 Object.freeze(define);
 (function (f) { if (typeof exports === "object" && typeof module !== "undefined") {
     module.exports = f();
@@ -11781,9 +11780,6 @@ define("tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"], fu
 });
 define("tabs/SourceTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_1) {
     "use strict";
-    var Gtk = require('Gtk');
-    var GObject = require('GObject');
-    var Pango = require('Pango');
     /**
      *
      * ProjectViewer class -
@@ -11813,9 +11809,6 @@ define("tabs/SourceTab", ["require", "exports", "tabs/NotebookTab"], function (r
 });
 define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_2) {
     "use strict";
-    var Gtk = require('Gtk');
-    var GObject = require('GObject');
-    var Pango = require('Pango');
     /**
      *
      * ProjectViewer class -
@@ -11844,9 +11837,6 @@ define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (
 });
 define("tabs/ResourceTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_3) {
     "use strict";
-    var Gtk = require('Gtk');
-    var GObject = require('GObject');
-    var Pango = require('Pango');
     /**
      *
      * ProjectViewer class -
@@ -11905,15 +11895,14 @@ define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AutovalaTab;
 });
-define("Application", ["require", "exports", "Gio", "Gtk", "Util", "Project", "tabs/SourceTab", "tabs/PackageTab", "tabs/ResourceTab", "tabs/AutovalaTab"], function (require, exports, Gio, Gtk, Util_1, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
+define("Application", ["require", "exports", "Gio", "Gtk", "xml2js", "Util", "Project", "tabs/SourceTab", "tabs/PackageTab", "tabs/ResourceTab", "tabs/AutovalaTab"], function (require, exports, Gio, Gtk, xml2js, Util_1, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
     "use strict";
-    var parseString = require('xml2js').parseString;
     /**
      * Top level Application
      */
     var Application = (function () {
         function Application(params) {
-            parseString("<root>Hello xml2js!</root>", function (err, res) {
+            xml2js.parseString("<root>Hello xml2js!</root>", function (err, res) {
                 print("Parsed");
                 print(JSON.stringify(res, null, 2));
             });

@@ -1,6 +1,11 @@
+/**
+ * gjs.d.ts
+ * 
+ * Gjs declarations for typescript
+ */
+type Handler = (...args) => void
 
 declare const ARGV: string[]
-type Handler = (...args) => void
 declare function print(...args: any[])
 declare function require(name: string): any
 
