@@ -1,7 +1,7 @@
-const GLib = imports.gi.GLib
-const Gio = imports.gi.Gio
-const Gtk = imports.gi.Gtk
 
+import * as Gio from 'Gio'
+import * as Gtk from 'Gtk'
+import * as GLib from 'GLib'
 import Util from 'Util'
 import Application from 'Application'
 /**
@@ -10,11 +10,13 @@ import Application from 'Application'
  * top level application object
  */
 export default class Player {
-  
+
+  application: any
+  appWindow: any
+  window: any
+
   constructor() {
-    this.application = new Gtk.Application({
-      flags: Gio.ApplicationFlags.FLAGS_NONE
-    })
+    this.application = new Gtk.Application({flags: Gio.ApplicationFlags.FLAGS_NONE})
     this.application.connect('activate', () => {
         this.buildUI()
         this.appWindow = new Application({
@@ -61,7 +63,7 @@ export default class Player {
     })
 
     quitAction.connect('activate', () => {
-      return _this.window.destroy()
+      return this.window.destroy()
     })
 
     this.application.add_action(quitAction)
@@ -99,6 +101,7 @@ export default class Player {
   getConfig() {
     const res_name_default = "custom.gresource"
     const res_prefix_default = "/com/darkoverlordofdata/custom"
+
     let data = Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json")
     let config = data != null ? JSON.parse(data) : {}
     config.app_name = "Player"

@@ -1,12 +1,16 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es5",    
         "module": "amd",
         "rootDir": "src",
+        "allowJs": true,
         "outFile": "bin/bosco-player"
     },
     "files": [
+        "src/gnome.d.ts",
+        "src/prefix.ts",
         "src/amd.js",
-        "src/main.js"
+        "src/bundle.js",
+        "src/main.ts"
     ]
 }

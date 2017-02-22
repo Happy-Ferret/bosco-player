@@ -1,6 +1,6 @@
-const GObject = imports.gi.GObject
-const Gtk = imports.gi.Gtk
-const Pango = imports.gi.Pango
+import * as Gtk from 'Gtk'
+import * as GObject from 'GObject'
+import * as Pango from 'Pango'
 
 import NotebookTab from 'tabs/NotebookTab'
 /**

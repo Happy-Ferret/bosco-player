@@ -1,6 +1,7 @@
-const Gio = imports.gi.Gio
-const Gtk = imports.gi.Gtk
-const Lang = imports.lang
+
+import * as Gio from 'Gio'
+import * as Gtk from 'Gtk'
+import * as Lang from 'Lang'
 
 export default class Util {
 

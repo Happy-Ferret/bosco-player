@@ -25,11 +25,13 @@ Future?
 
 I use vscode. ctrl-b to build, f5 to run
 or...
+
+If I can use coffeescript, I can use es6!
+but coffeescript is shebang friendly, and es6 translation is not.
+
 ```
-coffee --no-header -o js -c src
 tsc -p ./jsconfig.json
 ```
-
 
 ### install
 
@@ -41,7 +43,8 @@ npm install -g coffeescript
 git clone git@github.com:darkoverlordofdata/bosco-player.git
 cd bosco-player
 npm install
-cake install
+tsc -p ./jsconfig.json
+./install
 ```
 
 ### gjs + coffeescript + tsc

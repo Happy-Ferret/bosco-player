@@ -1,6 +1,7 @@
-const GObject = imports.gi.GObject
-const Gtk = imports.gi.Gtk
-const Pango = imports.gi.Pango
+import * as Gtk from 'Gtk'
+import * as GObject from 'GObject'
+import * as Pango from 'Pango'
+
 /**
  *
  * Abstract Class ProjectViewer - 
@@ -10,6 +11,15 @@ const Pango = imports.gi.Pango
  */
 export default class NotebookTab {
 
+  prj: any
+  status: any
+  id: any
+  listStore: any
+  treeView: any
+  selection: any
+  grid: any
+  scrollView: any
+
   /**
     * set the autovala project data 
     * @param prj:Project
@@ -17,7 +27,7 @@ export default class NotebookTab {
   constructor(prj, status) {
     this.prj = prj
     this.status = status
-    this.id = this.status.get_context_id(this.constructor.name)
+    this.id = this.status.get_context_id(this.constructor['name'])
   }
   /**
     *
@@ -84,7 +94,7 @@ export default class NotebookTab {
     * show the current selected row
    */
   onSelectionChanged() {
-    [isSelected, model, iter] = this.selection.get_selected()
+    let [isSelected, model, iter] = this.selection.get_selected()
     this.status.push(this.id, this.listStore.get_value(iter, 0) 
         + " " + this.listStore.get_value(iter, 1) 
         + " " + this.listStore.get_value(iter, 2))

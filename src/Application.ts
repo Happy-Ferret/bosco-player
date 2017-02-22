@@ -1,7 +1,6 @@
-const GLib = imports.gi.GLib
-const Gio = imports.gi.Gio
-const Gtk = imports.gi.Gtk
-const Notify = imports.gi.Notify
+
+import * as Gio from 'Gio'
+import * as Gtk from 'Gtk'
 
 import Util from 'Util'
 import Project from 'Project'
@@ -10,14 +9,45 @@ import PackageTab from 'tabs/PackageTab'
 import ResourceTab from 'tabs/ResourceTab'
 import AutovalaTab from 'tabs/AutovalaTab'
 
+const {parseString} = require('xml2js')
+
 /**
  * Top level Application
  */
 export default class Application {
 
+  application: any
+  window: any
+  regularCss: any
+  logoCss: any
+  headerBar: any
+  headerbar: any
+  config: any
+  background: any
+  projectPath: string
+  projectFile: any
+  notebook: any
+  avprj: any
+  entitasFile: any
+  entitas: any
+  avContent: any
+  resContent: any
+  pkContent: any
+  srcContent: any
+  entitasContent: any
+
   constructor(params) {
-    this.params = params
-    this.window = Util.loadTemplate('AppWindow', PREFIX + "/player.ui", ['background', 'status'], this.params)
+
+    parseString("<root>Hello xml2js!</root>", (err, res) => {
+      print("Parsed")
+      print(JSON.stringify(res, null, 2))
+    })
+
+    //this.params = params
+    this.window = Util.loadTemplate('AppWindow', 
+                                      PREFIX + "/player.ui", 
+                                      ['background', 'status'], 
+                                      params)
     this.regularCss = new Gtk.CssProvider()
     this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }")
     this.logoCss = new Gtk.CssProvider()
@@ -45,50 +75,13 @@ export default class Application {
   }
 
 
-  /**
-   * builds the Application Menu
-   *
-   * main app menu
-   */
-  buildAppMenu() {
-    const menu = new Gio.Menu()
-    menu.append("New", 'app.new')
-    menu.append("About", 'app.about')
-    menu.append("Quit", 'app.quit')
-    this.application.set_app_menu(menu)
-
-    const newAction = new Gio.SimpleAction({
-      name: 'new'
-    })
-    newAction.connect('activate', () => {
-        return this.showNew()
-    })
-    this.application.add_action(newAction)
-
-    const aboutAction = new Gio.SimpleAction({
-      name: 'about'
-    })
-    aboutAction.connect('activate', () => {
-        return _this.showAbout()
-    })
-    this.application.add_action(aboutAction)
-
-    const quitAction = new Gio.SimpleAction({
-      name: 'quit'
-    })
-    quitAction.connect('activate', () => {
-        return _this.window.destroy()
-    })
-    this.application.add_action(quitAction)
-  }
-
 
   /**
    * builds the client background
    *   
    * @param config
    */
-  buildBackground(config) {
+  buildBackground() {
     const background = new Gtk.Box()
     background.set_vexpand(true)
     background.set_hexpand(true)
@@ -183,7 +176,7 @@ export default class Application {
     const builder = new Gtk.Builder()
     builder.add_from_file(PREFIX + "/project.glade")
     const notebook = builder.get_object("project")
-    const title = new Gtk.Label({
+    let title = new Gtk.Label({
       label: "Autovala"
     })
     this.avContent = new Gtk.Box()
@@ -229,11 +222,9 @@ export default class Application {
     })
     namelabel.set_halign(Gtk.Align.END)
     const nameentry = new Gtk.Entry()
-    nameentry.connect("changed", (function(_this) {
-      return function() {
+    nameentry.connect("changed", () => {
         return config.res_name = nameentry.get_text()
-      }
-    })(this))
+    })
     nameentry.set_placeholder_text(config.res_name)
     grid.attach(namelabel, 0, 0, 1, 1)
     grid.attach_next_to(nameentry, namelabel, Gtk.PositionType.RIGHT, 2, 1)
@@ -268,7 +259,7 @@ export default class Application {
     })
 
     menu.connect("closed", () => {
-        const outputstream, parent, res_prefix
+        let outputstream, parent, res_prefix
         if (menubutton.get_active()) {
           menubutton.set_active(false)
         }
@@ -283,19 +274,19 @@ export default class Application {
           config.res_prefix = res_prefix
           write = true
         }
-        if (write) {
-          parent = config_file.get_parent()
-          if (parent.query_exists(null)) {
-            if (config_file.query_exists(null)) {
-              config_file["delete"](null)
-            }
-          } else {
-            parent.make_directory_with_parents(null)
-          }
-          outputstream = config_file.create(Gio.FileCreateFlags.REPLACE_DESTINATION, null)
-          outputstream.write_all(JSON.stringify(config), null)
-          outputstream.close(null)
-        }
+        // if (write) {
+        //   parent = config_file.get_parent()
+        //   if (parent.query_exists(null)) {
+        //     if (config_file.query_exists(null)) {
+        //       config_file["delete"](null)
+        //     }
+        //   } else {
+        //     parent.make_directory_with_parents(null)
+        //   }
+        //   outputstream = config_file.create(Gio.FileCreateFlags.REPLACE_DESTINATION, null)
+        //   outputstream.write_all(JSON.stringify(config), null)
+        //   outputstream.close(null)
+        // }
     })
     menu.add(grid)
     return menubutton
