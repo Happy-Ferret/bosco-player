@@ -12,13 +12,13 @@ import * as Pango from 'Pango'
 export class NotebookTab {
 
   prj: any
-  status: any
-  id: any
-  listStore: any
-  treeView: any
-  selection: any
-  grid: any
-  scrollView: any
+  status: Gtk.Statusbar
+  id: number
+  listStore: Gtk.ListStore
+  treeView: Gtk.TreeView
+  selection: Gtk.TreeSelection
+  grid: Gtk.Grid
+  scrollView: Gtk.ScrolledWindow
 
   /**
     * set the autovala project data 

@@ -60,14 +60,50 @@ declare module "Gio" {
         load_contents(obj:any): any
         static new_for_path(path: string): File
     }
-    export class Menu extends GObject.Object {
-        append(label: string, action: string)
+    // export class Menu extends GObject.Object {
+    //     append(label: string, action: string)
+    // }
+    export class Menu extends MenuModel {
+        append(label: string, detailed_action: string):void
+        append_item(item: MenuItem):void
+        append_section(label: string, section: MenuModel):void
+        append_submenu(label: string, submenu: MenuModel):void
+        freeze():void
+        insert(position: number, label: string, detailed_action: string):void
+        insert_item(position: number, item: MenuItem):void
+        insert_section(position: number, label: string, section: MenuModel):void
+        insert_submenu(position: number, label: string, submenu: MenuModel):void
+        prepend(label: string, detailed_action: string):void
+        prepend_item(item: MenuItem):void
+        prepend_section(label: string, section: MenuModel):void
+        prepend_submenu(label: string, submenu: MenuModel):void
+        remove(position: number):void
+        remove_all():void
     }
     export class MenuAttributeIter extends GObject.Object {
         get_name():string
         get_next(out_name: string, value: any):boolean
         get_value():any
         next():boolean
+    }
+    export class MenuItem extends GObject.Object {
+        constructor(label: string, detailed_action: string)
+        constructor(model: MenuModel, item_index: number)
+        constructor(label: string, section: MenuModel)
+        constructor(label: string, submenu: MenuModel)
+        get_attribute(attribute: string, format_string: string, ...args: any[]):boolean
+        get_attribute_value(attribute: string, expected_type: any):any
+        get_link(link: string):MenuModel
+        set_action_and_target(action: string, format_string: string, ...args: any[]):void
+        set_action_and_target_value(action: string, target_value: any):void
+        set_attribute(attribute: string, format_string: string, ...args: any[]):void
+        set_attribute_value(attribute: string, value: any):void
+        set_detailed_action(detailed_action: string):void
+        set_icon(icon: any):void
+        set_label(label: string):void
+        set_link(link: string, model: MenuModel):void
+        set_section(section: MenuModel):void
+        set_submenu(submenu: MenuModel):void
     }
     export class MenuLinkIter extends GObject.Object {
         get_name():string
@@ -99,8 +135,14 @@ declare module "Gio" {
         set_title(title: string):void
         set_urgent(urgent: boolean):void
     }
+    // export class SimpleAction extends GObject.Object {
+    //     constructor(config: any)
+    // }
     export class SimpleAction extends GObject.Object {
-        constructor(config: any)
+        constructor(config?: any)
+        set_enabled(enabled: boolean):void
+        set_state(value: any):void
+        set_state_hint(state_hint: any):void
     }
     // export enum ApplicationFlags {
     //     FLAGS_NONE

@@ -10,7 +10,7 @@ import {PlayerWindow} from 'PlayerWindow'
  */
 export class Player {
 
-  application: any //Application
+  application: Application
   appWindow: PlayerWindow
   window: any
   path: string

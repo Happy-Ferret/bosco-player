@@ -84,6 +84,8 @@ declare module "Gtk" {
     export class Application extends Gio.Application {
         constructor(config?:any)
         constructor(application_id: string, flags: Gio.ApplicationFlags)
+        add_action(action: any)     /* Not in GIR! */        
+        run(argv: any)              /* Not in GIR! */        
         add_accelerator(accelerator: string, action_name: string, parameter: any):void
         add_window(window: Window):void
         get_accels_for_action(detailed_action_name: string):string[]
@@ -237,7 +239,8 @@ declare module "Gtk" {
         get_path_for_child(child: Widget):any
         get_resize_mode():ResizeMode
         propagate_draw(child: Widget, cr: any):void
-        remove(widget: Widget):void
+        //remove(widget: Widget):void
+        remove(...args:any[]):void 
         resize_children():void
         set_border_width(border_width: number):void
         set_focus_chain(focusable_widgets: any):void
@@ -250,7 +253,7 @@ declare module "Gtk" {
     }
 
     export class CssProvider extends GObject.Object {
-        load_from_data(data: number[], length: number):boolean
+        load_from_data(...args:any[]):boolean /* different then GIR!*/
         load_from_file(file: Gio.File):boolean
         load_from_path(path: string):boolean
         load_from_resource(resource_path: string):void
@@ -408,7 +411,29 @@ declare module "Gtk" {
         set_subtitle(subtitle: string):void
         set_title(title: string):void
     }
-    export class Image extends Container {        
+    export class Image extends Misc {
+        constructor(config?:any)
+        constructor(filename: string)
+        constructor(icon: any, size: number)
+        clear():void
+        get_animation():any
+        get_gicon(gicon: any, size: number):void
+        get_icon_name(icon_name: string, size: number):void
+        get_icon_set(icon_set: any, size: number):void
+        get_pixbuf():any
+        get_pixel_size():number
+        get_stock(stock_id: string, size: number):void
+        get_storage_type():ImageType
+        set_from_animation(animation: any):void
+        set_from_file(filename: string):void
+        set_from_gicon(icon: any, size: number):void
+        set_from_icon_name(icon_name: string, size: number):void
+        set_from_icon_set(icon_set: any, size: number):void
+        set_from_pixbuf(pixbuf: any):void
+        set_from_resource(resource_path: string):void
+        set_from_stock(stock_id: string, size: number):void
+        set_from_surface(surface: any):void
+        set_pixel_size(pixel_size: number):void
     }
     export class Label extends Misc {
         constructor(config?:any)
@@ -466,7 +491,8 @@ declare module "Gtk" {
         constructor(config?:any)
         constructor(n_columns: number, ...args: any[])
         constructor(n_columns: number, types: number[])
-        append(iter: any):void
+        get_value(iter: any, index: number): any
+        append(iter?: any):void
         clear():void
         insert(iter: any, position: number):void
         insert_after(iter: any, sibling: any):void
@@ -480,7 +506,8 @@ declare module "Gtk" {
         remove(iter: any):boolean
         reorder(new_order: number[]):void
         set(iter: any, ...args: any[]):void
-        set_column_types(n_columns: number, types: number[]):void
+        // set_column_types(n_columns: number, types: number[]):void
+        set_column_types(types: number[]):void
         set_valist(iter: any, var_args: any):void
         set_value(iter: any, column: number, value: any):void
         set_valuesv(iter: any, columns: number[], values: any[], n_values: number):void
@@ -584,6 +611,14 @@ declare module "Gtk" {
         set_vadjustment(vadjustment: Adjustment):void
         unset_placement():void
     }
+    export class Statusbar extends Box {
+        get_context_id(context_description: string):number
+        get_message_area():Box
+        pop(context_id: number):void
+        push(context_id: number, text: string):number
+        //remove(context_id: number, message_id: number):void
+        remove_all(context_id: number):void
+    }
     export class ToggleButton extends Button {
         constructor(config?:any)
         constructor(label: string)
@@ -612,7 +647,8 @@ declare module "Gtk" {
         count_selected_rows():number
         get_mode():SelectionMode
         get_select_function():any
-        get_selected(model: any, iter: any):boolean
+        // get_selected(model: any, iter: any):boolean
+        get_selected():any /* Not in GIR! returns tuple of [bool, model, iter]*/
         get_selected_rows(model: any):any
         get_tree_view():TreeView
         get_user_data():any

@@ -12,25 +12,23 @@ import {parseString} from 'xml2js'
  */
 export class PlayerWindow {
 
-  application: any
   window: any
-  regularCss: any
-  logoCss: any
-  headerBar: any
-  headerbar: any
   config: any
   background: any
-  projectPath: string
-  projectFile: any
-  notebook: any
   avprj: any
-  entitasFile: any
   entitas: any
-  avContent: any
-  resContent: any
-  pkContent: any
-  srcContent: any
-  entitasContent: any
+  regularCss: Gtk.CssProvider
+  logoCss: Gtk.CssProvider
+  headerbar: Gtk.HeaderBar
+  projectPath: string
+  projectFile: File
+  entitasFile: File
+  notebook: Gtk.Notebook
+  avContent: Gtk.Box
+  resContent: Gtk.Box
+  pkContent: Gtk.Box
+  srcContent: Gtk.Box
+  entitasContent: Gtk.Box
 
   constructor(params) {
 
