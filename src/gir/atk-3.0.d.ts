@@ -5,7 +5,7 @@
 declare module "Atk" {
   export function add_focus_tracker(focus_tracker: EventListener):number
   export function add_global_event_listener(listener: GObject.SignalEmissionHook, event_type: string):number
-  export function add_key_event_listener(listener: KeySnoopFunc, data: object):number
+  export function add_key_event_listener(listener: KeySnoopFunc, data: any):number
   export function attribute_set_free(attrib_set: AttributeSet):void
   export function focus_tracker_init(init: EventListenerInit):void
   export function focus_tracker_notify(object: Object):void
@@ -359,7 +359,7 @@ declare module "Atk" {
     get_object_locale():string
     get_parent():Object
     get_role():Role
-    initialize(data: object):void
+    initialize(data: any):void
     notify_state_change(state: State, value: boolean):void
     peek_parent():Object
     ref_accessible_child(i: number):Object
@@ -374,16 +374,16 @@ declare module "Atk" {
   }
   export class ObjectFactory extends GObject.Object {
     create_accessible(obj: GObject.Object):Object
-    get_accessible_type():GType
+    get_accessible_type():number
     invalidate():void
   }
   export class Plug extends Object {
     get_id():string
   }
   export class Registry extends GObject.Object {
-    get_factory(type: GType):ObjectFactory
-    get_factory_type(type: GType):GType
-    set_factory_type(type: GType, factory_type: GType):void
+    get_factory(type: number):ObjectFactory
+    get_factory_type(type: number):number
+    set_factory_type(type: number, factory_type: number):void
   }
   export class Relation extends GObject.Object {
     constructor(targets: Object[], n_targets: number, relationship: RelationType)

@@ -52,14 +52,14 @@ declare module "Pango" {
   export function markup_parser_finish(context: GLib.MarkupParseContext, attr_list: AttrList, text: string, accel_char: gunichar):boolean
   export function markup_parser_new(accel_marker: gunichar):GLib.MarkupParseContext
   export function module_register(module: IncludedModule):void
-  export function parse_enum(type: GType, str: string, value: number, warn: boolean, possible_values: string):boolean
+  export function parse_enum(type: number, str: string, value: number, warn: boolean, possible_values: string):boolean
   export function parse_markup(markup_text: string, length: number, accel_marker: gunichar, attr_list: AttrList, text: string, accel_char: gunichar):boolean
   export function parse_stretch(str: string, stretch: Stretch, warn: boolean):boolean
   export function parse_style(str: string, style: Style, warn: boolean):boolean
   export function parse_variant(str: string, variant: Variant, warn: boolean):boolean
   export function parse_weight(str: string, weight: Weight, warn: boolean):boolean
   export function quantize_line_geometry(thickness: number, position: number):void
-  export function read_line(stream: object, str: GLib.String):number
+  export function read_line(stream: any, str: GLib.String):number
   export function reorder_items(logical_items: GLib.List):GLib.List
   export function scan_int(pos: string, out: number):boolean
   export function scan_string(pos: string, out: GLib.String):boolean
@@ -378,7 +378,7 @@ declare module "Pango" {
     load_fontset(context: Context, desc: FontDescription, language: Language):Fontset
   }
   export class Fontset extends GObject.Object {
-    foreach(func: FontsetForeachFunc, data: object):void
+    foreach(func: FontsetForeachFunc, data: any):void
     get_font(wc: number):Font
     get_metrics():FontMetrics
   }

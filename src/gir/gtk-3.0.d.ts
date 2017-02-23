@@ -19,7 +19,7 @@ declare module "Gtk" {
   export function binding_entry_add_signall(binding_set: BindingSet, keyval: number, modifiers: Gdk.ModifierType, signal_name: string, binding_args: GLib.SList):void
   export function binding_entry_remove(binding_set: BindingSet, keyval: number, modifiers: Gdk.ModifierType):void
   export function binding_entry_skip(binding_set: BindingSet, keyval: number, modifiers: Gdk.ModifierType):void
-  export function binding_set_by_class(object_class: object):BindingSet
+  export function binding_set_by_class(object_class: any):BindingSet
   export function binding_set_find(set_name: string):BindingSet
   export function binding_set_new(set_name: string):BindingSet
   export function bindings_activate(object: GObject.Object, keyval: number, modifiers: Gdk.ModifierType):boolean
@@ -72,7 +72,7 @@ declare module "Gtk" {
   export function init(argc: number, argv: string[]):void
   export function init_check(argc: number, argv: string[]):boolean
   export function init_with_args(argc: number, argv: string[], parameter_string: string, entries: GLib.OptionEntry[], translation_domain: string):boolean
-  export function key_snooper_install(snooper: KeySnoopFunc, func_data: object):number
+  export function key_snooper_install(snooper: KeySnoopFunc, func_data: any):number
   export function key_snooper_remove(snooper_handler_id: number):void
   export function main():void
   export function main_do_event(event: Gdk.Event):void
@@ -105,7 +105,7 @@ declare module "Gtk" {
   export function parse_args(argc: number, argv: string[]):boolean
   export function print_error_quark():GLib.Quark
   export function print_run_page_setup_dialog(parent: Window, page_setup: PageSetup, settings: PrintSettings):PageSetup
-  export function print_run_page_setup_dialog_async(parent: Window, page_setup: PageSetup, settings: PrintSettings, done_cb: PageSetupDoneFunc, data: object):void
+  export function print_run_page_setup_dialog_async(parent: Window, page_setup: PageSetup, settings: PrintSettings, done_cb: PageSetupDoneFunc, data: any):void
   export function propagate_event(widget: Widget, event: Gdk.Event):void
   export function rc_add_default_file(filename: filename):void
   export function rc_find_module_in_path(module_file: string):filename
@@ -115,7 +115,7 @@ declare module "Gtk" {
   export function rc_get_im_module_path():filename
   export function rc_get_module_dir():filename
   export function rc_get_style(widget: Widget):Style
-  export function rc_get_style_by_paths(settings: Settings, widget_path: string, class_path: string, type: GType):Style
+  export function rc_get_style_by_paths(settings: Settings, widget_path: string, class_path: string, type: number):Style
   export function rc_get_theme_dir():string
   export function rc_parse(filename: string):void
   export function rc_parse_color(scanner: GLib.Scanner, color: Gdk.Color):number
@@ -162,13 +162,13 @@ declare module "Gtk" {
   export function selection_owner_set_for_display(display: Gdk.Display, widget: Widget, selection: Gdk.Atom, time_: guint32):boolean
   export function selection_remove_all(widget: Widget):void
   export function set_debug_flags(flags: number):void
-  export function show_about_dialog(parent: Window, first_property_name: string, ...args: any):void
+  export function show_about_dialog(parent: Window, first_property_name: string, ...args: any[]):void
   export function show_uri(screen: Gdk.Screen, uri: string, timestamp: guint32):boolean
   export function stock_add(items: StockItem[], n_items: number):void
   export function stock_add_static(items: StockItem[], n_items: number):void
   export function stock_list_ids():GLib.SList
   export function stock_lookup(stock_id: string, item: StockItem):boolean
-  export function stock_set_translate_func(domain: string, func: TranslateFunc, data: object, notify: GLib.DestroyNotify):void
+  export function stock_set_translate_func(domain: string, func: TranslateFunc, data: any, notify: GLib.DestroyNotify):void
   export function target_table_free(targets: TargetEntry[], n_targets: number):void
   export function target_table_new_from_list(list: TargetList, n_targets: number):TargetEntry[]
   export function targets_include_image(targets: Gdk.Atom[], n_targets: number, writable: boolean):boolean
@@ -176,13 +176,13 @@ declare module "Gtk" {
   export function targets_include_text(targets: Gdk.Atom[], n_targets: number):boolean
   export function targets_include_uri(targets: Gdk.Atom[], n_targets: number):boolean
   export function test_create_simple_window(window_title: string, dialog_text: string):Widget
-  export function test_create_widget(widget_type: GType, first_property_name: string, ...args: any):Widget
-  export function test_display_button_window(window_title: string, dialog_text: string, ...args: any):Widget
+  export function test_create_widget(widget_type: number, first_property_name: string, ...args: any[]):Widget
+  export function test_display_button_window(window_title: string, dialog_text: string, ...args: any[]):Widget
   export function test_find_label(widget: Widget, label_pattern: string):Widget
-  export function test_find_sibling(base_widget: Widget, widget_type: GType):Widget
-  export function test_find_widget(widget: Widget, label_pattern: string, widget_type: GType):Widget
-  export function test_init(argcp: number, argvp: string[], ...args: any):void
-  export function test_list_all_types(n_types: number):GType[]
+  export function test_find_sibling(base_widget: Widget, widget_type: number):Widget
+  export function test_find_widget(widget: Widget, label_pattern: string, widget_type: number):Widget
+  export function test_init(argcp: number, argvp: string[], ...args: any[]):void
+  export function test_list_all_types(n_types: number):number[]
   export function test_register_all_types():void
   export function test_slider_get_value(widget: Widget):number
   export function test_slider_set_perc(widget: Widget, percentage: number):void
@@ -1095,7 +1095,7 @@ declare module "Gtk" {
     connect_by_path(accel_path: string, closure: GObject.Closure):void
     disconnect(closure: GObject.Closure):boolean
     disconnect_key(accel_key: number, accel_mods: Gdk.ModifierType):boolean
-    find(find_func: AccelGroupFindFunc, data: object):AccelKey
+    find(find_func: AccelGroupFindFunc, data: any):AccelKey
     get_is_locked():boolean
     get_modifier_mask():Gdk.ModifierType
     lock():void
@@ -1173,12 +1173,12 @@ declare module "Gtk" {
     constructor(name: string)
     add_action(action: Action):void
     add_action_with_accel(action: Action, accelerator: string):void
-    add_actions(entries: ActionEntry[], n_entries: number, user_data: object):void
-    add_actions_full(entries: ActionEntry[], n_entries: number, user_data: object, destroy: GLib.DestroyNotify):void
-    add_radio_actions(entries: RadioActionEntry[], n_entries: number, value: number, on_change: GObject.Callback, user_data: object):void
-    add_radio_actions_full(entries: RadioActionEntry[], n_entries: number, value: number, on_change: GObject.Callback, user_data: object, destroy: GLib.DestroyNotify):void
-    add_toggle_actions(entries: ToggleActionEntry[], n_entries: number, user_data: object):void
-    add_toggle_actions_full(entries: ToggleActionEntry[], n_entries: number, user_data: object, destroy: GLib.DestroyNotify):void
+    add_actions(entries: ActionEntry[], n_entries: number, user_data: any):void
+    add_actions_full(entries: ActionEntry[], n_entries: number, user_data: any, destroy: GLib.DestroyNotify):void
+    add_radio_actions(entries: RadioActionEntry[], n_entries: number, value: number, on_change: GObject.Callback, user_data: any):void
+    add_radio_actions_full(entries: RadioActionEntry[], n_entries: number, value: number, on_change: GObject.Callback, user_data: any, destroy: GLib.DestroyNotify):void
+    add_toggle_actions(entries: ToggleActionEntry[], n_entries: number, user_data: any):void
+    add_toggle_actions_full(entries: ToggleActionEntry[], n_entries: number, user_data: any, destroy: GLib.DestroyNotify):void
     get_accel_group():AccelGroup
     get_action(action_name: string):Action
     get_name():string
@@ -1188,7 +1188,7 @@ declare module "Gtk" {
     remove_action(action: Action):void
     set_accel_group(accel_group: AccelGroup):void
     set_sensitive(sensitive: boolean):void
-    set_translate_func(func: TranslateFunc, data: object, notify: GLib.DestroyNotify):void
+    set_translate_func(func: TranslateFunc, data: any, notify: GLib.DestroyNotify):void
     set_translation_domain(domain: string):void
     set_visible(visible: boolean):void
     translate_string(string: string):string
@@ -1312,7 +1312,7 @@ declare module "Gtk" {
     remove_action_widget(child: Widget):void
     remove_page(page_num: number):void
     set_current_page(page_num: number):void
-    set_forward_page_func(page_func: AssistantPageFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_forward_page_func(page_func: AssistantPageFunc, data: any, destroy: GLib.DestroyNotify):void
     set_page_complete(page: Widget, complete: boolean):void
     set_page_has_padding(page: Widget, has_padding: boolean):void
     set_page_header_image(page: Widget, pixbuf: GdkPixbuf.Pixbuf):void
@@ -1347,26 +1347,26 @@ declare module "Gtk" {
     constructor(resource_path: string)
     constructor(string: string, length: number)
     add_callback_symbol(callback_name: string, callback_symbol: GObject.Callback):void
-    add_callback_symbols(first_callback_name: string, first_callback_symbol: GObject.Callback, ...args: any):void
+    add_callback_symbols(first_callback_name: string, first_callback_symbol: GObject.Callback, ...args: any[]):void
     add_from_file(filename: string):number
     add_from_resource(resource_path: string):number
     add_from_string(buffer: string, length: number):number
     add_objects_from_file(filename: string, object_ids: string[]):number
     add_objects_from_resource(resource_path: string, object_ids: string[]):number
     add_objects_from_string(buffer: string, length: number, object_ids: string[]):number
-    connect_signals(user_data: object):void
-    connect_signals_full(func: BuilderConnectFunc, user_data: object):void
+    connect_signals(user_data: any):void
+    connect_signals_full(func: BuilderConnectFunc, user_data: any):void
     expose_object(name: string, object: GObject.Object):void
     get_application():Application
     get_object(name: string):GObject.Object
     get_objects():GLib.SList
     get_translation_domain():string
-    get_type_from_name(type_name: string):GType
+    get_type_from_name(type_name: string):number
     lookup_callback_symbol(callback_name: string):GObject.Callback
     set_application(application: Application):void
     set_translation_domain(domain: string):void
     value_from_string(pspec: GObject.ParamSpec, string: string, value: GObject.Value):boolean
-    value_from_string_type(type: GType, string: string, value: GObject.Value):boolean
+    value_from_string_type(type: number, string: string, value: GObject.Value):boolean
   }
   export class Button extends Bin {
     constructor(icon_name: string, size: number)
@@ -1419,7 +1419,7 @@ declare module "Gtk" {
     mark_day(day: number):void
     select_day(day: number):void
     select_month(month: number, year: number):void
-    set_detail_func(func: CalendarDetailFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_detail_func(func: CalendarDetailFunc, data: any, destroy: GLib.DestroyNotify):void
     set_detail_height_rows(rows: number):void
     set_detail_width_chars(chars: number):void
     set_display_options(flags: CalendarDisplayOptions):void
@@ -1432,23 +1432,23 @@ declare module "Gtk" {
     activate_cell(widget: Widget, renderer: CellRenderer, event: Gdk.Event, cell_area: Gdk.Rectangle, flags: CellRendererState):boolean
     add(renderer: CellRenderer):void
     add_focus_sibling(renderer: CellRenderer, sibling: CellRenderer):void
-    add_with_properties(renderer: CellRenderer, first_prop_name: string, ...args: any):void
+    add_with_properties(renderer: CellRenderer, first_prop_name: string, ...args: any[]):void
     apply_attributes(tree_model: TreeModel, iter: TreeIter, is_expander: boolean, is_expanded: boolean):void
     attribute_connect(renderer: CellRenderer, attribute: string, column: number):void
     attribute_disconnect(renderer: CellRenderer, attribute: string):void
     attribute_get_column(renderer: CellRenderer, attribute: string):number
-    cell_get(renderer: CellRenderer, first_prop_name: string, ...args: any):void
+    cell_get(renderer: CellRenderer, first_prop_name: string, ...args: any[]):void
     cell_get_property(renderer: CellRenderer, property_name: string, value: GObject.Value):void
     cell_get_valist(renderer: CellRenderer, first_property_name: string, var_args: any):void
-    cell_set(renderer: CellRenderer, first_prop_name: string, ...args: any):void
+    cell_set(renderer: CellRenderer, first_prop_name: string, ...args: any[]):void
     cell_set_property(renderer: CellRenderer, property_name: string, value: GObject.Value):void
     cell_set_valist(renderer: CellRenderer, first_property_name: string, var_args: any):void
     copy_context(context: CellAreaContext):CellAreaContext
     create_context():CellAreaContext
     event(context: CellAreaContext, widget: Widget, event: Gdk.Event, cell_area: Gdk.Rectangle, flags: CellRendererState):number
     focus(direction: DirectionType):boolean
-    foreach(callback: CellCallback, callback_data: object):void
-    foreach_alloc(context: CellAreaContext, widget: Widget, cell_area: Gdk.Rectangle, background_area: Gdk.Rectangle, callback: CellAllocCallback, callback_data: object):void
+    foreach(callback: CellCallback, callback_data: any):void
+    foreach_alloc(context: CellAreaContext, widget: Widget, cell_area: Gdk.Rectangle, background_area: Gdk.Rectangle, callback: CellAllocCallback, callback_data: any):void
     get_cell_allocation(context: CellAreaContext, widget: Widget, renderer: CellRenderer, cell_area: Gdk.Rectangle, allocation: Gdk.Rectangle):void
     get_cell_at_position(context: CellAreaContext, widget: Widget, cell_area: Gdk.Rectangle, x: number, y: number, alloc_area: Gdk.Rectangle):CellRenderer
     get_current_path_string():string
@@ -1578,16 +1578,16 @@ declare module "Gtk" {
     clear():void
     get_display():Gdk.Display
     get_owner():GObject.Object
-    request_contents(target: Gdk.Atom, callback: ClipboardReceivedFunc, user_data: object):void
-    request_image(callback: ClipboardImageReceivedFunc, user_data: object):void
-    request_rich_text(buffer: TextBuffer, callback: ClipboardRichTextReceivedFunc, user_data: object):void
-    request_targets(callback: ClipboardTargetsReceivedFunc, user_data: object):void
-    request_text(callback: ClipboardTextReceivedFunc, user_data: object):void
-    request_uris(callback: ClipboardURIReceivedFunc, user_data: object):void
+    request_contents(target: Gdk.Atom, callback: ClipboardReceivedFunc, user_data: any):void
+    request_image(callback: ClipboardImageReceivedFunc, user_data: any):void
+    request_rich_text(buffer: TextBuffer, callback: ClipboardRichTextReceivedFunc, user_data: any):void
+    request_targets(callback: ClipboardTargetsReceivedFunc, user_data: any):void
+    request_text(callback: ClipboardTextReceivedFunc, user_data: any):void
+    request_uris(callback: ClipboardURIReceivedFunc, user_data: any):void
     set_can_store(targets: TargetEntry[], n_targets: number):void
     set_image(pixbuf: GdkPixbuf.Pixbuf):void
     set_text(text: string, len: number):void
-    set_with_data(targets: TargetEntry[], n_targets: number, get_func: ClipboardGetFunc, clear_func: ClipboardClearFunc, user_data: object):boolean
+    set_with_data(targets: TargetEntry[], n_targets: number, get_func: ClipboardGetFunc, clear_func: ClipboardClearFunc, user_data: any):boolean
     set_with_owner(targets: TargetEntry[], n_targets: number, get_func: ClipboardGetFunc, clear_func: ClipboardClearFunc, owner: GObject.Object):boolean
     store():void
     wait_for_contents(target: Gdk.Atom):SelectionData
@@ -1680,7 +1680,7 @@ declare module "Gtk" {
     set_id_column(id_column: number):void
     set_model(model: TreeModel):void
     set_popup_fixed_width(fixed: boolean):void
-    set_row_separator_func(func: TreeViewRowSeparatorFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_row_separator_func(func: TreeViewRowSeparatorFunc, data: any, destroy: GLib.DestroyNotify):void
     set_row_span_column(row_span: number):void
     set_title(title: string):void
     set_wrap_width(width: number):void
@@ -1700,19 +1700,19 @@ declare module "Gtk" {
   }
   export class Container extends Widget {
     add(widget: Widget):void
-    add_with_properties(widget: Widget, first_prop_name: string, ...args: any):void
+    add_with_properties(widget: Widget, first_prop_name: string, ...args: any[]):void
     check_resize():void
-    child_get(child: Widget, first_prop_name: string, ...args: any):void
+    child_get(child: Widget, first_prop_name: string, ...args: any[]):void
     child_get_property(child: Widget, property_name: string, value: GObject.Value):void
     child_get_valist(child: Widget, first_property_name: string, var_args: any):void
     child_notify(child: Widget, child_property: string):void
     child_notify_by_pspec(child: Widget, pspec: GObject.ParamSpec):void
-    child_set(child: Widget, first_prop_name: string, ...args: any):void
+    child_set(child: Widget, first_prop_name: string, ...args: any[]):void
     child_set_property(child: Widget, property_name: string, value: GObject.Value):void
     child_set_valist(child: Widget, first_property_name: string, var_args: any):void
-    child_type():GType
-    forall(callback: Callback, callback_data: object):void
-    foreach(callback: Callback, callback_data: object):void
+    child_type():number
+    forall(callback: Callback, callback_data: any):void
+    foreach(callback: Callback, callback_data: any):void
     get_border_width():number
     get_children():GLib.List
     get_focus_chain(focusable_widgets: GLib.List):boolean
@@ -1748,10 +1748,10 @@ declare module "Gtk" {
     to_string():string
   }
   export class Dialog extends Window {
-    constructor(title: string, parent: Window, flags: DialogFlags, first_button_text: string, ...args: any)
+    constructor(title: string, parent: Window, flags: DialogFlags, first_button_text: string, ...args: any[])
     add_action_widget(child: Widget, response_id: number):void
     add_button(button_text: string, response_id: number):Widget
-    add_buttons(first_button_text: string, ...args: any):void
+    add_buttons(first_button_text: string, ...args: any[]):void
     get_action_area():Widget
     get_content_area():Box
     get_header_bar():Widget
@@ -1759,7 +1759,7 @@ declare module "Gtk" {
     get_widget_for_response(response_id: number):Widget
     response(response_id: number):void
     run():number
-    set_alternative_button_order(first_response_id: number, ...args: any):void
+    set_alternative_button_order(first_response_id: number, ...args: any[]):void
     set_alternative_button_order_from_array(n_params: number, new_order: number[]):void
     set_default_response(response_id: number):void
     set_response_sensitive(response_id: number, setting: boolean):void
@@ -1878,7 +1878,7 @@ declare module "Gtk" {
     insert_prefix():void
     set_inline_completion(inline_completion: boolean):void
     set_inline_selection(inline_selection: boolean):void
-    set_match_func(func: EntryCompletionMatchFunc, func_data: object, func_notify: GLib.DestroyNotify):void
+    set_match_func(func: EntryCompletionMatchFunc, func_data: any, func_notify: GLib.DestroyNotify):void
     set_minimum_key_length(length: number):void
     set_model(model: TreeModel):void
     set_popup_completion(popup_completion: boolean):void
@@ -1934,13 +1934,13 @@ declare module "Gtk" {
     set_width_chars(n_chars: number):void
   }
   export class FileChooserDialog extends Dialog {
-    constructor(title: string, parent: Window, action: FileChooserAction, first_button_text: string, ...args: any)
+    constructor(title: string, parent: Window, action: FileChooserAction, first_button_text: string, ...args: any[])
   }
   export class FileChooserWidget extends Box {
     constructor(action: FileChooserAction)
   }
   export class FileFilter extends GObject.InitiallyUnowned {
-    add_custom(needed: FileFilterFlags, func: FileFilterFunc, data: object, notify: GLib.DestroyNotify):void
+    add_custom(needed: FileFilterFlags, func: FileFilterFunc, data: any, notify: GLib.DestroyNotify):void
     add_mime_type(mime_type: string):void
     add_pattern(pattern: string):void
     add_pixbuf_formats():void
@@ -1954,7 +1954,7 @@ declare module "Gtk" {
     put(widget: Widget, x: number, y: number):void
   }
   export class FlowBox extends Container {
-    bind_model(model: Gio.ListModel, create_widget_func: FlowBoxCreateWidgetFunc, user_data: object, user_data_free_func: GLib.DestroyNotify):void
+    bind_model(model: Gio.ListModel, create_widget_func: FlowBoxCreateWidgetFunc, user_data: any, user_data_free_func: GLib.DestroyNotify):void
     get_activate_on_single_click():boolean
     get_child_at_index(idx: number):FlowBoxChild
     get_column_spacing():number
@@ -1969,17 +1969,17 @@ declare module "Gtk" {
     invalidate_sort():void
     select_all():void
     select_child(child: FlowBoxChild):void
-    selected_foreach(func: FlowBoxForeachFunc, data: object):void
+    selected_foreach(func: FlowBoxForeachFunc, data: any):void
     set_activate_on_single_click(single: boolean):void
     set_column_spacing(spacing: number):void
-    set_filter_func(filter_func: FlowBoxFilterFunc, user_data: object, destroy: GLib.DestroyNotify):void
+    set_filter_func(filter_func: FlowBoxFilterFunc, user_data: any, destroy: GLib.DestroyNotify):void
     set_hadjustment(adjustment: Adjustment):void
     set_homogeneous(homogeneous: boolean):void
     set_max_children_per_line(n_children: number):void
     set_min_children_per_line(n_children: number):void
     set_row_spacing(spacing: number):void
     set_selection_mode(mode: SelectionMode):void
-    set_sort_func(sort_func: FlowBoxSortFunc, user_data: object, destroy: GLib.DestroyNotify):void
+    set_sort_func(sort_func: FlowBoxSortFunc, user_data: any, destroy: GLib.DestroyNotify):void
     set_vadjustment(adjustment: Adjustment):void
     unselect_all():void
     unselect_child(child: FlowBoxChild):void
@@ -2239,14 +2239,14 @@ declare module "Gtk" {
     get_filename():filename
     is_symbolic():boolean
     load_icon():GdkPixbuf.Pixbuf
-    load_icon_async(cancellable: Gio.Cancellable, callback: Gio.AsyncReadyCallback, user_data: object):void
+    load_icon_async(cancellable: Gio.Cancellable, callback: Gio.AsyncReadyCallback, user_data: any):void
     load_icon_finish(res: Gio.AsyncResult):GdkPixbuf.Pixbuf
     load_surface(for_window: Gdk.Window):cairo.Surface
     load_symbolic(fg: Gdk.RGBA, success_color: Gdk.RGBA, warning_color: Gdk.RGBA, error_color: Gdk.RGBA, was_symbolic: boolean):GdkPixbuf.Pixbuf
-    load_symbolic_async(fg: Gdk.RGBA, success_color: Gdk.RGBA, warning_color: Gdk.RGBA, error_color: Gdk.RGBA, cancellable: Gio.Cancellable, callback: Gio.AsyncReadyCallback, user_data: object):void
+    load_symbolic_async(fg: Gdk.RGBA, success_color: Gdk.RGBA, warning_color: Gdk.RGBA, error_color: Gdk.RGBA, cancellable: Gio.Cancellable, callback: Gio.AsyncReadyCallback, user_data: any):void
     load_symbolic_finish(res: Gio.AsyncResult, was_symbolic: boolean):GdkPixbuf.Pixbuf
     load_symbolic_for_context(context: StyleContext, was_symbolic: boolean):GdkPixbuf.Pixbuf
-    load_symbolic_for_context_async(context: StyleContext, cancellable: Gio.Cancellable, callback: Gio.AsyncReadyCallback, user_data: object):void
+    load_symbolic_for_context_async(context: StyleContext, cancellable: Gio.Cancellable, callback: Gio.AsyncReadyCallback, user_data: any):void
     load_symbolic_for_context_finish(res: Gio.AsyncResult, was_symbolic: boolean):GdkPixbuf.Pixbuf
     load_symbolic_for_style(style: Style, state: StateType, was_symbolic: boolean):GdkPixbuf.Pixbuf
     set_raw_coordinates(raw_coordinates: boolean):void
@@ -2314,7 +2314,7 @@ declare module "Gtk" {
     scroll_to_path(path: TreePath, use_align: boolean, row_align: gfloat, col_align: gfloat):void
     select_all():void
     select_path(path: TreePath):void
-    selected_foreach(func: IconViewForeachFunc, data: object):void
+    selected_foreach(func: IconViewForeachFunc, data: any):void
     set_activate_on_single_click(single: boolean):void
     set_column_spacing(column_spacing: number):void
     set_columns(columns: number):void
@@ -2389,10 +2389,10 @@ declare module "Gtk" {
     set_use_stock(use_stock: boolean):void
   }
   export class InfoBar extends Box {
-    constructor(first_button_text: string, ...args: any)
+    constructor(first_button_text: string, ...args: any[])
     add_action_widget(child: Widget, response_id: number):void
     add_button(button_text: string, response_id: number):Button
-    add_buttons(first_button_text: string, ...args: any):void
+    add_buttons(first_button_text: string, ...args: any[]):void
     get_action_area():Widget
     get_content_area():Widget
     get_message_type():MessageType
@@ -2503,7 +2503,7 @@ declare module "Gtk" {
   export class LinkButtonAccessible extends ButtonAccessible {
   }
   export class ListBox extends Container {
-    bind_model(model: Gio.ListModel, create_widget_func: ListBoxCreateWidgetFunc, user_data: object, user_data_free_func: GLib.DestroyNotify):void
+    bind_model(model: Gio.ListModel, create_widget_func: ListBoxCreateWidgetFunc, user_data: any, user_data_free_func: GLib.DestroyNotify):void
     drag_highlight_row(row: ListBoxRow):void
     drag_unhighlight_row():void
     get_activate_on_single_click():boolean
@@ -2520,14 +2520,14 @@ declare module "Gtk" {
     prepend(child: Widget):void
     select_all():void
     select_row(row: ListBoxRow):void
-    selected_foreach(func: ListBoxForeachFunc, data: object):void
+    selected_foreach(func: ListBoxForeachFunc, data: any):void
     set_activate_on_single_click(single: boolean):void
     set_adjustment(adjustment: Adjustment):void
-    set_filter_func(filter_func: ListBoxFilterFunc, user_data: object, destroy: GLib.DestroyNotify):void
-    set_header_func(update_header: ListBoxUpdateHeaderFunc, user_data: object, destroy: GLib.DestroyNotify):void
+    set_filter_func(filter_func: ListBoxFilterFunc, user_data: any, destroy: GLib.DestroyNotify):void
+    set_header_func(update_header: ListBoxUpdateHeaderFunc, user_data: any, destroy: GLib.DestroyNotify):void
     set_placeholder(placeholder: Widget):void
     set_selection_mode(mode: SelectionMode):void
-    set_sort_func(sort_func: ListBoxSortFunc, user_data: object, destroy: GLib.DestroyNotify):void
+    set_sort_func(sort_func: ListBoxSortFunc, user_data: any, destroy: GLib.DestroyNotify):void
     unselect_all():void
     unselect_row(row: ListBoxRow):void
   }
@@ -2547,14 +2547,14 @@ declare module "Gtk" {
   export class ListBoxRowAccessible extends ContainerAccessible {
   }
   export class ListStore extends GObject.Object {
-    constructor(n_columns: number, ...args: any)
-    constructor(n_columns: number, types: GType[])
+    constructor(n_columns: number, ...args: any[])
+    constructor(n_columns: number, types: number[])
     append(iter: TreeIter):void
     clear():void
     insert(iter: TreeIter, position: number):void
     insert_after(iter: TreeIter, sibling: TreeIter):void
     insert_before(iter: TreeIter, sibling: TreeIter):void
-    insert_with_values(iter: TreeIter, position: number, ...args: any):void
+    insert_with_values(iter: TreeIter, position: number, ...args: any[]):void
     insert_with_valuesv(iter: TreeIter, position: number, columns: number[], values: GObject.Value[], n_values: number):void
     iter_is_valid(iter: TreeIter):boolean
     move_after(iter: TreeIter, position: TreeIter):void
@@ -2562,8 +2562,8 @@ declare module "Gtk" {
     prepend(iter: TreeIter):void
     remove(iter: TreeIter):boolean
     reorder(new_order: number[]):void
-    set(iter: TreeIter, ...args: any):void
-    set_column_types(n_columns: number, types: GType[]):void
+    set(iter: TreeIter, ...args: any[]):void
+    set_column_types(n_columns: number, types: number[]):void
     set_valist(iter: TreeIter, var_args: any):void
     set_value(iter: TreeIter, column: number, value: GObject.Value):void
     set_valuesv(iter: TreeIter, columns: number[], values: GObject.Value[], n_values: number):void
@@ -2590,8 +2590,8 @@ declare module "Gtk" {
     get_tearoff_state():boolean
     get_title():string
     popdown():void
-    popup(parent_menu_shell: Widget, parent_menu_item: Widget, func: MenuPositionFunc, data: object, button: number, activate_time: guint32):void
-    popup_for_device(device: Gdk.Device, parent_menu_shell: Widget, parent_menu_item: Widget, func: MenuPositionFunc, data: object, destroy: GLib.DestroyNotify, button: number, activate_time: guint32):void
+    popup(parent_menu_shell: Widget, parent_menu_item: Widget, func: MenuPositionFunc, data: any, button: number, activate_time: guint32):void
+    popup_for_device(device: Gdk.Device, parent_menu_shell: Widget, parent_menu_item: Widget, func: MenuPositionFunc, data: any, destroy: GLib.DestroyNotify, button: number, activate_time: guint32):void
     reorder_child(child: Widget, position: number):void
     reposition():void
     set_accel_group(accel_group: AccelGroup):void
@@ -2678,10 +2678,10 @@ declare module "Gtk" {
     set_menu(menu: Widget):void
   }
   export class MessageDialog extends Dialog {
-    constructor(parent: Window, flags: DialogFlags, type: MessageType, buttons: ButtonsType, message_format: string, ...args: any)
-    constructor(parent: Window, flags: DialogFlags, type: MessageType, buttons: ButtonsType, message_format: string, ...args: any)
-    format_secondary_markup(message_format: string, ...args: any):void
-    format_secondary_text(message_format: string, ...args: any):void
+    constructor(parent: Window, flags: DialogFlags, type: MessageType, buttons: ButtonsType, message_format: string, ...args: any[])
+    constructor(parent: Window, flags: DialogFlags, type: MessageType, buttons: ButtonsType, message_format: string, ...args: any[])
+    format_secondary_markup(message_format: string, ...args: any[]):void
+    format_secondary_text(message_format: string, ...args: any[]):void
     get_image():Widget
     get_message_area():Widget
     set_image(image: Widget):void
@@ -2923,7 +2923,7 @@ declare module "Gtk" {
     constructor(file_name: filename)
     constructor(key_file: GLib.KeyFile, group_name: string)
     copy():PrintSettings
-    foreach(func: PrintSettingsFunc, user_data: object):void
+    foreach(func: PrintSettingsFunc, user_data: any):void
     get(key: string):string
     get_bool(key: string):boolean
     get_collate():boolean
@@ -3095,8 +3095,8 @@ declare module "Gtk" {
     set_show_numbers(show_numbers: boolean):void
   }
   export class RecentChooserDialog extends Dialog {
-    constructor(title: string, parent: Window, first_button_text: string, ...args: any)
-    constructor(title: string, parent: Window, manager: RecentManager, first_button_text: string, ...args: any)
+    constructor(title: string, parent: Window, first_button_text: string, ...args: any[])
+    constructor(title: string, parent: Window, manager: RecentManager, first_button_text: string, ...args: any[])
   }
   export class RecentChooserMenu extends Menu {
     constructor(manager: RecentManager)
@@ -3109,7 +3109,7 @@ declare module "Gtk" {
   export class RecentFilter extends GObject.InitiallyUnowned {
     add_age(days: number):void
     add_application(application: string):void
-    add_custom(needed: RecentFilterFlags, func: RecentFilterFunc, data: object, data_destroy: GLib.DestroyNotify):void
+    add_custom(needed: RecentFilterFlags, func: RecentFilterFunc, data: any, data_destroy: GLib.DestroyNotify):void
     add_group(group: string):void
     add_mime_type(mime_type: string):void
     add_pattern(pattern: string):void
@@ -3359,9 +3359,9 @@ declare module "Gtk" {
     attach(window: Gdk.Window):Style
     copy():Style
     detach():void
-    get(widget_type: GType, first_property_name: string, ...args: any):void
-    get_style_property(widget_type: GType, property_name: string, value: GObject.Value):void
-    get_valist(widget_type: GType, first_property_name: string, var_args: any):void
+    get(widget_type: number, first_property_name: string, ...args: any[]):void
+    get_style_property(widget_type: number, property_name: string, value: GObject.Value):void
+    get_valist(widget_type: number, first_property_name: string, var_args: any):void
     has_context():boolean
     lookup_color(color_name: string, color: Gdk.Color):boolean
     lookup_icon_set(stock_id: string):IconSet
@@ -3372,8 +3372,8 @@ declare module "Gtk" {
     add_class(class_name: string):void
     add_provider(provider: StyleProvider, priority: number):void
     add_region(region_name: string, flags: RegionFlags):void
-    cancel_animations(region_id: object):void
-    get(state: StateFlags, ...args: any):void
+    cancel_animations(region_id: any):void
+    get(state: StateFlags, ...args: any[]):void
     get_background_color(state: StateFlags, color: Gdk.RGBA):void
     get_border(state: StateFlags, border: Border):void
     get_border_color(state: StateFlags, color: Gdk.RGBA):void
@@ -3391,7 +3391,7 @@ declare module "Gtk" {
     get_screen():Gdk.Screen
     get_section(property: string):CssSection
     get_state():StateFlags
-    get_style(...args: any):void
+    get_style(...args: any[]):void
     get_style_property(property_name: string, value: GObject.Value):void
     get_style_valist(args: any):void
     get_valist(state: StateFlags, args: any):void
@@ -3402,9 +3402,9 @@ declare module "Gtk" {
     list_regions():GLib.List
     lookup_color(color_name: string, color: Gdk.RGBA):boolean
     lookup_icon_set(stock_id: string):IconSet
-    notify_state_change(window: Gdk.Window, region_id: object, state: StateType, state_value: boolean):void
+    notify_state_change(window: Gdk.Window, region_id: any, state: StateType, state_value: boolean):void
     pop_animatable_region():void
-    push_animatable_region(region_id: object):void
+    push_animatable_region(region_id: any):void
     remove_class(class_name: string):void
     remove_provider(provider: StyleProvider):void
     remove_region(region_name: string):void
@@ -3424,13 +3424,13 @@ declare module "Gtk" {
   }
   export class StyleProperties extends GObject.Object {
     clear():void
-    get(state: StateFlags, ...args: any):void
+    get(state: StateFlags, ...args: any[]):void
     get_property(property: string, state: StateFlags, value: GObject.Value):boolean
     get_valist(state: StateFlags, args: any):void
     lookup_color(name: string):SymbolicColor
     map_color(name: string, color: SymbolicColor):void
     merge(props_to_merge: StyleProperties, replace: boolean):void
-    set(state: StateFlags, ...args: any):void
+    set(state: StateFlags, ...args: any[]):void
     set_property(property: string, state: StateFlags, value: GObject.Value):void
     set_valist(state: StateFlags, args: any):void
     unset_property(property: string, state: StateFlags):void
@@ -3473,7 +3473,7 @@ declare module "Gtk" {
     copy_clipboard(clipboard: Clipboard):void
     create_child_anchor(iter: TextIter):TextChildAnchor
     create_mark(mark_name: string, where: TextIter, left_gravity: boolean):TextMark
-    create_tag(tag_name: string, first_property_name: string, ...args: any):TextTag
+    create_tag(tag_name: string, first_property_name: string, ...args: any[]):TextTag
     cut_clipboard(clipboard: Clipboard, default_editable: boolean):void
     delete(start: TextIter, end: TextIter):void
     delete_interactive(start_iter: TextIter, end_iter: TextIter, default_editable: boolean):boolean
@@ -3517,15 +3517,15 @@ declare module "Gtk" {
     insert_pixbuf(iter: TextIter, pixbuf: GdkPixbuf.Pixbuf):void
     insert_range(iter: TextIter, start: TextIter, end: TextIter):void
     insert_range_interactive(iter: TextIter, start: TextIter, end: TextIter, default_editable: boolean):boolean
-    insert_with_tags(iter: TextIter, text: string, len: number, first_tag: TextTag, ...args: any):void
-    insert_with_tags_by_name(iter: TextIter, text: string, len: number, first_tag_name: string, ...args: any):void
+    insert_with_tags(iter: TextIter, text: string, len: number, first_tag: TextTag, ...args: any[]):void
+    insert_with_tags_by_name(iter: TextIter, text: string, len: number, first_tag_name: string, ...args: any[]):void
     move_mark(mark: TextMark, where: TextIter):void
     move_mark_by_name(name: string, where: TextIter):void
     paste_clipboard(clipboard: Clipboard, override_location: TextIter, default_editable: boolean):void
     place_cursor(where: TextIter):void
-    register_deserialize_format(mime_type: string, function_: TextBufferDeserializeFunc, user_data: object, user_data_destroy: GLib.DestroyNotify):Gdk.Atom
+    register_deserialize_format(mime_type: string, function_: TextBufferDeserializeFunc, user_data: any, user_data_destroy: GLib.DestroyNotify):Gdk.Atom
     register_deserialize_tagset(tagset_name: string):Gdk.Atom
-    register_serialize_format(mime_type: string, function_: TextBufferSerializeFunc, user_data: object, user_data_destroy: GLib.DestroyNotify):Gdk.Atom
+    register_serialize_format(mime_type: string, function_: TextBufferSerializeFunc, user_data: any, user_data_destroy: GLib.DestroyNotify):Gdk.Atom
     register_serialize_tagset(tagset_name: string):Gdk.Atom
     remove_all_tags(start: TextIter, end: TextIter):void
     remove_selection_clipboard(clipboard: Clipboard):void
@@ -3561,7 +3561,7 @@ declare module "Gtk" {
   }
   export class TextTagTable extends GObject.Object {
     add(tag: TextTag):boolean
-    foreach(func: TextTagTableForeach, data: object):void
+    foreach(func: TextTagTableForeach, data: any):void
     get_size():number
     lookup(name: string):TextTag
     remove(tag: TextTag):void
@@ -3642,7 +3642,7 @@ declare module "Gtk" {
   export class TextViewAccessible extends ContainerAccessible {
   }
   export class ThemingEngine extends GObject.Object {
-    get(state: StateFlags, ...args: any):void
+    get(state: StateFlags, ...args: any[]):void
     get_background_color(state: StateFlags, color: Gdk.RGBA):void
     get_border(state: StateFlags, border: Border):void
     get_border_color(state: StateFlags, color: Gdk.RGBA):void
@@ -3656,7 +3656,7 @@ declare module "Gtk" {
     get_property(property: string, state: StateFlags, value: GObject.Value):void
     get_screen():Gdk.Screen
     get_state():StateFlags
-    get_style(...args: any):void
+    get_style(...args: any[]):void
     get_style_property(property_name: string, value: GObject.Value):void
     get_style_valist(args: any):void
     get_valist(state: StateFlags, args: any):void
@@ -3814,9 +3814,9 @@ declare module "Gtk" {
     convert_path_to_child_path(filter_path: TreePath):TreePath
     get_model():TreeModel
     refilter():void
-    set_modify_func(n_columns: number, types: GType[], func: TreeModelFilterModifyFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_modify_func(n_columns: number, types: number[], func: TreeModelFilterModifyFunc, data: any, destroy: GLib.DestroyNotify):void
     set_visible_column(column: number):void
-    set_visible_func(func: TreeModelFilterVisibleFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_visible_func(func: TreeModelFilterVisibleFunc, data: any, destroy: GLib.DestroyNotify):void
   }
   export class TreeModelSort extends GObject.Object {
     clear_cache():void
@@ -3842,23 +3842,23 @@ declare module "Gtk" {
     select_iter(iter: TreeIter):void
     select_path(path: TreePath):void
     select_range(start_path: TreePath, end_path: TreePath):void
-    selected_foreach(func: TreeSelectionForeachFunc, data: object):void
+    selected_foreach(func: TreeSelectionForeachFunc, data: any):void
     set_mode(type: SelectionMode):void
-    set_select_function(func: TreeSelectionFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_select_function(func: TreeSelectionFunc, data: any, destroy: GLib.DestroyNotify):void
     unselect_all():void
     unselect_iter(iter: TreeIter):void
     unselect_path(path: TreePath):void
     unselect_range(start_path: TreePath, end_path: TreePath):void
   }
   export class TreeStore extends GObject.Object {
-    constructor(n_columns: number, ...args: any)
-    constructor(n_columns: number, types: GType[])
+    constructor(n_columns: number, ...args: any[])
+    constructor(n_columns: number, types: number[])
     append(iter: TreeIter, parent: TreeIter):void
     clear():void
     insert(iter: TreeIter, parent: TreeIter, position: number):void
     insert_after(iter: TreeIter, parent: TreeIter, sibling: TreeIter):void
     insert_before(iter: TreeIter, parent: TreeIter, sibling: TreeIter):void
-    insert_with_values(iter: TreeIter, parent: TreeIter, position: number, ...args: any):void
+    insert_with_values(iter: TreeIter, parent: TreeIter, position: number, ...args: any[]):void
     insert_with_valuesv(iter: TreeIter, parent: TreeIter, position: number, columns: number[], values: GObject.Value[], n_values: number):void
     is_ancestor(iter: TreeIter, descendant: TreeIter):boolean
     iter_depth(iter: TreeIter):number
@@ -3868,8 +3868,8 @@ declare module "Gtk" {
     prepend(iter: TreeIter, parent: TreeIter):void
     remove(iter: TreeIter):boolean
     reorder(parent: TreeIter, new_order: number[]):void
-    set(iter: TreeIter, ...args: any):void
-    set_column_types(n_columns: number, types: GType[]):void
+    set(iter: TreeIter, ...args: any[]):void
+    set_column_types(n_columns: number, types: number[]):void
     set_valist(iter: TreeIter, var_args: any):void
     set_value(iter: TreeIter, column: number, value: GObject.Value):void
     set_valuesv(iter: TreeIter, columns: number[], values: GObject.Value[], n_values: number):void
@@ -3932,11 +3932,11 @@ declare module "Gtk" {
     get_visible_range(start_path: TreePath, end_path: TreePath):boolean
     get_visible_rect(visible_rect: Gdk.Rectangle):void
     insert_column(column: TreeViewColumn, position: number):number
-    insert_column_with_attributes(position: number, title: string, cell: CellRenderer, ...args: any):number
-    insert_column_with_data_func(position: number, title: string, cell: CellRenderer, func: TreeCellDataFunc, data: object, dnotify: GLib.DestroyNotify):number
+    insert_column_with_attributes(position: number, title: string, cell: CellRenderer, ...args: any[]):number
+    insert_column_with_data_func(position: number, title: string, cell: CellRenderer, func: TreeCellDataFunc, data: any, dnotify: GLib.DestroyNotify):number
     is_blank_at_pos(x: number, y: number, path: TreePath, column: TreeViewColumn, cell_x: number, cell_y: number):boolean
     is_rubber_banding_active():boolean
-    map_expanded_rows(func: TreeViewMappingFunc, data: object):void
+    map_expanded_rows(func: TreeViewMappingFunc, data: any):void
     move_column_after(column: TreeViewColumn, base_column: TreeViewColumn):void
     remove_column(column: TreeViewColumn):number
     row_activated(path: TreePath, column: TreeViewColumn):void
@@ -3944,10 +3944,10 @@ declare module "Gtk" {
     scroll_to_cell(path: TreePath, column: TreeViewColumn, use_align: boolean, row_align: gfloat, col_align: gfloat):void
     scroll_to_point(tree_x: number, tree_y: number):void
     set_activate_on_single_click(single: boolean):void
-    set_column_drag_function(func: TreeViewColumnDropFunc, user_data: object, destroy: GLib.DestroyNotify):void
+    set_column_drag_function(func: TreeViewColumnDropFunc, user_data: any, destroy: GLib.DestroyNotify):void
     set_cursor(path: TreePath, focus_column: TreeViewColumn, start_editing: boolean):void
     set_cursor_on_cell(path: TreePath, focus_column: TreeViewColumn, focus_cell: CellRenderer, start_editing: boolean):void
-    set_destroy_count_func(func: TreeDestroyCountFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_destroy_count_func(func: TreeDestroyCountFunc, data: any, destroy: GLib.DestroyNotify):void
     set_drag_dest_row(path: TreePath, pos: TreeViewDropPosition):void
     set_enable_search(enable_search: boolean):void
     set_enable_tree_lines(enabled: boolean):void
@@ -3962,13 +3962,13 @@ declare module "Gtk" {
     set_level_indentation(indentation: number):void
     set_model(model: TreeModel):void
     set_reorderable(reorderable: boolean):void
-    set_row_separator_func(func: TreeViewRowSeparatorFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_row_separator_func(func: TreeViewRowSeparatorFunc, data: any, destroy: GLib.DestroyNotify):void
     set_rubber_banding(enable: boolean):void
     set_rules_hint(setting: boolean):void
     set_search_column(column: number):void
     set_search_entry(entry: Entry):void
-    set_search_equal_func(search_equal_func: TreeViewSearchEqualFunc, search_user_data: object, search_destroy: GLib.DestroyNotify):void
-    set_search_position_func(func: TreeViewSearchPositionFunc, data: object, destroy: GLib.DestroyNotify):void
+    set_search_equal_func(search_equal_func: TreeViewSearchEqualFunc, search_user_data: any, search_destroy: GLib.DestroyNotify):void
+    set_search_position_func(func: TreeViewSearchPositionFunc, data: any, destroy: GLib.DestroyNotify):void
     set_show_expanders(enabled: boolean):void
     set_tooltip_cell(tooltip: Tooltip, path: TreePath, column: TreeViewColumn, cell: CellRenderer):void
     set_tooltip_column(column: number):void
@@ -3981,7 +3981,7 @@ declare module "Gtk" {
   }
   export class TreeViewColumn extends GObject.InitiallyUnowned {
     constructor(area: CellArea)
-    constructor(title: string, cell: CellRenderer, ...args: any)
+    constructor(title: string, cell: CellRenderer, ...args: any[])
     add_attribute(cell_renderer: CellRenderer, attribute: string, column: number):void
     cell_get_position(cell_renderer: CellRenderer, x_offset: number, width: number):boolean
     cell_get_size(cell_area: Gdk.Rectangle, x_offset: number, y_offset: number, width: number, height: number):void
@@ -4015,8 +4015,8 @@ declare module "Gtk" {
     pack_start(cell: CellRenderer, expand: boolean):void
     queue_resize():void
     set_alignment(xalign: gfloat):void
-    set_attributes(cell_renderer: CellRenderer, ...args: any):void
-    set_cell_data_func(cell_renderer: CellRenderer, func: TreeCellDataFunc, func_data: object, destroy: GLib.DestroyNotify):void
+    set_attributes(cell_renderer: CellRenderer, ...args: any[]):void
+    set_cell_data_func(cell_renderer: CellRenderer, func: TreeCellDataFunc, func_data: any, destroy: GLib.DestroyNotify):void
     set_clickable(clickable: boolean):void
     set_expand(expand: boolean):void
     set_fixed_width(fixed_width: number):void
@@ -4082,13 +4082,13 @@ declare module "Gtk" {
   export class VolumeButton extends ScaleButton {
   }
   export class Widget extends GObject.InitiallyUnowned {
-    constructor(type: GType, first_property_name: string, ...args: any)
+    constructor(type: number, first_property_name: string, ...args: any[])
     activate():boolean
     add_accelerator(accel_signal: string, accel_group: AccelGroup, accel_key: number, accel_mods: Gdk.ModifierType, accel_flags: AccelFlags):void
     add_device_events(device: Gdk.Device, events: Gdk.EventMask):void
     add_events(events: number):void
     add_mnemonic_label(label: Widget):void
-    add_tick_callback(callback: TickCallback, user_data: object, notify: GLib.DestroyNotify):number
+    add_tick_callback(callback: TickCallback, user_data: any, notify: GLib.DestroyNotify):number
     can_activate_accel(signal_id: number):boolean
     child_focus(direction: DirectionType):boolean
     child_notify(child_property: string):void
@@ -4138,7 +4138,7 @@ declare module "Gtk" {
     get_allocated_height():number
     get_allocated_width():number
     get_allocation(allocation: Allocation):void
-    get_ancestor(widget_type: GType):Widget
+    get_ancestor(widget_type: number):Widget
     get_app_paintable():boolean
     get_can_default():boolean
     get_can_focus():boolean
@@ -4199,7 +4199,7 @@ declare module "Gtk" {
     get_style():Style
     get_style_context():StyleContext
     get_support_multidevice():boolean
-    get_template_child(widget_type: GType, name: string):GObject.Object
+    get_template_child(widget_type: number, name: string):GObject.Object
     get_tooltip_markup():string
     get_tooltip_text():string
     get_tooltip_window():Window
@@ -4331,7 +4331,7 @@ declare module "Gtk" {
     size_allocate_with_baseline(allocation: Allocation, baseline: number):void
     size_request(requisition: Requisition):void
     style_attach():void
-    style_get(first_property_name: string, ...args: any):void
+    style_get(first_property_name: string, ...args: any[]):void
     style_get_property(property_name: string, value: GObject.Value):void
     style_get_valist(first_property_name: string, var_args: any):void
     thaw_child_notify():void

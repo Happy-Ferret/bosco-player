@@ -172,7 +172,7 @@ export class PlayerWindow {
   buildNotebook() {
     const builder = new Gtk.Builder()
     builder.add_from_file(PREFIX + "/project.glade")
-    const notebook = builder.get_object("project")
+    const notebook = builder.get_object("project") as Gtk.Notebook
     let title = new Gtk.Label({
       label: "Autovala"
     })

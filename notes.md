@@ -36,6 +36,7 @@ use sed to reset the prefix during install.
 file:///usr/share/gir-1.0/Gtk-3.0.gir
 file:///usr/share/gir-1.0/GLib-2.0.gir
 file:///usr/share/gir-1.0/Gio-2.0.gir
+file:///usr/share/gir-1.0/GObject-2.0.gir
 
 
 ./gir2dts /usr/share/gir-1.0/Gtk-3.0.gir src/gtk-3.0.d.ts

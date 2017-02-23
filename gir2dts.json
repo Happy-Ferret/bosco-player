@@ -36,7 +36,7 @@
             "types": {
                 "enum": ["*"],
                 "function": [],
-                "class": []
+                "class": ["Object"]
             }
 
         },
@@ -60,7 +60,7 @@
             }
 
         },
-        "xlib": {
+        "xLib": {
             "source": "/usr/share/gir-1.0/xlib-2.0.gir",
             "patch": "",
             "types": {

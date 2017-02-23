@@ -15,18 +15,18 @@ declare module "Gio" {
   export function app_info_get_recommended_for_type(content_type: string):GLib.List
   export function app_info_launch_default_for_uri(uri: string, launch_context: AppLaunchContext):boolean
   export function app_info_reset_type_associations(content_type: string):void
-  export function async_initable_newv_async(object_type: GType, n_parameters: number, parameters: GObject.Parameter, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
-  export function bus_get(bus_type: BusType, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+  export function async_initable_newv_async(object_type: number, n_parameters: number, parameters: GObject.Parameter, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
+  export function bus_get(bus_type: BusType, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
   export function bus_get_finish(res: AsyncResult):DBusConnection
   export function bus_get_sync(bus_type: BusType, cancellable: Cancellable):DBusConnection
-  export function bus_own_name(bus_type: BusType, name: string, flags: BusNameOwnerFlags, bus_acquired_handler: BusAcquiredCallback, name_acquired_handler: BusNameAcquiredCallback, name_lost_handler: BusNameLostCallback, user_data: object, user_data_free_func: GLib.DestroyNotify):number
-  export function bus_own_name_on_connection(connection: DBusConnection, name: string, flags: BusNameOwnerFlags, name_acquired_handler: BusNameAcquiredCallback, name_lost_handler: BusNameLostCallback, user_data: object, user_data_free_func: GLib.DestroyNotify):number
+  export function bus_own_name(bus_type: BusType, name: string, flags: BusNameOwnerFlags, bus_acquired_handler: BusAcquiredCallback, name_acquired_handler: BusNameAcquiredCallback, name_lost_handler: BusNameLostCallback, user_data: any, user_data_free_func: GLib.DestroyNotify):number
+  export function bus_own_name_on_connection(connection: DBusConnection, name: string, flags: BusNameOwnerFlags, name_acquired_handler: BusNameAcquiredCallback, name_lost_handler: BusNameLostCallback, user_data: any, user_data_free_func: GLib.DestroyNotify):number
   export function bus_own_name_on_connection_with_closures(connection: DBusConnection, name: string, flags: BusNameOwnerFlags, name_acquired_closure: GObject.Closure, name_lost_closure: GObject.Closure):number
   export function bus_own_name_with_closures(bus_type: BusType, name: string, flags: BusNameOwnerFlags, bus_acquired_closure: GObject.Closure, name_acquired_closure: GObject.Closure, name_lost_closure: GObject.Closure):number
   export function bus_unown_name(owner_id: number):void
   export function bus_unwatch_name(watcher_id: number):void
-  export function bus_watch_name(bus_type: BusType, name: string, flags: BusNameWatcherFlags, name_appeared_handler: BusNameAppearedCallback, name_vanished_handler: BusNameVanishedCallback, user_data: object, user_data_free_func: GLib.DestroyNotify):number
-  export function bus_watch_name_on_connection(connection: DBusConnection, name: string, flags: BusNameWatcherFlags, name_appeared_handler: BusNameAppearedCallback, name_vanished_handler: BusNameVanishedCallback, user_data: object, user_data_free_func: GLib.DestroyNotify):number
+  export function bus_watch_name(bus_type: BusType, name: string, flags: BusNameWatcherFlags, name_appeared_handler: BusNameAppearedCallback, name_vanished_handler: BusNameVanishedCallback, user_data: any, user_data_free_func: GLib.DestroyNotify):number
+  export function bus_watch_name_on_connection(connection: DBusConnection, name: string, flags: BusNameWatcherFlags, name_appeared_handler: BusNameAppearedCallback, name_vanished_handler: BusNameVanishedCallback, user_data: any, user_data_free_func: GLib.DestroyNotify):number
   export function bus_watch_name_on_connection_with_closures(connection: DBusConnection, name: string, flags: BusNameWatcherFlags, name_appeared_closure: GObject.Closure, name_vanished_closure: GObject.Closure):number
   export function bus_watch_name_with_closures(bus_type: BusType, name: string, flags: BusNameWatcherFlags, name_appeared_closure: GObject.Closure, name_vanished_closure: GObject.Closure):number
   export function content_type_can_be_executable(type: string):boolean
@@ -44,7 +44,7 @@ declare module "Gio" {
   export function content_types_get_registered():GLib.List
   export function dbus_address_escape_value(string: string):string
   export function dbus_address_get_for_bus_sync(bus_type: BusType, cancellable: Cancellable):string
-  export function dbus_address_get_stream(address: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+  export function dbus_address_get_stream(address: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
   export function dbus_address_get_stream_finish(res: AsyncResult, out_guid: string):IOStream
   export function dbus_address_get_stream_sync(address: string, out_guid: string, cancellable: Cancellable):IOStream
   export function dbus_annotation_info_lookup(annotations: DBusAnnotationInfo[], name: string):string
@@ -74,12 +74,12 @@ declare module "Gio" {
   export function file_new_tmp(tmpl: filename, iostream: FileIOStream):File
   export function file_parse_name(parse_name: string):File
   export function icon_deserialize(value: GLib.Variant):Icon
-  export function icon_hash(icon: object):number
+  export function icon_hash(icon: any):number
   export function icon_new_for_string(str: string):Icon
-  export function initable_newv(object_type: GType, n_parameters: number, parameters: GObject.Parameter[], cancellable: Cancellable):GObject.Object
+  export function initable_newv(object_type: number, n_parameters: number, parameters: GObject.Parameter[], cancellable: Cancellable):GObject.Object
   export function io_error_from_errno(err_no: number):IOErrorEnum
   export function io_error_quark():GLib.Quark
-  export function io_extension_point_implement(extension_point_name: string, type: GType, extension_name: string, priority: number):IOExtension
+  export function io_extension_point_implement(extension_point_name: string, type: number, extension_name: string, priority: number):IOExtension
   export function io_extension_point_lookup(name: string):IOExtensionPoint
   export function io_extension_point_register(name: string):IOExtensionPoint
   export function io_modules_load_all_in_directory(dirname: string):GLib.List
@@ -87,7 +87,7 @@ declare module "Gio" {
   export function io_modules_scan_all_in_directory(dirname: string):void
   export function io_modules_scan_all_in_directory_with_scope(dirname: string, scope: IOModuleScope):void
   export function io_scheduler_cancel_all_jobs():void
-  export function io_scheduler_push_job(job_func: IOSchedulerJobFunc, user_data: object, notify: GLib.DestroyNotify, io_priority: number, cancellable: Cancellable):void
+  export function io_scheduler_push_job(job_func: IOSchedulerJobFunc, user_data: any, notify: GLib.DestroyNotify, io_priority: number, cancellable: Cancellable):void
   export function network_monitor_get_default():NetworkMonitor
   export function networking_init():void
   export function pollable_source_new(pollable_stream: GObject.Object):GLib.Source
@@ -107,9 +107,9 @@ declare module "Gio" {
   export function resources_register(resource: Resource):void
   export function resources_unregister(resource: Resource):void
   export function settings_schema_source_get_default():SettingsSchemaSource
-  export function simple_async_report_error_in_idle(object: GObject.Object, callback: AsyncReadyCallback, user_data: object, domain: GLib.Quark, code: number, format: string, ...args: any):void
-  export function simple_async_report_gerror_in_idle(object: GObject.Object, callback: AsyncReadyCallback, user_data: object, error: GLib.Error):void
-  export function simple_async_report_take_gerror_in_idle(object: GObject.Object, callback: AsyncReadyCallback, user_data: object, error: GLib.Error):void
+  export function simple_async_report_error_in_idle(object: GObject.Object, callback: AsyncReadyCallback, user_data: any, domain: GLib.Quark, code: number, format: string, ...args: any[]):void
+  export function simple_async_report_gerror_in_idle(object: GObject.Object, callback: AsyncReadyCallback, user_data: any, error: GLib.Error):void
+  export function simple_async_report_take_gerror_in_idle(object: GObject.Object, callback: AsyncReadyCallback, user_data: any, error: GLib.Error):void
   export function srv_target_list_sort(targets: GLib.List):GLib.List
   export function tls_backend_get_default():TlsBackend
   export function tls_client_connection_new(base_io_stream: IOStream, server_identity: SocketConnectable):TlsClientConnection
@@ -728,15 +728,15 @@ declare module "Gio" {
     get_platform_data():GLib.Variant
     get_stdin():InputStream
     getenv(name: string):string
-    print(format: string, ...args: any):void
-    printerr(format: string, ...args: any):void
+    print(format: string, ...args: any[]):void
+    printerr(format: string, ...args: any[]):void
     set_exit_status(exit_status: number):void
   }
   export class BufferedInputStream extends FilterInputStream {
     constructor(base_stream: InputStream)
     constructor(base_stream: InputStream, size: number)
     fill(count: number, cancellable: Cancellable):number
-    fill_async(count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    fill_async(count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     fill_finish(result: AsyncResult):number
     get_available():number
     get_buffer_size():number
@@ -759,7 +759,7 @@ declare module "Gio" {
   }
   export class Cancellable extends GObject.Object {
     cancel():void
-    connect(callback: GObject.Callback, data: object, data_destroy_func: GLib.DestroyNotify):number
+    connect(callback: GObject.Callback, data: any, data_destroy_func: GLib.DestroyNotify):number
     disconnect(handler_id: number):void
     get_fd():number
     is_cancelled():boolean
@@ -790,7 +790,7 @@ declare module "Gio" {
     get_unix_pid():number
     get_unix_user():number
     is_same_user(other_credentials: Credentials):boolean
-    set_native(native_type: CredentialsType, native: object):void
+    set_native(native_type: CredentialsType, native: any):void
     set_unix_user(uid: number):boolean
     to_string():string
   }
@@ -805,20 +805,20 @@ declare module "Gio" {
     constructor(res: AsyncResult)
     constructor(address: string, flags: DBusConnectionFlags, observer: DBusAuthObserver, cancellable: Cancellable)
     constructor(stream: IOStream, guid: string, flags: DBusConnectionFlags, observer: DBusAuthObserver, cancellable: Cancellable)
-    add_filter(filter_function: DBusMessageFilterFunction, user_data: object, user_data_free_func: GLib.DestroyNotify):number
-    call(bus_name: string, object_path: string, interface_name: string, method_name: string, parameters: GLib.Variant, reply_type: GLib.VariantType, flags: DBusCallFlags, timeout_msec: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    add_filter(filter_function: DBusMessageFilterFunction, user_data: any, user_data_free_func: GLib.DestroyNotify):number
+    call(bus_name: string, object_path: string, interface_name: string, method_name: string, parameters: GLib.Variant, reply_type: GLib.VariantType, flags: DBusCallFlags, timeout_msec: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     call_finish(res: AsyncResult):GLib.Variant
     call_sync(bus_name: string, object_path: string, interface_name: string, method_name: string, parameters: GLib.Variant, reply_type: GLib.VariantType, flags: DBusCallFlags, timeout_msec: number, cancellable: Cancellable):GLib.Variant
-    call_with_unix_fd_list(bus_name: string, object_path: string, interface_name: string, method_name: string, parameters: GLib.Variant, reply_type: GLib.VariantType, flags: DBusCallFlags, timeout_msec: number, fd_list: UnixFDList, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    call_with_unix_fd_list(bus_name: string, object_path: string, interface_name: string, method_name: string, parameters: GLib.Variant, reply_type: GLib.VariantType, flags: DBusCallFlags, timeout_msec: number, fd_list: UnixFDList, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     call_with_unix_fd_list_finish(out_fd_list: UnixFDList, res: AsyncResult):GLib.Variant
     call_with_unix_fd_list_sync(bus_name: string, object_path: string, interface_name: string, method_name: string, parameters: GLib.Variant, reply_type: GLib.VariantType, flags: DBusCallFlags, timeout_msec: number, fd_list: UnixFDList, out_fd_list: UnixFDList, cancellable: Cancellable):GLib.Variant
-    close(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    close(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     close_finish(res: AsyncResult):boolean
     close_sync(cancellable: Cancellable):boolean
     emit_signal(destination_bus_name: string, object_path: string, interface_name: string, signal_name: string, parameters: GLib.Variant):boolean
     export_action_group(object_path: string, action_group: ActionGroup):number
     export_menu_model(object_path: string, menu: MenuModel):number
-    flush(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    flush(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     flush_finish(res: AsyncResult):boolean
     flush_sync(cancellable: Cancellable):boolean
     get_capabilities():DBusCapabilityFlags
@@ -829,16 +829,16 @@ declare module "Gio" {
     get_stream():IOStream
     get_unique_name():string
     is_closed():boolean
-    register_object(object_path: string, interface_info: DBusInterfaceInfo, vtable: DBusInterfaceVTable, user_data: object, user_data_free_func: GLib.DestroyNotify):number
+    register_object(object_path: string, interface_info: DBusInterfaceInfo, vtable: DBusInterfaceVTable, user_data: any, user_data_free_func: GLib.DestroyNotify):number
     register_object_with_closures(object_path: string, interface_info: DBusInterfaceInfo, method_call_closure: GObject.Closure, get_property_closure: GObject.Closure, set_property_closure: GObject.Closure):number
-    register_subtree(object_path: string, vtable: DBusSubtreeVTable, flags: DBusSubtreeFlags, user_data: object, user_data_free_func: GLib.DestroyNotify):number
+    register_subtree(object_path: string, vtable: DBusSubtreeVTable, flags: DBusSubtreeFlags, user_data: any, user_data_free_func: GLib.DestroyNotify):number
     remove_filter(filter_id: number):void
     send_message(message: DBusMessage, flags: DBusSendMessageFlags, out_serial: guint32):boolean
-    send_message_with_reply(message: DBusMessage, flags: DBusSendMessageFlags, timeout_msec: number, out_serial: guint32, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    send_message_with_reply(message: DBusMessage, flags: DBusSendMessageFlags, timeout_msec: number, out_serial: guint32, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     send_message_with_reply_finish(res: AsyncResult):DBusMessage
     send_message_with_reply_sync(message: DBusMessage, flags: DBusSendMessageFlags, timeout_msec: number, out_serial: guint32, cancellable: Cancellable):DBusMessage
     set_exit_on_close(exit_on_close: boolean):void
-    signal_subscribe(sender: string, interface_name: string, member: string, object_path: string, arg0: string, flags: DBusSignalFlags, callback: DBusSignalCallback, user_data: object, user_data_free_func: GLib.DestroyNotify):number
+    signal_subscribe(sender: string, interface_name: string, member: string, object_path: string, arg0: string, flags: DBusSignalFlags, callback: DBusSignalCallback, user_data: any, user_data_free_func: GLib.DestroyNotify):number
     signal_unsubscribe(subscription_id: number):void
     start_message_processing():void
     unexport_action_group(export_id: number):void
@@ -888,7 +888,7 @@ declare module "Gio" {
     get_signature():string
     get_unix_fd_list():UnixFDList
     lock():void
-    new_method_error(error_name: string, error_message_format: string, ...args: any):DBusMessage
+    new_method_error(error_name: string, error_message_format: string, ...args: any[]):DBusMessage
     new_method_error_literal(error_name: string, error_message: string):DBusMessage
     new_method_error_valist(error_name: string, error_message_format: string, var_args: any):DBusMessage
     new_method_reply():DBusMessage
@@ -924,7 +924,7 @@ declare module "Gio" {
     get_sender():string
     get_user_data():object
     return_dbus_error(error_name: string, error_message: string):void
-    return_error(domain: GLib.Quark, code: number, format: string, ...args: any):void
+    return_error(domain: GLib.Quark, code: number, format: string, ...args: any[]):void
     return_error_literal(domain: GLib.Quark, code: number, message: string):void
     return_error_valist(domain: GLib.Quark, code: number, format: string, var_args: any):void
     return_gerror(error: GLib.Error):void
@@ -935,8 +935,8 @@ declare module "Gio" {
   export class DBusObjectManagerClient extends GObject.Object {
     constructor(res: AsyncResult)
     constructor(res: AsyncResult)
-    constructor(bus_type: BusType, flags: DBusObjectManagerClientFlags, name: string, object_path: string, get_proxy_type_func: DBusProxyTypeFunc, get_proxy_type_user_data: object, get_proxy_type_destroy_notify: GLib.DestroyNotify, cancellable: Cancellable)
-    constructor(connection: DBusConnection, flags: DBusObjectManagerClientFlags, name: string, object_path: string, get_proxy_type_func: DBusProxyTypeFunc, get_proxy_type_user_data: object, get_proxy_type_destroy_notify: GLib.DestroyNotify, cancellable: Cancellable)
+    constructor(bus_type: BusType, flags: DBusObjectManagerClientFlags, name: string, object_path: string, get_proxy_type_func: DBusProxyTypeFunc, get_proxy_type_user_data: any, get_proxy_type_destroy_notify: GLib.DestroyNotify, cancellable: Cancellable)
+    constructor(connection: DBusConnection, flags: DBusObjectManagerClientFlags, name: string, object_path: string, get_proxy_type_func: DBusProxyTypeFunc, get_proxy_type_user_data: any, get_proxy_type_destroy_notify: GLib.DestroyNotify, cancellable: Cancellable)
     get_connection():DBusConnection
     get_flags():DBusObjectManagerClientFlags
     get_name():string
@@ -968,10 +968,10 @@ declare module "Gio" {
     constructor(res: AsyncResult)
     constructor(bus_type: BusType, flags: DBusProxyFlags, info: DBusInterfaceInfo, name: string, object_path: string, interface_name: string, cancellable: Cancellable)
     constructor(connection: DBusConnection, flags: DBusProxyFlags, info: DBusInterfaceInfo, name: string, object_path: string, interface_name: string, cancellable: Cancellable)
-    call(method_name: string, parameters: GLib.Variant, flags: DBusCallFlags, timeout_msec: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    call(method_name: string, parameters: GLib.Variant, flags: DBusCallFlags, timeout_msec: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     call_finish(res: AsyncResult):GLib.Variant
     call_sync(method_name: string, parameters: GLib.Variant, flags: DBusCallFlags, timeout_msec: number, cancellable: Cancellable):GLib.Variant
-    call_with_unix_fd_list(method_name: string, parameters: GLib.Variant, flags: DBusCallFlags, timeout_msec: number, fd_list: UnixFDList, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    call_with_unix_fd_list(method_name: string, parameters: GLib.Variant, flags: DBusCallFlags, timeout_msec: number, fd_list: UnixFDList, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     call_with_unix_fd_list_finish(out_fd_list: UnixFDList, res: AsyncResult):GLib.Variant
     call_with_unix_fd_list_sync(method_name: string, parameters: GLib.Variant, flags: DBusCallFlags, timeout_msec: number, fd_list: UnixFDList, out_fd_list: UnixFDList, cancellable: Cancellable):GLib.Variant
     get_cached_property(property_name: string):GLib.Variant
@@ -1006,7 +1006,7 @@ declare module "Gio" {
     read_int32(cancellable: Cancellable):gint32
     read_int64(cancellable: Cancellable):number
     read_line(length: number, cancellable: Cancellable):number[]
-    read_line_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    read_line_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     read_line_finish(result: AsyncResult, length: number):number[]
     read_line_finish_utf8(result: AsyncResult, length: number):string
     read_line_utf8(length: number, cancellable: Cancellable):string
@@ -1014,10 +1014,10 @@ declare module "Gio" {
     read_uint32(cancellable: Cancellable):guint32
     read_uint64(cancellable: Cancellable):number
     read_until(stop_chars: string, length: number, cancellable: Cancellable):string
-    read_until_async(stop_chars: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    read_until_async(stop_chars: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     read_until_finish(result: AsyncResult, length: number):string
     read_upto(stop_chars: string, stop_chars_len: number, length: number, cancellable: Cancellable):string
-    read_upto_async(stop_chars: string, stop_chars_len: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    read_upto_async(stop_chars: string, stop_chars_len: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     read_upto_finish(result: AsyncResult, length: number):string
     set_byte_order(order: DataStreamByteOrder):void
     set_newline_type(type: DataStreamNewlineType):void
@@ -1052,7 +1052,7 @@ declare module "Gio" {
     get_string(key: string):string
     has_key(key: string):boolean
     launch_action(action_name: string, launch_context: AppLaunchContext):void
-    launch_uris_as_manager(uris: GLib.List, launch_context: AppLaunchContext, spawn_flags: GLib.SpawnFlags, user_setup: GLib.SpawnChildSetupFunc, user_setup_data: object, pid_callback: DesktopAppLaunchCallback, pid_callback_data: object):boolean
+    launch_uris_as_manager(uris: GLib.List, launch_context: AppLaunchContext, spawn_flags: GLib.SpawnFlags, user_setup: GLib.SpawnChildSetupFunc, user_setup_data: any, pid_callback: DesktopAppLaunchCallback, pid_callback_data: any):boolean
     list_actions():string[]
   }
   export class Emblem extends GObject.Object {
@@ -1070,7 +1070,7 @@ declare module "Gio" {
   }
   export class FileEnumerator extends GObject.Object {
     close(cancellable: Cancellable):boolean
-    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     close_finish(result: AsyncResult):boolean
     get_child(info: FileInfo):File
     get_container():File
@@ -1078,14 +1078,14 @@ declare module "Gio" {
     is_closed():boolean
     iterate(out_info: FileInfo, out_child: File, cancellable: Cancellable):boolean
     next_file(cancellable: Cancellable):FileInfo
-    next_files_async(num_files: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    next_files_async(num_files: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     next_files_finish(result: AsyncResult):GLib.List
     set_pending(pending: boolean):void
   }
   export class FileIOStream extends IOStream {
     get_etag():string
     query_info(attributes: string, cancellable: Cancellable):FileInfo
-    query_info_async(attributes: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    query_info_async(attributes: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     query_info_finish(result: AsyncResult):FileInfo
   }
   export class FileIcon extends GObject.Object {
@@ -1099,7 +1099,7 @@ declare module "Gio" {
     get_attribute_as_string(attribute: string):string
     get_attribute_boolean(attribute: string):boolean
     get_attribute_byte_string(attribute: string):string
-    get_attribute_data(attribute: string, type: FileAttributeType, value_pp: object, status: FileAttributeStatus):boolean
+    get_attribute_data(attribute: string, type: FileAttributeType, value_pp: any, status: FileAttributeStatus):boolean
     get_attribute_int32(attribute: string):gint32
     get_attribute_int64(attribute: string):number
     get_attribute_object(attribute: string):GObject.Object
@@ -1129,7 +1129,7 @@ declare module "Gio" {
     has_namespace(name_space: string):boolean
     list_attributes(name_space: string):string[]
     remove_attribute(attribute: string):void
-    set_attribute(attribute: string, type: FileAttributeType, value_p: object):void
+    set_attribute(attribute: string, type: FileAttributeType, value_p: any):void
     set_attribute_boolean(attribute: string, attr_value: boolean):void
     set_attribute_byte_string(attribute: string, attr_value: string):void
     set_attribute_int32(attribute: string, attr_value: gint32):void
@@ -1158,7 +1158,7 @@ declare module "Gio" {
   }
   export class FileInputStream extends InputStream {
     query_info(attributes: string, cancellable: Cancellable):FileInfo
-    query_info_async(attributes: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    query_info_async(attributes: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     query_info_finish(result: AsyncResult):FileInfo
   }
   export class FileMonitor extends GObject.Object {
@@ -1170,7 +1170,7 @@ declare module "Gio" {
   export class FileOutputStream extends OutputStream {
     get_etag():string
     query_info(attributes: string, cancellable: Cancellable):FileInfo
-    query_info_async(attributes: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    query_info_async(attributes: string, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     query_info_finish(result: AsyncResult):FileInfo
   }
   export class FilenameCompleter extends GObject.Object {
@@ -1196,14 +1196,14 @@ declare module "Gio" {
   export class IOStream extends GObject.Object {
     clear_pending():void
     close(cancellable: Cancellable):boolean
-    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     close_finish(result: AsyncResult):boolean
     get_input_stream():InputStream
     get_output_stream():OutputStream
     has_pending():boolean
     is_closed():boolean
     set_pending():boolean
-    splice_async(stream2: IOStream, flags: IOStreamSpliceFlags, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    splice_async(stream2: IOStream, flags: IOStreamSpliceFlags, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
   }
   export class InetAddress extends GObject.Object {
     constructor(family: SocketFamily)
@@ -1247,32 +1247,32 @@ declare module "Gio" {
   export class InputStream extends GObject.Object {
     clear_pending():void
     close(cancellable: Cancellable):boolean
-    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     close_finish(result: AsyncResult):boolean
     has_pending():boolean
     is_closed():boolean
     read(buffer: number[], count: number, cancellable: Cancellable):number
     read_all(buffer: number[], count: number, bytes_read: number, cancellable: Cancellable):boolean
-    read_all_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    read_all_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     read_all_finish(result: AsyncResult, bytes_read: number):boolean
-    read_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    read_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     read_bytes(count: number, cancellable: Cancellable):GLib.Bytes
-    read_bytes_async(count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    read_bytes_async(count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     read_bytes_finish(result: AsyncResult):GLib.Bytes
     read_finish(result: AsyncResult):number
     set_pending():boolean
     skip(count: number, cancellable: Cancellable):number
-    skip_async(count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    skip_async(count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     skip_finish(result: AsyncResult):number
   }
   export class ListStore extends GObject.Object {
-    constructor(item_type: GType)
+    constructor(item_type: number)
     append(item: GObject.Object):void
     insert(position: number, item: GObject.Object):void
-    insert_sorted(item: GObject.Object, compare_func: GLib.CompareDataFunc, user_data: object):number
+    insert_sorted(item: GObject.Object, compare_func: GLib.CompareDataFunc, user_data: any):number
     remove(position: number):void
     remove_all():void
-    sort(compare_func: GLib.CompareDataFunc, user_data: object):void
+    sort(compare_func: GLib.CompareDataFunc, user_data: any):void
     splice(position: number, n_removals: number, additions: GObject.Object[], n_additions: number):void
   }
   export class MemoryInputStream extends InputStream {
@@ -1282,7 +1282,7 @@ declare module "Gio" {
     add_data(data: number[], len: number, destroy: GLib.DestroyNotify):void
   }
   export class MemoryOutputStream extends OutputStream {
-    constructor(data: object, size: number, realloc_function: ReallocFunc, destroy_function: GLib.DestroyNotify)
+    constructor(data: any, size: number, realloc_function: ReallocFunc, destroy_function: GLib.DestroyNotify)
     get_data():object
     get_data_size():number
     get_size():number
@@ -1317,12 +1317,12 @@ declare module "Gio" {
     constructor(model: MenuModel, item_index: number)
     constructor(label: string, section: MenuModel)
     constructor(label: string, submenu: MenuModel)
-    get_attribute(attribute: string, format_string: string, ...args: any):boolean
+    get_attribute(attribute: string, format_string: string, ...args: any[]):boolean
     get_attribute_value(attribute: string, expected_type: GLib.VariantType):GLib.Variant
     get_link(link: string):MenuModel
-    set_action_and_target(action: string, format_string: string, ...args: any):void
+    set_action_and_target(action: string, format_string: string, ...args: any[]):void
     set_action_and_target_value(action: string, target_value: GLib.Variant):void
-    set_attribute(attribute: string, format_string: string, ...args: any):void
+    set_attribute(attribute: string, format_string: string, ...args: any[]):void
     set_attribute_value(attribute: string, value: GLib.Variant):void
     set_detailed_action(detailed_action: string):void
     set_icon(icon: Icon):void
@@ -1338,7 +1338,7 @@ declare module "Gio" {
     next():boolean
   }
   export class MenuModel extends GObject.Object {
-    get_item_attribute(item_index: number, attribute: string, format_string: string, ...args: any):boolean
+    get_item_attribute(item_index: number, attribute: string, format_string: string, ...args: any[]):boolean
     get_item_attribute_value(item_index: number, attribute: string, expected_type: GLib.VariantType):GLib.Variant
     get_item_link(item_index: number, link: string):MenuModel
     get_n_items():number
@@ -1382,11 +1382,11 @@ declare module "Gio" {
   export class Notification extends GObject.Object {
     constructor(title: string)
     add_button(label: string, detailed_action: string):void
-    add_button_with_target(label: string, action: string, target_format: string, ...args: any):void
+    add_button_with_target(label: string, action: string, target_format: string, ...args: any[]):void
     add_button_with_target_value(label: string, action: string, target: GLib.Variant):void
     set_body(body: string):void
     set_default_action(detailed_action: string):void
-    set_default_action_and_target(action: string, target_format: string, ...args: any):void
+    set_default_action_and_target(action: string, target_format: string, ...args: any[]):void
     set_default_action_and_target_value(action: string, target: GLib.Variant):void
     set_icon(icon: Icon):void
     set_priority(priority: NotificationPriority):void
@@ -1396,40 +1396,40 @@ declare module "Gio" {
   export class OutputStream extends GObject.Object {
     clear_pending():void
     close(cancellable: Cancellable):boolean
-    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    close_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     close_finish(result: AsyncResult):boolean
     flush(cancellable: Cancellable):boolean
-    flush_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    flush_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     flush_finish(result: AsyncResult):boolean
     has_pending():boolean
     is_closed():boolean
     is_closing():boolean
-    printf(bytes_written: number, cancellable: Cancellable, error: GLib.Error, format: string, ...args: any):boolean
+    printf(bytes_written: number, cancellable: Cancellable, error: GLib.Error, format: string, ...args: any[]):boolean
     set_pending():boolean
     splice(source: InputStream, flags: OutputStreamSpliceFlags, cancellable: Cancellable):number
-    splice_async(source: InputStream, flags: OutputStreamSpliceFlags, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    splice_async(source: InputStream, flags: OutputStreamSpliceFlags, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     splice_finish(result: AsyncResult):number
     vprintf(bytes_written: number, cancellable: Cancellable, error: GLib.Error, format: string, args: any):boolean
     write(buffer: number[], count: number, cancellable: Cancellable):number
     write_all(buffer: number[], count: number, bytes_written: number, cancellable: Cancellable):boolean
-    write_all_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    write_all_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     write_all_finish(result: AsyncResult, bytes_written: number):boolean
-    write_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    write_async(buffer: number[], count: number, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     write_bytes(bytes: GLib.Bytes, cancellable: Cancellable):number
-    write_bytes_async(bytes: GLib.Bytes, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    write_bytes_async(bytes: GLib.Bytes, io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     write_bytes_finish(result: AsyncResult):number
     write_finish(result: AsyncResult):number
   }
   export class Permission extends GObject.Object {
     acquire(cancellable: Cancellable):boolean
-    acquire_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    acquire_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     acquire_finish(result: AsyncResult):boolean
     get_allowed():boolean
     get_can_acquire():boolean
     get_can_release():boolean
     impl_update(allowed: boolean, can_acquire: boolean, can_release: boolean):void
     release(cancellable: Cancellable):boolean
-    release_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    release_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     release_finish(result: AsyncResult):boolean
   }
   export class PropertyAction extends GObject.Object {
@@ -1449,16 +1449,16 @@ declare module "Gio" {
   }
   export class Resolver extends GObject.Object {
     lookup_by_address(address: InetAddress, cancellable: Cancellable):string
-    lookup_by_address_async(address: InetAddress, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_by_address_async(address: InetAddress, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_by_address_finish(result: AsyncResult):string
     lookup_by_name(hostname: string, cancellable: Cancellable):GLib.List
-    lookup_by_name_async(hostname: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_by_name_async(hostname: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_by_name_finish(result: AsyncResult):GLib.List
     lookup_records(rrname: string, record_type: ResolverRecordType, cancellable: Cancellable):GLib.List
-    lookup_records_async(rrname: string, record_type: ResolverRecordType, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_records_async(rrname: string, record_type: ResolverRecordType, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_records_finish(result: AsyncResult):GLib.List
     lookup_service(service: string, protocol: string, domain: string, cancellable: Cancellable):GLib.List
-    lookup_service_async(service: string, protocol: string, domain: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_service_async(service: string, protocol: string, domain: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_service_finish(result: AsyncResult):GLib.List
     set_default():void
   }
@@ -1470,11 +1470,11 @@ declare module "Gio" {
     constructor(schema_id: string, path: string)
     apply():void
     bind(key: string, object: GObject.Object, property: string, flags: SettingsBindFlags):void
-    bind_with_mapping(key: string, object: GObject.Object, property: string, flags: SettingsBindFlags, get_mapping: SettingsBindGetMapping, set_mapping: SettingsBindSetMapping, user_data: object, destroy: GLib.DestroyNotify):void
+    bind_with_mapping(key: string, object: GObject.Object, property: string, flags: SettingsBindFlags, get_mapping: SettingsBindGetMapping, set_mapping: SettingsBindSetMapping, user_data: any, destroy: GLib.DestroyNotify):void
     bind_writable(key: string, object: GObject.Object, property: string, inverted: boolean):void
     create_action(key: string):Action
     delay():void
-    get(key: string, format: string, ...args: any):void
+    get(key: string, format: string, ...args: any[]):void
     get_boolean(key: string):boolean
     get_child(name: string):Settings
     get_default_value(key: string):GLib.Variant
@@ -1483,7 +1483,7 @@ declare module "Gio" {
     get_flags(key: string):number
     get_has_unapplied():boolean
     get_int(key: string):number
-    get_mapped(key: string, mapping: SettingsGetMapping, user_data: object):object
+    get_mapped(key: string, mapping: SettingsGetMapping, user_data: any):object
     get_range(key: string):GLib.Variant
     get_string(key: string):string
     get_strv(key: string):string[]
@@ -1496,7 +1496,7 @@ declare module "Gio" {
     range_check(key: string, value: GLib.Variant):boolean
     reset(key: string):void
     revert():void
-    set(key: string, format: string, ...args: any):boolean
+    set(key: string, format: string, ...args: any[]):boolean
     set_boolean(key: string, value: boolean):boolean
     set_double(key: string, value: number):boolean
     set_enum(key: string, value: number):boolean
@@ -1515,16 +1515,16 @@ declare module "Gio" {
     set_state_hint(state_hint: GLib.Variant):void
   }
   export class SimpleActionGroup extends GObject.Object {
-    add_entries(entries: ActionEntry[], n_entries: number, user_data: object):void
+    add_entries(entries: ActionEntry[], n_entries: number, user_data: any):void
     insert(action: Action):void
     lookup(action_name: string):Action
     remove(action_name: string):void
   }
   export class SimpleAsyncResult extends GObject.Object {
-    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: object, source_tag: object)
-    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: object, domain: GLib.Quark, code: number, format: string, ...args: any)
-    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: object, error: GLib.Error)
-    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: object, error: GLib.Error)
+    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: any, source_tag: any)
+    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: any, domain: GLib.Quark, code: number, format: string, ...args: any[])
+    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: any, error: GLib.Error)
+    constructor(source_object: GObject.Object, callback: AsyncReadyCallback, user_data: any, error: GLib.Error)
     complete():void
     complete_in_idle():void
     get_op_res_gboolean():boolean
@@ -1534,12 +1534,12 @@ declare module "Gio" {
     propagate_error():boolean
     run_in_thread(func: SimpleAsyncThreadFunc, io_priority: number, cancellable: Cancellable):void
     set_check_cancellable(check_cancellable: Cancellable):void
-    set_error(domain: GLib.Quark, code: number, format: string, ...args: any):void
+    set_error(domain: GLib.Quark, code: number, format: string, ...args: any[]):void
     set_error_va(domain: GLib.Quark, code: number, format: string, args: any):void
     set_from_error(error: GLib.Error):void
     set_handle_cancellation(handle_cancellation: boolean):void
     set_op_res_gboolean(op_res: boolean):void
-    set_op_res_gpointer(op_res: object, destroy_op_res: GLib.DestroyNotify):void
+    set_op_res_gpointer(op_res: any, destroy_op_res: GLib.DestroyNotify):void
     set_op_res_gssize(op_res: number):void
     take_error(error: GLib.Error):void
   }
@@ -1612,29 +1612,29 @@ declare module "Gio" {
     speaks_ipv4():boolean
   }
   export class SocketAddress extends GObject.Object {
-    constructor(native: object, len: number)
+    constructor(native: any, len: number)
     get_family():SocketFamily
     get_native_size():number
-    to_native(dest: object, destlen: number):boolean
+    to_native(dest: any, destlen: number):boolean
   }
   export class SocketAddressEnumerator extends GObject.Object {
     next(cancellable: Cancellable):SocketAddress
-    next_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    next_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     next_finish(result: AsyncResult):SocketAddress
   }
   export class SocketClient extends GObject.Object {
     add_application_proxy(protocol: string):void
     connect(connectable: SocketConnectable, cancellable: Cancellable):SocketConnection
-    connect_async(connectable: SocketConnectable, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    connect_async(connectable: SocketConnectable, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     connect_finish(result: AsyncResult):SocketConnection
     connect_to_host(host_and_port: string, default_port: guint16, cancellable: Cancellable):SocketConnection
-    connect_to_host_async(host_and_port: string, default_port: guint16, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    connect_to_host_async(host_and_port: string, default_port: guint16, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     connect_to_host_finish(result: AsyncResult):SocketConnection
     connect_to_service(domain: string, service: string, cancellable: Cancellable):SocketConnection
-    connect_to_service_async(domain: string, service: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    connect_to_service_async(domain: string, service: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     connect_to_service_finish(result: AsyncResult):SocketConnection
     connect_to_uri(uri: string, default_port: guint16, cancellable: Cancellable):SocketConnection
-    connect_to_uri_async(uri: string, default_port: guint16, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    connect_to_uri_async(uri: string, default_port: guint16, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     connect_to_uri_finish(result: AsyncResult):SocketConnection
     get_enable_proxy():boolean
     get_family():SocketFamily
@@ -1657,7 +1657,7 @@ declare module "Gio" {
   }
   export class SocketConnection extends IOStream {
     connect(address: SocketAddress, cancellable: Cancellable):boolean
-    connect_async(address: SocketAddress, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    connect_async(address: SocketAddress, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     connect_finish(result: AsyncResult):boolean
     get_local_address():SocketAddress
     get_remote_address():SocketAddress
@@ -1668,14 +1668,14 @@ declare module "Gio" {
     get_level():number
     get_msg_type():number
     get_size():number
-    serialize(data: object):void
+    serialize(data: any):void
   }
   export class SocketListener extends GObject.Object {
     accept(source_object: GObject.Object, cancellable: Cancellable):SocketConnection
-    accept_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    accept_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     accept_finish(result: AsyncResult, source_object: GObject.Object):SocketConnection
     accept_socket(source_object: GObject.Object, cancellable: Cancellable):Socket
-    accept_socket_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    accept_socket_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     accept_socket_finish(result: AsyncResult, source_object: GObject.Object):Socket
     add_address(address: SocketAddress, type: SocketType, protocol: SocketProtocol, source_object: GObject.Object, effective_address: SocketAddress):boolean
     add_any_inet_port(source_object: GObject.Object):guint16
@@ -1690,13 +1690,13 @@ declare module "Gio" {
     stop():void
   }
   export class Subprocess extends GObject.Object {
-    constructor(flags: SubprocessFlags, error: GLib.Error, argv0: string, ...args: any)
+    constructor(flags: SubprocessFlags, error: GLib.Error, argv0: string, ...args: any[])
     constructor(argv: string[], flags: SubprocessFlags)
     communicate(stdin_buf: GLib.Bytes, cancellable: Cancellable, stdout_buf: GLib.Bytes, stderr_buf: GLib.Bytes):boolean
-    communicate_async(stdin_buf: GLib.Bytes, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    communicate_async(stdin_buf: GLib.Bytes, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     communicate_finish(result: AsyncResult, stdout_buf: GLib.Bytes, stderr_buf: GLib.Bytes):boolean
     communicate_utf8(stdin_buf: string, cancellable: Cancellable, stdout_buf: string, stderr_buf: string):boolean
-    communicate_utf8_async(stdin_buf: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    communicate_utf8_async(stdin_buf: string, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     communicate_utf8_finish(result: AsyncResult, stdout_buf: string, stderr_buf: string):boolean
     force_exit():void
     get_exit_status():number
@@ -1711,16 +1711,16 @@ declare module "Gio" {
     get_term_sig():number
     send_signal(signal_num: number):void
     wait(cancellable: Cancellable):boolean
-    wait_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    wait_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     wait_check(cancellable: Cancellable):boolean
-    wait_check_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    wait_check_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     wait_check_finish(result: AsyncResult):boolean
     wait_finish(result: AsyncResult):boolean
   }
   export class SubprocessLauncher extends GObject.Object {
     constructor(flags: SubprocessFlags)
     getenv(variable: string):string
-    set_child_setup(child_setup: GLib.SpawnChildSetupFunc, user_data: object, destroy_notify: GLib.DestroyNotify):void
+    set_child_setup(child_setup: GLib.SpawnChildSetupFunc, user_data: any, destroy_notify: GLib.DestroyNotify):void
     set_cwd(cwd: string):void
     set_environ(env: string):void
     set_flags(flags: SubprocessFlags):void
@@ -1728,7 +1728,7 @@ declare module "Gio" {
     set_stdin_file_path(path: string):void
     set_stdout_file_path(path: string):void
     setenv(variable: string, value: string, overwrite: boolean):void
-    spawn(error: GLib.Error, argv0: string, ...args: any):Subprocess
+    spawn(error: GLib.Error, argv0: string, ...args: any[]):Subprocess
     spawnv(argv: string[]):Subprocess
     take_fd(source_fd: number, target_fd: number):void
     take_stderr_fd(fd: number):void
@@ -1737,7 +1737,7 @@ declare module "Gio" {
     unsetenv(variable: string):void
   }
   export class Task extends GObject.Object {
-    constructor(source_object: GObject.Object, cancellable: Cancellable, callback: AsyncReadyCallback, callback_data: object)
+    constructor(source_object: GObject.Object, cancellable: Cancellable, callback: AsyncReadyCallback, callback_data: any)
     attach_source(source: GLib.Source, callback: GLib.SourceFunc):void
     get_cancellable():Cancellable
     get_check_cancellable():boolean
@@ -1756,15 +1756,15 @@ declare module "Gio" {
     return_error(error: GLib.Error):void
     return_error_if_cancelled():boolean
     return_int(result: number):void
-    return_new_error(domain: GLib.Quark, code: number, format: string, ...args: any):void
-    return_pointer(result: object, result_destroy: GLib.DestroyNotify):void
+    return_new_error(domain: GLib.Quark, code: number, format: string, ...args: any[]):void
+    return_pointer(result: any, result_destroy: GLib.DestroyNotify):void
     run_in_thread(task_func: TaskThreadFunc):void
     run_in_thread_sync(task_func: TaskThreadFunc):void
     set_check_cancellable(check_cancellable: boolean):void
     set_priority(priority: number):void
     set_return_on_cancel(return_on_cancel: boolean):boolean
-    set_source_tag(source_tag: object):void
-    set_task_data(task_data: object, task_data_destroy: GLib.DestroyNotify):void
+    set_source_tag(source_tag: any):void
+    set_task_data(task_data: any, task_data_destroy: GLib.DestroyNotify):void
   }
   export class TcpConnection extends SocketConnection {
     get_graceful_disconnect():boolean
@@ -1813,7 +1813,7 @@ declare module "Gio" {
     get_require_close_notify():boolean
     get_use_system_certdb():boolean
     handshake(cancellable: Cancellable):boolean
-    handshake_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    handshake_async(io_priority: number, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     handshake_finish(result: AsyncResult):boolean
     set_certificate(certificate: TlsCertificate):void
     set_database(database: TlsDatabase):void
@@ -1825,26 +1825,26 @@ declare module "Gio" {
   export class TlsDatabase extends GObject.Object {
     create_certificate_handle(certificate: TlsCertificate):string
     lookup_certificate_for_handle(handle: string, interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable):TlsCertificate
-    lookup_certificate_for_handle_async(handle: string, interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_certificate_for_handle_async(handle: string, interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_certificate_for_handle_finish(result: AsyncResult):TlsCertificate
     lookup_certificate_issuer(certificate: TlsCertificate, interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable):TlsCertificate
-    lookup_certificate_issuer_async(certificate: TlsCertificate, interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_certificate_issuer_async(certificate: TlsCertificate, interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_certificate_issuer_finish(result: AsyncResult):TlsCertificate
     lookup_certificates_issued_by(issuer_raw_dn: number[], interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable):GLib.List
-    lookup_certificates_issued_by_async(issuer_raw_dn: number[], interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    lookup_certificates_issued_by_async(issuer_raw_dn: number[], interaction: TlsInteraction, flags: TlsDatabaseLookupFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     lookup_certificates_issued_by_finish(result: AsyncResult):GLib.List
     verify_chain(chain: TlsCertificate, purpose: string, identity: SocketConnectable, interaction: TlsInteraction, flags: TlsDatabaseVerifyFlags, cancellable: Cancellable):TlsCertificateFlags
-    verify_chain_async(chain: TlsCertificate, purpose: string, identity: SocketConnectable, interaction: TlsInteraction, flags: TlsDatabaseVerifyFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    verify_chain_async(chain: TlsCertificate, purpose: string, identity: SocketConnectable, interaction: TlsInteraction, flags: TlsDatabaseVerifyFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     verify_chain_finish(result: AsyncResult):TlsCertificateFlags
   }
   export class TlsInteraction extends GObject.Object {
     ask_password(password: TlsPassword, cancellable: Cancellable):TlsInteractionResult
-    ask_password_async(password: TlsPassword, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    ask_password_async(password: TlsPassword, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     ask_password_finish(result: AsyncResult):TlsInteractionResult
     invoke_ask_password(password: TlsPassword, cancellable: Cancellable):TlsInteractionResult
     invoke_request_certificate(connection: TlsConnection, flags: TlsCertificateRequestFlags, cancellable: Cancellable):TlsInteractionResult
     request_certificate(connection: TlsConnection, flags: TlsCertificateRequestFlags, cancellable: Cancellable):TlsInteractionResult
-    request_certificate_async(connection: TlsConnection, flags: TlsCertificateRequestFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    request_certificate_async(connection: TlsConnection, flags: TlsCertificateRequestFlags, cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     request_certificate_finish(result: AsyncResult):TlsInteractionResult
   }
   export class TlsPassword extends GObject.Object {
@@ -1861,11 +1861,11 @@ declare module "Gio" {
   }
   export class UnixConnection extends SocketConnection {
     receive_credentials(cancellable: Cancellable):Credentials
-    receive_credentials_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    receive_credentials_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     receive_credentials_finish(result: AsyncResult):Credentials
     receive_fd(cancellable: Cancellable):number
     send_credentials(cancellable: Cancellable):boolean
-    send_credentials_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: object):void
+    send_credentials_async(cancellable: Cancellable, callback: AsyncReadyCallback, user_data: any):void
     send_credentials_finish(result: AsyncResult):boolean
     send_fd(fd: number, cancellable: Cancellable):boolean
   }

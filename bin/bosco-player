@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 //#!/usr/bin/env gjs
 var PREFIX = "/home/bruce/gjs/bosco/share/bosco"; /* data location */
 /**
@@ -11581,7 +11586,659 @@ else {
                 module.exports = toString;
             }, { "./_baseToString": 97 }] }, {}, [28])(28);
 });
-// import {Player} from 'Player'
-define("main", ["require", "exports"], function (require, exports) {
+define("Util", ["require", "exports", "Gio", "Gtk", "Lang"], function (require, exports, Gio, Gtk, Lang) {
     "use strict";
+    var Util = (function () {
+        function Util() {
+        }
+        Util.readFile = function (filename) {
+            var file = Gio.file_new_for_path(filename);
+            if (file.query_exists(null)) {
+                var _a = file.load_contents(null), success = _a[0], data = _a[1], length_1 = _a[2];
+                return data;
+            }
+            else {
+                return null;
+            }
+        };
+        Util.loadTemplate = function (name, path, children, params) {
+            var klass = Lang.Class({
+                Name: name,
+                Extends: Gtk.ApplicationWindow,
+                Template: Util.readFile(path),
+                Children: children,
+                _init: function (params) {
+                    return this.parent(params);
+                }
+            });
+            return new klass(params);
+        };
+        return Util;
+    }());
+    exports.Util = Util;
+});
+define("Project", ["require", "exports"], function (require, exports) {
+    "use strict";
+    /**
+     *
+     * Project class -
+     *
+     *  parse autovala project data
+     *
+     */
+    var Project = (function () {
+        function Project(path, data) {
+            this.name = path.substring(path.lastIndexOf("/") + 1);
+            this.path = path.substring(0, path.lastIndexOf("/"));
+            this.data = {};
+            var lines = data.split('\n');
+            for (var j = 0, len = lines.length; j < len; j++) {
+                var line = lines[j];
+                if (line === "")
+                    continue;
+                if (line[0] === "#")
+                    continue;
+                var _a = line.split(/\s*\:\s*/), key0 = _a[0], value = _a[1];
+                var _b = [false, key0], readonly = _b[0], key = _b[1];
+                if (key[0] === '*') {
+                    _c = [true, key.substring(1)], readonly = _c[0], key = _c[1];
+                }
+                if (this.data[key] != null) {
+                    if (!Array.isArray(this.data[key])) {
+                        this.data[key] = [this.data[key]];
+                    }
+                    this.data[key].push({
+                        value: value,
+                        readonly: readonly
+                    });
+                }
+                else {
+                    this.data[key] = {
+                        value: value,
+                        readonly: readonly
+                    };
+                }
+            }
+            var _c;
+        }
+        Project.prototype.isArray = function (key) {
+            return Array.isArray(this.data[key]);
+        };
+        Project.prototype.count = function (key) {
+            return this.data[key].length;
+        };
+        Project.prototype.get = function (key, i) {
+            if (i == null) {
+                return this.data[key].value;
+            }
+            else {
+                return this.data[key][i].value;
+            }
+        };
+        Project.prototype.readonly = function (key, i) {
+            if (i == null) {
+                return this.data[key].readonly;
+            }
+            else {
+                return this.data[key][i].readonly;
+            }
+        };
+        return Project;
+    }());
+    exports.Project = Project;
+});
+define("tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"], function (require, exports, Gtk, GObject, Pango) {
+    "use strict";
+    /**
+     *
+     * Abstract Class ProjectViewer -
+     *
+     * view autovala data
+     *
+     */
+    var NotebookTab = (function () {
+        /**
+          * set the autovala project data
+          * @param prj:Project
+         */
+        function NotebookTab(prj, status) {
+            this.prj = prj;
+            this.status = status;
+            this.id = this.status.get_context_id(this.constructor['name']);
+        }
+        /**
+          *
+          *  buildUI
+          *
+          *  sets up the base UI page for property display
+          *  subclass must override & super this method
+          *
+         */
+        NotebookTab.prototype.buildUI = function () {
+            var _this = this;
+            var bold, key, normal, readonly, value;
+            this.listStore = new Gtk.ListStore();
+            this.listStore.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_STRING]);
+            this.treeView = new Gtk.TreeView({
+                expand: true,
+                model: this.listStore
+            });
+            this.selection = this.treeView.get_selection();
+            this.selection.connect('changed', function () {
+                return _this.onSelectionChanged();
+            });
+            this.grid = new Gtk.Grid();
+            key = new Gtk.TreeViewColumn({
+                title: "Key"
+            });
+            value = new Gtk.TreeViewColumn({
+                title: "Value"
+            });
+            readonly = new Gtk.TreeViewColumn({
+                title: "Readonly"
+            });
+            bold = new Gtk.CellRendererText({
+                weight: Pango.Weight.BOLD
+            });
+            normal = new Gtk.CellRendererText();
+            key.pack_start(bold, true);
+            value.pack_start(normal, true);
+            readonly.pack_start(normal, true);
+            key.add_attribute(bold, "text", 0);
+            value.add_attribute(normal, "text", 1);
+            readonly.add_attribute(normal, "text", 2);
+            this.treeView.insert_column(key, 0);
+            this.treeView.insert_column(value, 1);
+            this.treeView.insert_column(readonly, 2);
+            this.scrollView = new Gtk.ScrolledWindow({
+                hscrollbar_policy: Gtk.PolicyType.NEVER,
+                vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
+            });
+            this.scrollView.add(this.treeView);
+            return this.grid.attach(this.scrollView, 0, 0, 1, 1);
+        };
+        /**
+          * Add data to the list store
+          * call from subclass buildUI
+         */
+        NotebookTab.prototype.add = function (p1, p2, p3) {
+            return this.listStore.set(this.listStore.append(), [0, 1, 2], [String(p1), String(p2), String(p3)]);
+        };
+        /**
+          * show the current selected row
+         */
+        NotebookTab.prototype.onSelectionChanged = function () {
+            var _a = this.selection.get_selected(), isSelected = _a[0], model = _a[1], iter = _a[2];
+            this.status.push(this.id, this.listStore.get_value(iter, 0)
+                + " " + this.listStore.get_value(iter, 1)
+                + " " + this.listStore.get_value(iter, 2));
+            return;
+        };
+        return NotebookTab;
+    }());
+    exports.NotebookTab = NotebookTab;
+});
+define("tabs/SourceTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_1) {
+    "use strict";
+    /**
+     *
+     * ProjectViewer class -
+     *
+     * view autovala data
+     *
+     */
+    var SourceTab = (function (_super) {
+        __extends(SourceTab, _super);
+        function SourceTab() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        SourceTab.prototype.buildUI = function () {
+            _super.prototype.buildUI.call(this);
+            if (this.prj.data.gresource != null) {
+                for (var _i = 0, _a = this.prj.data.vala_source; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    this.add(item.value, "", item.readonly);
+                }
+            }
+            return this.grid;
+        };
+        return SourceTab;
+    }(NotebookTab_1.NotebookTab));
+    exports.SourceTab = SourceTab;
+});
+define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_2) {
+    "use strict";
+    /**
+     *
+     * ProjectViewer class -
+     *
+     * view autovala data
+     *
+     */
+    var PackageTab = (function (_super) {
+        __extends(PackageTab, _super);
+        function PackageTab() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PackageTab.prototype.buildUI = function () {
+            // var i, item, len, ref
+            _super.prototype.buildUI.call(this);
+            for (var _i = 0, _a = this.prj.data.vala_check_package; _i < _a.length; _i++) {
+                var item = _a[_i];
+                this.add(item.value, "", item.readonly);
+            }
+            return this.grid;
+        };
+        return PackageTab;
+    }(NotebookTab_2.NotebookTab));
+    exports.PackageTab = PackageTab;
+});
+define("tabs/ResourceTab", ["require", "exports", "Util", "xml2js", "tabs/NotebookTab"], function (require, exports, Util_1, xml2js_1, NotebookTab_3) {
+    "use strict";
+    /**
+     *
+     * GResource data view
+     *
+     */
+    var ResourceTab = (function (_super) {
+        __extends(ResourceTab, _super);
+        function ResourceTab() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ResourceTab.prototype.buildUI = function () {
+            _super.prototype.buildUI.call(this);
+            if (this.prj.data.gresource != null) {
+                for (var _i = 0, _a = this.prj.data.gresource; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    var _b = String(item.value).split(' '), name_1 = _b[0], path = _b[1];
+                    this.add(name_1, path, item.readonly);
+                    //print(`${this.prj.path}/${path}`)
+                    xml2js_1.parseString(Util_1.Util.readFile(this.prj.path + "/" + path), function (err, res) {
+                        var pfx = res.gresources.gresource[0].$['prefix'];
+                        var files = res.gresources.gresource[0].file;
+                        //print(`Prefix: ${pfx}\nFiles:\n`)
+                        //print(JSON.stringify(files, null, 2))
+                    });
+                }
+            }
+            return this.grid;
+        };
+        return ResourceTab;
+    }(NotebookTab_3.NotebookTab));
+    exports.ResourceTab = ResourceTab;
+});
+define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_4) {
+    "use strict";
+    /**
+     *
+     * ProjectViewer class -
+     *
+     * view autovala data
+     *
+     */
+    var AutovalaTab = (function (_super) {
+        __extends(AutovalaTab, _super);
+        function AutovalaTab() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        AutovalaTab.prototype.buildUI = function () {
+            _super.prototype.buildUI.call(this);
+            var data = this.prj.data;
+            for (var key in data) {
+                var item = data[key];
+                if (!Array.isArray(item)) {
+                    this.add(key, item.value, item.readonly);
+                }
+            }
+            return this.grid;
+        };
+        return AutovalaTab;
+    }(NotebookTab_4.NotebookTab));
+    exports.AutovalaTab = AutovalaTab;
+});
+define("PlayerWindow", ["require", "exports", "Gtk", "Gio", "Util", "Project", "tabs/SourceTab", "tabs/PackageTab", "tabs/ResourceTab", "tabs/AutovalaTab", "xml2js"], function (require, exports, Gtk, Gio_1, Util_2, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1, xml2js_2) {
+    "use strict";
+    /**
+     * Top level Application
+     */
+    var PlayerWindow = (function () {
+        function PlayerWindow(params) {
+            xml2js_2.parseString("<root>Hello xml2js!</root>", function (err, res) {
+                print("Parsed");
+                print(JSON.stringify(res, null, 2));
+            });
+            //this.params = params
+            this.window = Util_2.Util.loadTemplate('AppWindow', PREFIX + "/player.ui", ['background', 'status'], params);
+            this.regularCss = new Gtk.CssProvider();
+            this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }");
+            this.logoCss = new Gtk.CssProvider();
+            this.logoCss.load_from_data("* { font-family: OpenDyslexic;  font-size: 32px }");
+        }
+        /**
+         * buildUI
+         *
+         * @param config
+         */
+        PlayerWindow.prototype.buildUI = function (config) {
+            this.config = config;
+            this.headerbar = new Gtk.HeaderBar({
+                title: config.app_name,
+                show_close_button: true
+            });
+            this.headerbar.pack_start(this.buildOpen(config));
+            this.headerbar.pack_end(this.buildOptions(config));
+            this.window.background.add(this.buildBackground());
+            this.window.set_default_size(1040, 620);
+            this.window.set_titlebar(this.headerbar);
+            this.window.set_icon_from_file(PREFIX + "/bosco.png");
+            return this.window.show_all();
+        };
+        /**
+         * builds the client background
+         *
+         * @param config
+         */
+        PlayerWindow.prototype.buildBackground = function () {
+            var background = new Gtk.Box();
+            background.set_vexpand(true);
+            background.set_hexpand(true);
+            var label = new Gtk.Label({
+                label: "Bosco Player"
+            });
+            background.set_center_widget(label);
+            background.get_style_context().add_provider(this.logoCss, 0);
+            return this.background = background;
+        };
+        /**
+         * build open project button
+         *
+         * @param config
+         */
+        PlayerWindow.prototype.buildOpen = function (config) {
+            var _this = this;
+            var openButton = new Gtk.Button();
+            openButton.add(new Gtk.Image({
+                icon_name: "document-open-symbolic",
+                icon_size: Gtk.IconSize.SMALL_TOOLBAR
+            }));
+            openButton.connect("clicked", function () {
+                var chooser = new Gtk.FileChooserDialog({
+                    title: "Select Project File",
+                    action: Gtk.FileChooserAction.OPEN,
+                    transient_for: _this.window,
+                    modal: true
+                });
+                chooser.set_select_multiple(false);
+                chooser.add_button("Open", Gtk.ResponseType.OK);
+                chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
+                chooser.set_default_response(Gtk.ResponseType.OK);
+                chooser.connect("response", function (dialog, response) {
+                    _this.projectPath = dialog.get_filenames()[0];
+                    dialog.destroy();
+                    return _this.displayProject(_this.projectPath);
+                });
+                return chooser.run();
+            });
+            return openButton;
+        };
+        /**
+         * display project
+         *
+         * @param path
+         */
+        PlayerWindow.prototype.displayProject = function (path) {
+            this.projectFile = Gio_1.File.new_for_path(path);
+            if (!this.projectFile.query_exists(null)) {
+                return;
+            }
+            if (this.notebook != null) {
+                this.window.background.remove(this.notebook);
+            }
+            else {
+                this.window.background.remove(this.background);
+            }
+            this.window.background.add(this.buildNotebook());
+            var _a = this.projectFile.load_contents(null), success = _a[0], data = _a[1], length = _a[2];
+            this.avprj = new Project_1.Project(path, String(data));
+            path = path.substring(0, path.lastIndexOf("/"));
+            this.entitasFile = Gio_1.File.new_for_path(path + "/entitas.json");
+            if (this.entitasFile.query_exists(null)) {
+                _b = this.entitasFile.load_contents(null), success = _b[0], data = _b[1], length = _b[2];
+                this.entitas = JSON.parse(data);
+            }
+            else {
+                this.entitas = null;
+            }
+            this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
+            this.avContent.pack_start(new AutovalaTab_1.AutovalaTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.avContent.get_style_context().add_provider(this.regularCss, 0);
+            this.resContent.pack_start(new ResourceTab_1.ResourceTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.resContent.get_style_context().add_provider(this.regularCss, 0);
+            this.pkContent.pack_start(new PackageTab_1.PackageTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.pkContent.get_style_context().add_provider(this.regularCss, 0);
+            this.srcContent.pack_start(new SourceTab_1.SourceTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.srcContent.get_style_context().add_provider(this.regularCss, 0);
+            this.window.show_all();
+            this.notebook.set_current_page(1);
+            var _b;
+        };
+        /**
+         * build notebook
+         *
+         */
+        PlayerWindow.prototype.buildNotebook = function () {
+            var builder = new Gtk.Builder();
+            builder.add_from_file(PREFIX + "/project.glade");
+            var notebook = builder.get_object("project");
+            var title = new Gtk.Label({
+                label: "Autovala"
+            });
+            this.avContent = new Gtk.Box();
+            notebook.append_page(this.avContent, title);
+            title = new Gtk.Label({
+                label: "GResources"
+            });
+            this.resContent = new Gtk.Box();
+            notebook.append_page(this.resContent, title);
+            title = new Gtk.Label({
+                label: "Packages"
+            });
+            this.pkContent = new Gtk.Box();
+            notebook.append_page(this.pkContent, title);
+            title = new Gtk.Label({
+                label: "Source"
+            });
+            this.srcContent = new Gtk.Box();
+            notebook.append_page(this.srcContent, title);
+            title = new Gtk.Label({
+                label: "Entitas"
+            });
+            this.entitasContent = new Gtk.Box();
+            notebook.append_page(this.entitasContent, title);
+            return this.notebook = notebook;
+        };
+        /**
+         * build project options editor
+         *
+         * @param config
+         */
+        PlayerWindow.prototype.buildOptions = function (config) {
+            var grid = new Gtk.Grid({
+                column_spacing: 10,
+                row_spacing: 10,
+                margin: 10
+            });
+            grid.set_column_homogeneous(true);
+            var namelabel = new Gtk.Label({
+                label: "File name:"
+            });
+            namelabel.set_halign(Gtk.Align.END);
+            var nameentry = new Gtk.Entry();
+            nameentry.connect("changed", function () {
+                return config.res_name = nameentry.get_text();
+            });
+            nameentry.set_placeholder_text(config.res_name);
+            grid.attach(namelabel, 0, 0, 1, 1);
+            grid.attach_next_to(nameentry, namelabel, Gtk.PositionType.RIGHT, 2, 1);
+            var prefixlabel = new Gtk.Label({
+                label: "Resource prefix:"
+            });
+            prefixlabel.set_halign(Gtk.Align.END);
+            var prefixentry = new Gtk.Entry();
+            prefixentry.set_placeholder_text(config.res_prefix);
+            prefixentry.connect("changed", function () {
+                return prefixentry.get_text();
+            });
+            grid.attach(prefixlabel, 0, 1, 1, 1);
+            grid.attach_next_to(prefixentry, prefixlabel, Gtk.PositionType.RIGHT, 2, 1);
+            var menubutton = new Gtk.ToggleButton();
+            menubutton.add(new Gtk.Image({
+                icon_name: "open-menu-symbolic",
+                icon_size: Gtk.IconSize.SMALL_TOOLBAR
+            }));
+            menubutton.connect("clicked", function () {
+                if (menubutton.get_active()) {
+                    menu.show_all();
+                }
+            });
+            var menu = new Gtk.Popover();
+            menu.set_relative_to(menubutton);
+            menu.connect("show", function () {
+                nameentry.set_text(config.res_name);
+                return prefixentry.set_text(config.res_prefix);
+            });
+            menu.connect("closed", function () {
+                var outputstream, parent, res_prefix;
+                if (menubutton.get_active()) {
+                    menubutton.set_active(false);
+                }
+                config.res_name = config.res_name || config.res_name;
+                res_prefix = res_prefix || config.res_prefix;
+                var write = false;
+                if (config.res_name !== config.res_name) {
+                    config.res_name = config.res_name;
+                    write = true;
+                }
+                if (config.res_prefix !== res_prefix) {
+                    config.res_prefix = res_prefix;
+                    write = true;
+                }
+                // if (write) {
+                //   parent = config_file.get_parent()
+                //   if (parent.query_exists(null)) {
+                //     if (config_file.query_exists(null)) {
+                //       config_file["delete"](null)
+                //     }
+                //   } else {
+                //     parent.make_directory_with_parents(null)
+                //   }
+                //   outputstream = config_file.create(FileCreateFlags.REPLACE_DESTINATION, null)
+                //   outputstream.write_all(JSON.stringify(config), null)
+                //   outputstream.close(null)
+                // }
+            });
+            menu.add(grid);
+            return menubutton;
+        };
+        return PlayerWindow;
+    }());
+    exports.PlayerWindow = PlayerWindow;
+});
+define("Player", ["require", "exports", "GLib", "Gtk", "Gio", "Util", "PlayerWindow"], function (require, exports, GLib, Gtk_1, Gio_2, Util_3, PlayerWindow_1) {
+    "use strict";
+    /**
+     * Bosco Player
+     *
+     * top level application object
+     */
+    var Player = (function () {
+        function Player() {
+            var _this = this;
+            this.application = new Gtk_1.Application({ flags: Gio_2.ApplicationFlags.FLAGS_NONE });
+            this.application.connect('activate', function () {
+                _this.buildUI();
+                _this.appWindow = new PlayerWindow_1.PlayerWindow({
+                    application: _this.application
+                });
+                _this.appWindow.buildUI(_this.getConfig());
+                _this.window = _this.appWindow.window;
+                _this.window.present();
+            });
+        }
+        /**
+         * build the Application Menu
+         *
+         * main app menu
+         */
+        Player.prototype.buildUI = function () {
+            var _this = this;
+            var menu = new Gio_2.Menu();
+            menu.append("New", 'app.new');
+            menu.append("About", 'app.about');
+            menu.append("Quit", 'app.quit');
+            this.application.set_app_menu(menu);
+            var newAction = new Gio_2.SimpleAction({
+                name: 'new'
+            });
+            newAction.connect('activate', function () {
+                return _this.showNew();
+            });
+            this.application.add_action(newAction);
+            var aboutAction = new Gio_2.SimpleAction({
+                name: 'about'
+            });
+            aboutAction.connect('activate', function () {
+                return _this.showAbout();
+            });
+            this.application.add_action(aboutAction);
+            var quitAction = new Gio_2.SimpleAction({
+                name: 'quit'
+            });
+            quitAction.connect('activate', function () {
+                return _this.window.destroy();
+            });
+            this.application.add_action(quitAction);
+        };
+        /**
+         * New project dialog
+         */
+        Player.prototype.showNew = function () {
+            return print("Not implemented");
+        };
+        /**
+         * About dialog
+         */
+        Player.prototype.showAbout = function () {
+            var about = new Gtk_1.AboutDialog();
+            about.set_transient_for(this.window);
+            about.set_program_name("Bosco Player");
+            about.set_version("1.0");
+            about.set_comments("If it's not dark, it's not data");
+            about.set_website("");
+            about.set_website_label("Dark Overlord of Data");
+            about.set_authors(["bruce davidson"]);
+            about.run();
+            return about.destroy();
+        };
+        /**
+         * load configuration
+         */
+        Player.prototype.getConfig = function () {
+            var res_name_default = "custom.gresource";
+            var res_prefix_default = "/com/darkoverlordofdata/custom";
+            var data = Util_3.Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json");
+            var config = data != null ? JSON.parse(data) : {};
+            config.app_name = "Player";
+            var ref;
+            config.res_name = (ref = config.res_name) != null ? ref : res_name_default;
+            config.res_prefix = (ref = config.res_prefix) != null ? ref : res_prefix_default;
+            return config;
+        };
+        return Player;
+    }());
+    exports.Player = Player;
+});
+define("main", ["require", "exports", "Player"], function (require, exports, Player_1) {
+    "use strict";
+    new Player_1.Player().application.run(ARGV);
 });
