@@ -11,7 +11,7 @@
         {
             "isBuildCommand": true,
             "taskName": "build",
-            "args": ["tsc -p ./tsconfig.json"]
+            "args": ["tsc"]
         }
     ]
 }

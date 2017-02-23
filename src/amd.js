@@ -3,7 +3,7 @@
  * 
  * AMD loader for gjs
  * 
- * ties together
+ * ties together:
  * * builtin gir modules
  * * node modules (via browserify)
  * * local project modules

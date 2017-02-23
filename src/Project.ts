@@ -2,10 +2,18 @@
  *
  * Project class - 
  *
+ *  parse autovala project data
  *
  */
-export default class Project  {
-  constructor(data) {
+export class Project  {
+
+  data: any
+  path: string
+  name: string
+  
+  constructor(path, data) {
+    this.name = path.substring(path.lastIndexOf("/")+1)
+    this.path = path.substring(0, path.lastIndexOf("/"))
     this.data = {}
     let lines = data.split('\n')
     for (let j = 0, len = lines.length; j < len; j++) {

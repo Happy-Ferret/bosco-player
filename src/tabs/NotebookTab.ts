@@ -9,7 +9,7 @@ import * as Pango from 'Pango'
  * view autovala data
  *
  */
-export default class NotebookTab {
+export class NotebookTab {
 
   prj: any
   status: any

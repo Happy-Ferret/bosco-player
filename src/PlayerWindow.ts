@@ -1,17 +1,16 @@
-
-import * as Gio from 'Gio'
 import * as Gtk from 'Gtk'
-import * as xml2js from 'xml2js'
-import Util from 'Util'
-import Project from 'Project'
-import SourceTab from 'tabs/SourceTab'
-import PackageTab from 'tabs/PackageTab'
-import ResourceTab from 'tabs/ResourceTab'
-import AutovalaTab from 'tabs/AutovalaTab'
+import {File} from 'Gio'
+import {Util} from 'Util'
+import {Project} from 'Project'
+import {SourceTab} from 'tabs/SourceTab'
+import {PackageTab} from 'tabs/PackageTab'
+import {ResourceTab} from 'tabs/ResourceTab'
+import {AutovalaTab} from 'tabs/AutovalaTab'
+import {parseString} from 'xml2js'
 /**
  * Top level Application
  */
-export default class Application {
+export class PlayerWindow {
 
   application: any
   window: any
@@ -35,7 +34,7 @@ export default class Application {
 
   constructor(params) {
 
-    xml2js.parseString("<root>Hello xml2js!</root>", (err, res) => {
+    parseString("<root>Hello xml2js!</root>", (err, res) => {
       print("Parsed")
       print(JSON.stringify(res, null, 2))
     })
@@ -130,7 +129,7 @@ export default class Application {
    * @param path
    */
   displayProject(path) {
-    this.projectFile = Gio.File.new_for_path(path)
+    this.projectFile = File.new_for_path(path)
     if (!this.projectFile.query_exists(null)) {
       return
     }
@@ -142,9 +141,9 @@ export default class Application {
     this.window.background.add(this.buildNotebook())
 
     let [success, data, length] = this.projectFile.load_contents(null)
-    this.avprj = new Project(String(data))
+    this.avprj = new Project(path, String(data))
     path = path.substring(0, path.lastIndexOf("/"))
-    this.entitasFile = Gio.File.new_for_path(path + "/entitas.json")
+    this.entitasFile = File.new_for_path(path + "/entitas.json")
 
     if (this.entitasFile.query_exists(null)) {
       [success, data, length] = this.entitasFile.load_contents(null)
@@ -162,6 +161,7 @@ export default class Application {
     this.srcContent.pack_start(new SourceTab(this.avprj, this.window.status).buildUI(), true, true, 0)
     this.srcContent.get_style_context().add_provider(this.regularCss, 0)
     this.window.show_all()
+    this.notebook.set_current_page(1)
   }
 
 
@@ -280,7 +280,7 @@ export default class Application {
         //   } else {
         //     parent.make_directory_with_parents(null)
         //   }
-        //   outputstream = config_file.create(Gio.FileCreateFlags.REPLACE_DESTINATION, null)
+        //   outputstream = config_file.create(FileCreateFlags.REPLACE_DESTINATION, null)
         //   outputstream.write_all(JSON.stringify(config), null)
         //   outputstream.close(null)
         // }

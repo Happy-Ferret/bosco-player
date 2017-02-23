@@ -1,7 +1,4 @@
-import * as Gtk from 'Gtk'
-import * as GObject from 'GObject'
-import * as Pango from 'Pango'
-import NotebookTab from 'tabs/NotebookTab'
+import {NotebookTab} from 'tabs/NotebookTab'
 /**
  *
  * ProjectViewer class - 
@@ -9,11 +6,7 @@ import NotebookTab from 'tabs/NotebookTab'
  * view autovala data
  *
  */
-export default class PackageTab extends NotebookTab {
-
-  constructor(prj, status) {
-    super(prj, status)
-  }
+export class PackageTab extends NotebookTab {
 
   buildUI() {
     // var i, item, len, ref

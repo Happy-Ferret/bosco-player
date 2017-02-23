@@ -22,7 +22,6 @@ const PREFIX = "/usr/local/"
 ```
 use sed to reset the prefix during install.
 
-
 ### autovala fields of interest
 * autovala_version (24)
 * project_name
@@ -32,6 +31,19 @@ use sed to reset the prefix during install.
 * full_icon        icon location
 * gresource #      resources file location
 * use_gresource #  resources to use file location
+
+## TODO:
+file:///usr/share/gir-1.0/Gtk-3.0.gir
+file:///usr/share/gir-1.0/GLib-2.0.gir
+file:///usr/share/gir-1.0/Gio-2.0.gir
+
+
+./gir2dts /usr/share/gir-1.0/Gtk-3.0.gir src/gtk-3.0.d.ts
+gir2dts /usr/share/gir-1.0/Gio-2.0.gir src/gio-2.0.d.ts
+gir2dts /usr/share/gir-1.0/GLib-2.0.gir src/glib-2.0.d.ts
+gir2dts /usr/share/gir-1.0/GObject-2.0.gir src/gobject-2.0.d.ts
+gir2dts /usr/share/gir-1.0/Pango-1.0.gir src/pango-1.0.d.ts
+
 
 Bosco Player should provide a gui to 
 * manage component definitions (entitas.json)

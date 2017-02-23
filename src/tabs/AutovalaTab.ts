@@ -1,7 +1,7 @@
 import * as Gtk from 'Gtk'
 import * as GObject from 'GObject'
 import * as Pango from 'Pango'
-import NotebookTab from 'tabs/NotebookTab'
+import {NotebookTab} from 'tabs/NotebookTab'
 /**
  *
  * ProjectViewer class - 
@@ -9,12 +9,8 @@ import NotebookTab from 'tabs/NotebookTab'
  * view autovala data
  *
  */
-export default class AutovalaTab extends NotebookTab {
+export class AutovalaTab extends NotebookTab {
  
-  constructor(prj, status) {
-    super(prj, status)
-  }
-
   buildUI() {
     super.buildUI()
     let data = this.prj.data

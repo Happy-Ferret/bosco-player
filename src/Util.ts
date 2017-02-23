@@ -3,7 +3,7 @@ import * as Gio from 'Gio'
 import * as Gtk from 'Gtk'
 import * as Lang from 'Lang'
 
-export default class Util {
+export class Util {
 
   static readFile(filename) {
     const file = Gio.file_new_for_path(filename)

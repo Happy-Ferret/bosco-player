@@ -1,25 +1,26 @@
-
-import * as Gio from 'Gio'
-import * as Gtk from 'Gtk'
 import * as GLib from 'GLib'
-import Util from 'Util'
-import Application from 'Application'
+import {Application, AboutDialog} from 'Gtk'
+import {ApplicationFlags, Menu, SimpleAction} from 'Gio'
+import {Util} from 'Util'
+import {PlayerWindow} from 'PlayerWindow'
 /**
  * Bosco Player 
  *
  * top level application object
  */
-export default class Player {
+export class Player {
 
-  application: any
-  appWindow: any
+  application: any //Application
+  appWindow: PlayerWindow
   window: any
+  path: string
+  name: string
 
   constructor() {
-    this.application = new Gtk.Application({flags: Gio.ApplicationFlags.FLAGS_NONE})
+    this.application = new Application({flags: ApplicationFlags.FLAGS_NONE})
     this.application.connect('activate', () => {
         this.buildUI()
-        this.appWindow = new Application({
+        this.appWindow = new PlayerWindow({
           application: this.application
         })
         this.appWindow.buildUI(this.getConfig())
@@ -34,13 +35,13 @@ export default class Player {
    * main app menu
    */
   buildUI() {
-    let menu = new Gio.Menu()
+    let menu = new Menu()
     menu.append("New", 'app.new')
     menu.append("About", 'app.about')
     menu.append("Quit", 'app.quit')
 
     this.application.set_app_menu(menu)
-    let newAction = new Gio.SimpleAction({
+    let newAction = new SimpleAction({
       name: 'new'
     })
 
@@ -49,7 +50,7 @@ export default class Player {
     })
 
     this.application.add_action(newAction)
-    let aboutAction = new Gio.SimpleAction({
+    let aboutAction = new SimpleAction({
       name: 'about'
     })
 
@@ -58,7 +59,7 @@ export default class Player {
     })
 
     this.application.add_action(aboutAction)
-    let quitAction = new Gio.SimpleAction({
+    let quitAction = new SimpleAction({
       name: 'quit'
     })
 
@@ -82,7 +83,7 @@ export default class Player {
    * About dialog
    */
   showAbout() {
-    let about = new Gtk.AboutDialog()
+    let about = new AboutDialog()
     about.set_transient_for(this.window)
     about.set_program_name("Bosco Player")
     about.set_version("1.0")

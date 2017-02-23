@@ -1,27 +1,28 @@
-import * as Gtk from 'Gtk'
-import * as GObject from 'GObject'
-import * as Pango from 'Pango'
-import NotebookTab from 'tabs/NotebookTab'
+import {Util} from 'Util'
+import {parseString} from 'xml2js'
+import {NotebookTab} from 'tabs/NotebookTab'
 /**
  *
- * ProjectViewer class - 
- *
- * view autovala data
+ * GResource data view
  *
  */
-export default class ResourceTab extends NotebookTab {
-
-  constructor(prj, status) {
-    super(prj, status)
-  }
+export class ResourceTab extends NotebookTab {
 
   buildUI() {
     super.buildUI()
-    
+
     if (this.prj.data.gresource != null) {
       for (let item of this.prj.data.gresource) {
-            let [name, path] = String(item.value).split(' ')
-            this.add(name, path, item.readonly)
+        let [name, path] = String(item.value).split(' ')
+        this.add(name, path, item.readonly)
+        //print(`${this.prj.path}/${path}`)
+        parseString(Util.readFile(`${this.prj.path}/${path}`), (err, res) => {
+          let pfx = res.gresources.gresource[0].$['prefix']
+          let files = res.gresources.gresource[0].file
+          //print(`Prefix: ${pfx}\nFiles:\n`)
+          //print(JSON.stringify(files, null, 2))
+
+        })
       }
     }
     return this.grid
