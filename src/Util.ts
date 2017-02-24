@@ -15,17 +15,16 @@ export class Util {
     }
   }
 
-  static loadTemplate(name, path, children, params) {
-    const klass = Lang.Class({
-      Name: name,
-      Extends: Gtk.ApplicationWindow,
-      Template: Util.readFile(path),
-      Children: children,
+  static loadTemplate(template) {
+    return Lang.Class({
+      Name: template.name,
+      Extends: template.superclass,
+      Template: Util.readFile(template.path),
+      Children: template.children,
       _init: function(params) {
         return this.parent(params)
       }
     })
-    return new klass(params)
   }
 }
 

@@ -1,10 +1,10 @@
 ### Bosco Player ###
 
 Gtk application written with TypeScript
-Coffeescript works also, but for a complex desktop app, 
-type checking is a plus Right now, this is just a gui shell 
-that displays autovala values
 
+Right now, this is just a gui shell that displays autovala values
+
+I started out using CoffeeScript. But the rich type information available in Gir calls out for Typescript.
 
 ### build
 

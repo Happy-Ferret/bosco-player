@@ -1,23 +1,24 @@
 {
     "compilerOptions": {
-        "target": "es5",    
-        "module": "amd",
-        "rootDir": "src",
-        "allowJs": true,
-        "outFile": "bin/bosco-player"
+        "target": "es5",                // es5 compatability for gjs
+        "module": "amd",                // pack using amd module format
+        "rootDir": "src",               // strips 'src/' from the packed module name
+        "allowJs": true,                // amd loader & nodejs modules are js
+        // "listFiles": true,
+        "outFile": "bin/bosco-player"   // the target executable
     },
     "files": [
-        "src/decl/gjs.d.ts",
-        "src/decl/gobject.d.ts",
-        "src/decl/atk.d.ts",
-        "src/decl/glib.d.ts",
-        "src/decl/gio.d.ts",
-        "src/decl/gdk.d.ts",
-        "src/decl/gtk.d.ts",
-        "src/decl/pango.d.ts",
-        "src/xml2js.d.ts",
-        "src/amd.js",
-        "src/bundle.js",
-        "src/main.ts"
+        "src/builtin/gjs.d.ts",         // Gjs
+        "src/builtin/gobject.d.ts",     // GObject
+        "src/builtin/atk.d.ts",         // Atk
+        "src/builtin/glib.d.ts",        // GLib
+        "src/builtin/gio.d.ts",         // Gio
+        "src/builtin/gdk.d.ts",         // Gdk
+        "src/builtin/gtk.d.ts",         // Gtk
+        "src/builtin/pango.d.ts",       // Pango
+        "src/xml2js.d.ts",              // nodejs: xml2js
+        "src/umd.js",                   // module loader
+        "src/bundle.js",                // browserify bundle
+        "src/main.ts"                   // main program entry point
     ]
 }

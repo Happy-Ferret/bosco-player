@@ -10,12 +10,24 @@ import {AutovalaTab} from 'tabs/AutovalaTab'
 const DATADIR = "share/bosco"
 
 /** 
- * Interface based on player.ui
+ * Interface for the template: AppWindow.ui
  */
 export interface AppWindow extends Gtk.ApplicationWindow {
   background: Gtk.Box
   status: Gtk.Statusbar
 }
+/**
+ * Returns an anonymous class implementing the AppWindow interface
+ */
+function AppWindow() {
+  return Util.loadTemplate({
+    name: 'AppWindow',
+    path: `${DATADIR}/AppWindow.ui`,
+    superclass: Gtk.ApplicationWindow,
+    children: ['background', 'status'],
+  })
+}
+
 /**
  * Top level Application
  */
@@ -42,8 +54,7 @@ export class PlayerWindow {
    * Load the glade template
    */
   constructor(params) {
-    this.window = Util.loadTemplate('AppWindow',  `${DATADIR}/player.ui`, 
-                                      ['background', 'status'], params) as AppWindow
+    this.window = new (AppWindow())(params) as AppWindow
     this.regularCss = new Gtk.CssProvider()
     this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }")
     this.logoCss = new Gtk.CssProvider()

@@ -1,7 +1,8 @@
 /**
  *  Copyright 2017 darkoverlordofdata 
  * 
- * AMD loader for gjs
+ * UMD loader for gjs 
+ * allows mixture of amd & commonjs modules
  * 
  * ties together:
  * * builtin gir modules
@@ -11,11 +12,12 @@
  */
 const define = (function (modules) {
     return (name, deps, callback) => {
-        if (typeof name !== 'string') { // browserify bundle
+        if (typeof name !== 'string') { /* then it's a browserify bundle */
             const bundle = deps()
             for (name in bundle) 
                 modules[name] = { id: name, exports: bundle[name] }
-        } else {
+
+        } else { /* it's a local amd module */
             modules[name] = { id: name, exports: {} }
             let args = [(name) => modules[name].exports, modules[name].exports]
             for (let i = 2; i < deps.length; i++)
