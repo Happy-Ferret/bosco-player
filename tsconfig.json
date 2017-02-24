@@ -9,6 +9,7 @@
     "files": [
         "src/decl/gjs.d.ts",
         "src/decl/gobject.d.ts",
+        "src/decl/atk.d.ts",
         "src/decl/glib.d.ts",
         "src/decl/gio.d.ts",
         "src/decl/gdk.d.ts",

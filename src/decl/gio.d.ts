@@ -157,545 +157,545 @@ declare module "Gio" {
     // }
     export function file_new_for_path(path: string): File
 
-  export enum BusType{
-    STARTER,
-    NONE,
-    SYSTEM,
-    SESSION,
-  }
-  export enum ConverterResult{
-    ERROR,
-    CONVERTED,
-    FINISHED,
-    FLUSHED,
-  }
-  export enum CredentialsType{
-    INVALID,
-    LINUX_UCRED,
-    FREEBSD_CMSGCRED,
-    OPENBSD_SOCKPEERCRED,
-    SOLARIS_UCRED,
-    NETBSD_UNPCBID,
-  }
-  export enum DBusError{
-    FAILED,
-    NO_MEMORY,
-    SERVICE_UNKNOWN,
-    NAME_HAS_NO_OWNER,
-    NO_REPLY,
-    IO_ERROR,
-    BAD_ADDRESS,
-    NOT_SUPPORTED,
-    LIMITS_EXCEEDED,
-    ACCESS_DENIED,
-    AUTH_FAILED,
-    NO_SERVER,
-    TIMEOUT,
-    NO_NETWORK,
-    ADDRESS_IN_USE,
-    DISCONNECTED,
-    INVALID_ARGS,
-    FILE_NOT_FOUND,
-    FILE_EXISTS,
-    UNKNOWN_METHOD,
-    TIMED_OUT,
-    MATCH_RULE_NOT_FOUND,
-    MATCH_RULE_INVALID,
-    SPAWN_EXEC_FAILED,
-    SPAWN_FORK_FAILED,
-    SPAWN_CHILD_EXITED,
-    SPAWN_CHILD_SIGNALED,
-    SPAWN_FAILED,
-    SPAWN_SETUP_FAILED,
-    SPAWN_CONFIG_INVALID,
-    SPAWN_SERVICE_INVALID,
-    SPAWN_SERVICE_NOT_FOUND,
-    SPAWN_PERMISSIONS_INVALID,
-    SPAWN_FILE_INVALID,
-    SPAWN_NO_MEMORY,
-    UNIX_PROCESS_ID_UNKNOWN,
-    INVALID_SIGNATURE,
-    INVALID_FILE_CONTENT,
-    SELINUX_SECURITY_CONTEXT_UNKNOWN,
-    ADT_AUDIT_DATA_UNKNOWN,
-    OBJECT_PATH_IN_USE,
-    UNKNOWN_OBJECT,
-    UNKNOWN_INTERFACE,
-    UNKNOWN_PROPERTY,
-    PROPERTY_READ_ONLY,
-  }
-  export enum DBusMessageByteOrder{
-    BIG_ENDIAN,
-    LITTLE_ENDIAN,
-  }
-  export enum DBusMessageHeaderField{
-    INVALID,
-    PATH,
-    INTERFACE,
-    MEMBER,
-    ERROR_NAME,
-    REPLY_SERIAL,
-    DESTINATION,
-    SENDER,
-    SIGNATURE,
-    NUM_UNIX_FDS,
-  }
-  export enum DBusMessageType{
-    INVALID,
-    METHOD_CALL,
-    METHOD_RETURN,
-    ERROR,
-    SIGNAL,
-  }
-  export enum DataStreamByteOrder{
-    BIG_ENDIAN,
-    LITTLE_ENDIAN,
-    HOST_ENDIAN,
-  }
-  export enum DataStreamNewlineType{
-    LF,
-    CR,
-    CR_LF,
-    ANY,
-  }
-  export enum DriveStartStopType{
-    UNKNOWN,
-    SHUTDOWN,
-    NETWORK,
-    MULTIDISK,
-    PASSWORD,
-  }
-  export enum EmblemOrigin{
-    UNKNOWN,
-    DEVICE,
-    LIVEMETADATA,
-    TAG,
-  }
-  export enum FileAttributeStatus{
-    UNSET,
-    SET,
-    ERROR_SETTING,
-  }
-  export enum FileAttributeType{
-    INVALID,
-    STRING,
-    BYTE_STRING,
-    BOOLEAN,
-    UINT32,
-    INT32,
-    UINT64,
-    INT64,
-    OBJECT,
-    STRINGV,
-  }
-  export enum FileMonitorEvent{
-    CHANGED,
-    CHANGES_DONE_HINT,
-    DELETED,
-    CREATED,
-    ATTRIBUTE_CHANGED,
-    PRE_UNMOUNT,
-    UNMOUNTED,
-    MOVED,
-    RENAMED,
-    MOVED_IN,
-    MOVED_OUT,
-  }
-  export enum FileType{
-    UNKNOWN,
-    REGULAR,
-    DIRECTORY,
-    SYMBOLIC_LINK,
-    SPECIAL,
-    SHORTCUT,
-    MOUNTABLE,
-  }
-  export enum FilesystemPreviewType{
-    IF_ALWAYS,
-    IF_LOCAL,
-    NEVER,
-  }
-  export enum IOErrorEnum{
-    FAILED,
-    NOT_FOUND,
-    EXISTS,
-    IS_DIRECTORY,
-    NOT_DIRECTORY,
-    NOT_EMPTY,
-    NOT_REGULAR_FILE,
-    NOT_SYMBOLIC_LINK,
-    NOT_MOUNTABLE_FILE,
-    FILENAME_TOO_LONG,
-    INVALID_FILENAME,
-    TOO_MANY_LINKS,
-    NO_SPACE,
-    INVALID_ARGUMENT,
-    PERMISSION_DENIED,
-    NOT_SUPPORTED,
-    NOT_MOUNTED,
-    ALREADY_MOUNTED,
-    CLOSED,
-    CANCELLED,
-    PENDING,
-    READ_ONLY,
-    CANT_CREATE_BACKUP,
-    WRONG_ETAG,
-    TIMED_OUT,
-    WOULD_RECURSE,
-    BUSY,
-    WOULD_BLOCK,
-    HOST_NOT_FOUND,
-    WOULD_MERGE,
-    FAILED_HANDLED,
-    TOO_MANY_OPEN_FILES,
-    NOT_INITIALIZED,
-    ADDRESS_IN_USE,
-    PARTIAL_INPUT,
-    INVALID_DATA,
-    DBUS_ERROR,
-    HOST_UNREACHABLE,
-    NETWORK_UNREACHABLE,
-    CONNECTION_REFUSED,
-    PROXY_FAILED,
-    PROXY_AUTH_FAILED,
-    PROXY_NEED_AUTH,
-    PROXY_NOT_ALLOWED,
-    BROKEN_PIPE,
-    CONNECTION_CLOSED,
-    NOT_CONNECTED,
-    MESSAGE_TOO_LARGE,
-  }
-  export enum IOModuleScopeFlags{
-    NONE,
-    BLOCK_DUPLICATES,
-  }
-  export enum MountOperationResult{
-    HANDLED,
-    ABORTED,
-    UNHANDLED,
-  }
-  export enum NetworkConnectivity{
-    LOCAL,
-    LIMITED,
-    PORTAL,
-    FULL,
-  }
-  export enum NotificationPriority{
-    NORMAL,
-    LOW,
-    HIGH,
-    URGENT,
-  }
-  export enum PasswordSave{
-    NEVER,
-    FOR_SESSION,
-    PERMANENTLY,
-  }
-  export enum ResolverError{
-    NOT_FOUND,
-    TEMPORARY_FAILURE,
-    INTERNAL,
-  }
-  export enum ResolverRecordType{
-    SRV,
-    MX,
-    TXT,
-    SOA,
-    NS,
-  }
-  export enum ResourceError{
-    NOT_FOUND,
-    INTERNAL,
-  }
-  export enum SocketClientEvent{
-    RESOLVING,
-    RESOLVED,
-    CONNECTING,
-    CONNECTED,
-    PROXY_NEGOTIATING,
-    PROXY_NEGOTIATED,
-    TLS_HANDSHAKING,
-    TLS_HANDSHAKED,
-    COMPLETE,
-  }
-  export enum SocketFamily{
-    INVALID,
-    UNIX,
-    IPV4,
-    IPV6,
-  }
-  export enum SocketListenerEvent{
-    BINDING,
-    BOUND,
-    LISTENING,
-    LISTENED,
-  }
-  export enum SocketProtocol{
-    UNKNOWN,
-    DEFAULT,
-    TCP,
-    UDP,
-    SCTP,
-  }
-  export enum SocketType{
-    INVALID,
-    STREAM,
-    DATAGRAM,
-    SEQPACKET,
-  }
-  export enum TlsAuthenticationMode{
-    NONE,
-    REQUESTED,
-    REQUIRED,
-  }
-  export enum TlsCertificateRequestFlags{
-    NONE,
-  }
-  export enum TlsDatabaseLookupFlags{
-    NONE,
-    KEYPAIR,
-  }
-  export enum TlsError{
-    UNAVAILABLE,
-    MISC,
-    BAD_CERTIFICATE,
-    NOT_TLS,
-    HANDSHAKE,
-    CERTIFICATE_REQUIRED,
-    EOF,
-  }
-  export enum TlsInteractionResult{
-    UNHANDLED,
-    HANDLED,
-    FAILED,
-  }
-  export enum TlsRehandshakeMode{
-    NEVER,
-    SAFELY,
-    UNSAFELY,
-  }
-  export enum UnixSocketAddressType{
-    INVALID,
-    ANONYMOUS,
-    PATH,
-    ABSTRACT,
-    ABSTRACT_PADDED,
-  }
-  export enum ZlibCompressorFormat{
-    ZLIB,
-    GZIP,
-    RAW,
-  }
-  export enum AppInfoCreateFlags{
-    NONE,
-    NEEDS_TERMINAL,
-    SUPPORTS_URIS,
-    SUPPORTS_STARTUP_NOTIFICATION,
-  }
-  export enum ApplicationFlags{
-    FLAGS_NONE,
-    IS_SERVICE,
-    IS_LAUNCHER,
-    HANDLES_OPEN,
-    HANDLES_COMMAND_LINE,
-    SEND_ENVIRONMENT,
-    NON_UNIQUE,
-  }
-  export enum AskPasswordFlags{
-    NEED_PASSWORD,
-    NEED_USERNAME,
-    NEED_DOMAIN,
-    SAVING_SUPPORTED,
-    ANONYMOUS_SUPPORTED,
-  }
-  export enum BusNameOwnerFlags{
-    NONE,
-    ALLOW_REPLACEMENT,
-    REPLACE,
-  }
-  export enum BusNameWatcherFlags{
-    NONE,
-    AUTO_START,
-  }
-  export enum ConverterFlags{
-    NONE,
-    INPUT_AT_END,
-    FLUSH,
-  }
-  export enum DBusCallFlags{
-    NONE,
-    NO_AUTO_START,
-    ALLOW_INTERACTIVE_AUTHORIZATION,
-  }
-  export enum DBusCapabilityFlags{
-    NONE,
-    UNIX_FD_PASSING,
-  }
-  export enum DBusConnectionFlags{
-    NONE,
-    AUTHENTICATION_CLIENT,
-    AUTHENTICATION_SERVER,
-    AUTHENTICATION_ALLOW_ANONYMOUS,
-    MESSAGE_BUS_CONNECTION,
-    DELAY_MESSAGE_PROCESSING,
-  }
-  export enum DBusInterfaceSkeletonFlags{
-    NONE,
-    HANDLE_METHOD_INVOCATIONS_IN_THREAD,
-  }
-  export enum DBusMessageFlags{
-    NONE,
-    NO_REPLY_EXPECTED,
-    NO_AUTO_START,
-    ALLOW_INTERACTIVE_AUTHORIZATION,
-  }
-  export enum DBusObjectManagerClientFlags{
-    NONE,
-    DO_NOT_AUTO_START,
-  }
-  export enum DBusPropertyInfoFlags{
-    NONE,
-    READABLE,
-    WRITABLE,
-  }
-  export enum DBusProxyFlags{
-    NONE,
-    DO_NOT_LOAD_PROPERTIES,
-    DO_NOT_CONNECT_SIGNALS,
-    DO_NOT_AUTO_START,
-    GET_INVALIDATED_PROPERTIES,
-    DO_NOT_AUTO_START_AT_CONSTRUCTION,
-  }
-  export enum DBusSendMessageFlags{
-    NONE,
-    PRESERVE_SERIAL,
-  }
-  export enum DBusServerFlags{
-    NONE,
-    RUN_IN_THREAD,
-    AUTHENTICATION_ALLOW_ANONYMOUS,
-  }
-  export enum DBusSignalFlags{
-    NONE,
-    NO_MATCH_RULE,
-    MATCH_ARG0_NAMESPACE,
-    MATCH_ARG0_PATH,
-  }
-  export enum DBusSubtreeFlags{
-    NONE,
-    DISPATCH_TO_UNENUMERATED_NODES,
-  }
-  export enum DriveStartFlags{
-    NONE,
-  }
-  export enum FileAttributeInfoFlags{
-    NONE,
-    COPY_WITH_FILE,
-    COPY_WHEN_MOVED,
-  }
-  export enum FileCopyFlags{
-    NONE,
-    OVERWRITE,
-    BACKUP,
-    NOFOLLOW_SYMLINKS,
-    ALL_METADATA,
-    NO_FALLBACK_FOR_MOVE,
-    TARGET_DEFAULT_PERMS,
-  }
-  export enum FileCreateFlags{
-    NONE,
-    PRIVATE,
-    REPLACE_DESTINATION,
-  }
-  export enum FileMeasureFlags{
-    NONE,
-    REPORT_ANY_ERROR,
-    APPARENT_SIZE,
-    NO_XDEV,
-  }
-  export enum FileMonitorFlags{
-    NONE,
-    WATCH_MOUNTS,
-    SEND_MOVED,
-    WATCH_HARD_LINKS,
-    WATCH_MOVES,
-  }
-  export enum FileQueryInfoFlags{
-    NONE,
-    NOFOLLOW_SYMLINKS,
-  }
-  export enum IOStreamSpliceFlags{
-    NONE,
-    CLOSE_STREAM1,
-    CLOSE_STREAM2,
-    WAIT_FOR_BOTH,
-  }
-  export enum MountMountFlags{
-    NONE,
-  }
-  export enum MountUnmountFlags{
-    NONE,
-    FORCE,
-  }
-  export enum OutputStreamSpliceFlags{
-    NONE,
-    CLOSE_SOURCE,
-    CLOSE_TARGET,
-  }
-  export enum ResourceFlags{
-    NONE,
-    COMPRESSED,
-  }
-  export enum ResourceLookupFlags{
-    NONE,
-  }
-  export enum SettingsBindFlags{
-    DEFAULT,
-    GET,
-    SET,
-    NO_SENSITIVITY,
-    GET_NO_CHANGES,
-    INVERT_BOOLEAN,
-  }
-  export enum SocketMsgFlags{
-    NONE,
-    OOB,
-    PEEK,
-    DONTROUTE,
-  }
-  export enum SubprocessFlags{
-    NONE,
-    STDIN_PIPE,
-    STDIN_INHERIT,
-    STDOUT_PIPE,
-    STDOUT_SILENCE,
-    STDERR_PIPE,
-    STDERR_SILENCE,
-    STDERR_MERGE,
-    INHERIT_FDS,
-  }
-  export enum TestDBusFlags{
-    NONE,
-  }
-  export enum TlsCertificateFlags{
-    UNKNOWN_CA,
-    BAD_IDENTITY,
-    NOT_ACTIVATED,
-    EXPIRED,
-    REVOKED,
-    INSECURE,
-    GENERIC_ERROR,
-    VALIDATE_ALL,
-  }
-  export enum TlsDatabaseVerifyFlags{
-    NONE,
-  }
-  export enum TlsPasswordFlags{
-    NONE,
-    RETRY,
-    MANY_TRIES,
-    FINAL_TRY,
-  }
-    
+    export enum BusType{
+      STARTER,
+      NONE,
+      SYSTEM,
+      SESSION,
+    }
+    export enum ConverterResult{
+      ERROR,
+      CONVERTED,
+      FINISHED,
+      FLUSHED,
+    }
+    export enum CredentialsType{
+      INVALID,
+      LINUX_UCRED,
+      FREEBSD_CMSGCRED,
+      OPENBSD_SOCKPEERCRED,
+      SOLARIS_UCRED,
+      NETBSD_UNPCBID,
+    }
+    export enum DBusError{
+      FAILED,
+      NO_MEMORY,
+      SERVICE_UNKNOWN,
+      NAME_HAS_NO_OWNER,
+      NO_REPLY,
+      IO_ERROR,
+      BAD_ADDRESS,
+      NOT_SUPPORTED,
+      LIMITS_EXCEEDED,
+      ACCESS_DENIED,
+      AUTH_FAILED,
+      NO_SERVER,
+      TIMEOUT,
+      NO_NETWORK,
+      ADDRESS_IN_USE,
+      DISCONNECTED,
+      INVALID_ARGS,
+      FILE_NOT_FOUND,
+      FILE_EXISTS,
+      UNKNOWN_METHOD,
+      TIMED_OUT,
+      MATCH_RULE_NOT_FOUND,
+      MATCH_RULE_INVALID,
+      SPAWN_EXEC_FAILED,
+      SPAWN_FORK_FAILED,
+      SPAWN_CHILD_EXITED,
+      SPAWN_CHILD_SIGNALED,
+      SPAWN_FAILED,
+      SPAWN_SETUP_FAILED,
+      SPAWN_CONFIG_INVALID,
+      SPAWN_SERVICE_INVALID,
+      SPAWN_SERVICE_NOT_FOUND,
+      SPAWN_PERMISSIONS_INVALID,
+      SPAWN_FILE_INVALID,
+      SPAWN_NO_MEMORY,
+      UNIX_PROCESS_ID_UNKNOWN,
+      INVALID_SIGNATURE,
+      INVALID_FILE_CONTENT,
+      SELINUX_SECURITY_CONTEXT_UNKNOWN,
+      ADT_AUDIT_DATA_UNKNOWN,
+      OBJECT_PATH_IN_USE,
+      UNKNOWN_OBJECT,
+      UNKNOWN_INTERFACE,
+      UNKNOWN_PROPERTY,
+      PROPERTY_READ_ONLY,
+    }
+    export enum DBusMessageByteOrder{
+      BIG_ENDIAN,
+      LITTLE_ENDIAN,
+    }
+    export enum DBusMessageHeaderField{
+      INVALID,
+      PATH,
+      INTERFACE,
+      MEMBER,
+      ERROR_NAME,
+      REPLY_SERIAL,
+      DESTINATION,
+      SENDER,
+      SIGNATURE,
+      NUM_UNIX_FDS,
+    }
+    export enum DBusMessageType{
+      INVALID,
+      METHOD_CALL,
+      METHOD_RETURN,
+      ERROR,
+      SIGNAL,
+    }
+    export enum DataStreamByteOrder{
+      BIG_ENDIAN,
+      LITTLE_ENDIAN,
+      HOST_ENDIAN,
+    }
+    export enum DataStreamNewlineType{
+      LF,
+      CR,
+      CR_LF,
+      ANY,
+    }
+    export enum DriveStartStopType{
+      UNKNOWN,
+      SHUTDOWN,
+      NETWORK,
+      MULTIDISK,
+      PASSWORD,
+    }
+    export enum EmblemOrigin{
+      UNKNOWN,
+      DEVICE,
+      LIVEMETADATA,
+      TAG,
+    }
+    export enum FileAttributeStatus{
+      UNSET,
+      SET,
+      ERROR_SETTING,
+    }
+    export enum FileAttributeType{
+      INVALID,
+      STRING,
+      BYTE_STRING,
+      BOOLEAN,
+      UINT32,
+      INT32,
+      UINT64,
+      INT64,
+      OBJECT,
+      STRINGV,
+    }
+    export enum FileMonitorEvent{
+      CHANGED,
+      CHANGES_DONE_HINT,
+      DELETED,
+      CREATED,
+      ATTRIBUTE_CHANGED,
+      PRE_UNMOUNT,
+      UNMOUNTED,
+      MOVED,
+      RENAMED,
+      MOVED_IN,
+      MOVED_OUT,
+    }
+    export enum FileType{
+      UNKNOWN,
+      REGULAR,
+      DIRECTORY,
+      SYMBOLIC_LINK,
+      SPECIAL,
+      SHORTCUT,
+      MOUNTABLE,
+    }
+    export enum FilesystemPreviewType{
+      IF_ALWAYS,
+      IF_LOCAL,
+      NEVER,
+    }
+    export enum IOErrorEnum{
+      FAILED,
+      NOT_FOUND,
+      EXISTS,
+      IS_DIRECTORY,
+      NOT_DIRECTORY,
+      NOT_EMPTY,
+      NOT_REGULAR_FILE,
+      NOT_SYMBOLIC_LINK,
+      NOT_MOUNTABLE_FILE,
+      FILENAME_TOO_LONG,
+      INVALID_FILENAME,
+      TOO_MANY_LINKS,
+      NO_SPACE,
+      INVALID_ARGUMENT,
+      PERMISSION_DENIED,
+      NOT_SUPPORTED,
+      NOT_MOUNTED,
+      ALREADY_MOUNTED,
+      CLOSED,
+      CANCELLED,
+      PENDING,
+      READ_ONLY,
+      CANT_CREATE_BACKUP,
+      WRONG_ETAG,
+      TIMED_OUT,
+      WOULD_RECURSE,
+      BUSY,
+      WOULD_BLOCK,
+      HOST_NOT_FOUND,
+      WOULD_MERGE,
+      FAILED_HANDLED,
+      TOO_MANY_OPEN_FILES,
+      NOT_INITIALIZED,
+      ADDRESS_IN_USE,
+      PARTIAL_INPUT,
+      INVALID_DATA,
+      DBUS_ERROR,
+      HOST_UNREACHABLE,
+      NETWORK_UNREACHABLE,
+      CONNECTION_REFUSED,
+      PROXY_FAILED,
+      PROXY_AUTH_FAILED,
+      PROXY_NEED_AUTH,
+      PROXY_NOT_ALLOWED,
+      BROKEN_PIPE,
+      CONNECTION_CLOSED,
+      NOT_CONNECTED,
+      MESSAGE_TOO_LARGE,
+    }
+    export enum IOModuleScopeFlags{
+      NONE,
+      BLOCK_DUPLICATES,
+    }
+    export enum MountOperationResult{
+      HANDLED,
+      ABORTED,
+      UNHANDLED,
+    }
+    export enum NetworkConnectivity{
+      LOCAL,
+      LIMITED,
+      PORTAL,
+      FULL,
+    }
+    export enum NotificationPriority{
+      NORMAL,
+      LOW,
+      HIGH,
+      URGENT,
+    }
+    export enum PasswordSave{
+      NEVER,
+      FOR_SESSION,
+      PERMANENTLY,
+    }
+    export enum ResolverError{
+      NOT_FOUND,
+      TEMPORARY_FAILURE,
+      INTERNAL,
+    }
+    export enum ResolverRecordType{
+      SRV,
+      MX,
+      TXT,
+      SOA,
+      NS,
+    }
+    export enum ResourceError{
+      NOT_FOUND,
+      INTERNAL,
+    }
+    export enum SocketClientEvent{
+      RESOLVING,
+      RESOLVED,
+      CONNECTING,
+      CONNECTED,
+      PROXY_NEGOTIATING,
+      PROXY_NEGOTIATED,
+      TLS_HANDSHAKING,
+      TLS_HANDSHAKED,
+      COMPLETE,
+    }
+    export enum SocketFamily{
+      INVALID,
+      UNIX,
+      IPV4,
+      IPV6,
+    }
+    export enum SocketListenerEvent{
+      BINDING,
+      BOUND,
+      LISTENING,
+      LISTENED,
+    }
+    export enum SocketProtocol{
+      UNKNOWN,
+      DEFAULT,
+      TCP,
+      UDP,
+      SCTP,
+    }
+    export enum SocketType{
+      INVALID,
+      STREAM,
+      DATAGRAM,
+      SEQPACKET,
+    }
+    export enum TlsAuthenticationMode{
+      NONE,
+      REQUESTED,
+      REQUIRED,
+    }
+    export enum TlsCertificateRequestFlags{
+      NONE,
+    }
+    export enum TlsDatabaseLookupFlags{
+      NONE,
+      KEYPAIR,
+    }
+    export enum TlsError{
+      UNAVAILABLE,
+      MISC,
+      BAD_CERTIFICATE,
+      NOT_TLS,
+      HANDSHAKE,
+      CERTIFICATE_REQUIRED,
+      EOF,
+    }
+    export enum TlsInteractionResult{
+      UNHANDLED,
+      HANDLED,
+      FAILED,
+    }
+    export enum TlsRehandshakeMode{
+      NEVER,
+      SAFELY,
+      UNSAFELY,
+    }
+    export enum UnixSocketAddressType{
+      INVALID,
+      ANONYMOUS,
+      PATH,
+      ABSTRACT,
+      ABSTRACT_PADDED,
+    }
+    export enum ZlibCompressorFormat{
+      ZLIB,
+      GZIP,
+      RAW,
+    }
+    export enum AppInfoCreateFlags{
+      NONE,
+      NEEDS_TERMINAL,
+      SUPPORTS_URIS,
+      SUPPORTS_STARTUP_NOTIFICATION,
+    }
+    export enum ApplicationFlags{
+      FLAGS_NONE,
+      IS_SERVICE,
+      IS_LAUNCHER,
+      HANDLES_OPEN,
+      HANDLES_COMMAND_LINE,
+      SEND_ENVIRONMENT,
+      NON_UNIQUE,
+    }
+    export enum AskPasswordFlags{
+      NEED_PASSWORD,
+      NEED_USERNAME,
+      NEED_DOMAIN,
+      SAVING_SUPPORTED,
+      ANONYMOUS_SUPPORTED,
+    }
+    export enum BusNameOwnerFlags{
+      NONE,
+      ALLOW_REPLACEMENT,
+      REPLACE,
+    }
+    export enum BusNameWatcherFlags{
+      NONE,
+      AUTO_START,
+    }
+    export enum ConverterFlags{
+      NONE,
+      INPUT_AT_END,
+      FLUSH,
+    }
+    export enum DBusCallFlags{
+      NONE,
+      NO_AUTO_START,
+      ALLOW_INTERACTIVE_AUTHORIZATION,
+    }
+    export enum DBusCapabilityFlags{
+      NONE,
+      UNIX_FD_PASSING,
+    }
+    export enum DBusConnectionFlags{
+      NONE,
+      AUTHENTICATION_CLIENT,
+      AUTHENTICATION_SERVER,
+      AUTHENTICATION_ALLOW_ANONYMOUS,
+      MESSAGE_BUS_CONNECTION,
+      DELAY_MESSAGE_PROCESSING,
+    }
+    export enum DBusInterfaceSkeletonFlags{
+      NONE,
+      HANDLE_METHOD_INVOCATIONS_IN_THREAD,
+    }
+    export enum DBusMessageFlags{
+      NONE,
+      NO_REPLY_EXPECTED,
+      NO_AUTO_START,
+      ALLOW_INTERACTIVE_AUTHORIZATION,
+    }
+    export enum DBusObjectManagerClientFlags{
+      NONE,
+      DO_NOT_AUTO_START,
+    }
+    export enum DBusPropertyInfoFlags{
+      NONE,
+      READABLE,
+      WRITABLE,
+    }
+    export enum DBusProxyFlags{
+      NONE,
+      DO_NOT_LOAD_PROPERTIES,
+      DO_NOT_CONNECT_SIGNALS,
+      DO_NOT_AUTO_START,
+      GET_INVALIDATED_PROPERTIES,
+      DO_NOT_AUTO_START_AT_CONSTRUCTION,
+    }
+    export enum DBusSendMessageFlags{
+      NONE,
+      PRESERVE_SERIAL,
+    }
+    export enum DBusServerFlags{
+      NONE,
+      RUN_IN_THREAD,
+      AUTHENTICATION_ALLOW_ANONYMOUS,
+    }
+    export enum DBusSignalFlags{
+      NONE,
+      NO_MATCH_RULE,
+      MATCH_ARG0_NAMESPACE,
+      MATCH_ARG0_PATH,
+    }
+    export enum DBusSubtreeFlags{
+      NONE,
+      DISPATCH_TO_UNENUMERATED_NODES,
+    }
+    export enum DriveStartFlags{
+      NONE,
+    }
+    export enum FileAttributeInfoFlags{
+      NONE,
+      COPY_WITH_FILE,
+      COPY_WHEN_MOVED,
+    }
+    export enum FileCopyFlags{
+      NONE,
+      OVERWRITE,
+      BACKUP,
+      NOFOLLOW_SYMLINKS,
+      ALL_METADATA,
+      NO_FALLBACK_FOR_MOVE,
+      TARGET_DEFAULT_PERMS,
+    }
+    export enum FileCreateFlags{
+      NONE,
+      PRIVATE,
+      REPLACE_DESTINATION,
+    }
+    export enum FileMeasureFlags{
+      NONE,
+      REPORT_ANY_ERROR,
+      APPARENT_SIZE,
+      NO_XDEV,
+    }
+    export enum FileMonitorFlags{
+      NONE,
+      WATCH_MOUNTS,
+      SEND_MOVED,
+      WATCH_HARD_LINKS,
+      WATCH_MOVES,
+    }
+    export enum FileQueryInfoFlags{
+      NONE,
+      NOFOLLOW_SYMLINKS,
+    }
+    export enum IOStreamSpliceFlags{
+      NONE,
+      CLOSE_STREAM1,
+      CLOSE_STREAM2,
+      WAIT_FOR_BOTH,
+    }
+    export enum MountMountFlags{
+      NONE,
+    }
+    export enum MountUnmountFlags{
+      NONE,
+      FORCE,
+    }
+    export enum OutputStreamSpliceFlags{
+      NONE,
+      CLOSE_SOURCE,
+      CLOSE_TARGET,
+    }
+    export enum ResourceFlags{
+      NONE,
+      COMPRESSED,
+    }
+    export enum ResourceLookupFlags{
+      NONE,
+    }
+    export enum SettingsBindFlags{
+      DEFAULT,
+      GET,
+      SET,
+      NO_SENSITIVITY,
+      GET_NO_CHANGES,
+      INVERT_BOOLEAN,
+    }
+    export enum SocketMsgFlags{
+      NONE,
+      OOB,
+      PEEK,
+      DONTROUTE,
+    }
+    export enum SubprocessFlags{
+      NONE,
+      STDIN_PIPE,
+      STDIN_INHERIT,
+      STDOUT_PIPE,
+      STDOUT_SILENCE,
+      STDERR_PIPE,
+      STDERR_SILENCE,
+      STDERR_MERGE,
+      INHERIT_FDS,
+    }
+    export enum TestDBusFlags{
+      NONE,
+    }
+    export enum TlsCertificateFlags{
+      UNKNOWN_CA,
+      BAD_IDENTITY,
+      NOT_ACTIVATED,
+      EXPIRED,
+      REVOKED,
+      INSECURE,
+      GENERIC_ERROR,
+      VALIDATE_ALL,
+    }
+    export enum TlsDatabaseVerifyFlags{
+      NONE,
+    }
+    export enum TlsPasswordFlags{
+      NONE,
+      RETRY,
+      MANY_TRIES,
+      FINAL_TRY,
+    }
+      
 }
 

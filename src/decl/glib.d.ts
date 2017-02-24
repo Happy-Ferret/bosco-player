@@ -5,7 +5,8 @@
  */
 
 declare module "GLib" {
-    export function get_user_data_dir(): string
+  export function get_user_data_dir(): string
+  
   export enum BookmarkFileError{
     INVALID_URI,
     INVALID_VALUE,
