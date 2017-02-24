@@ -9,11 +9,11 @@ import * as Pango from 'Pango'
  * view autovala data
  *
  */
-export class NotebookTab {
+export abstract class NotebookTab {
 
   prj: any
-  status: Gtk.Statusbar
   id: number
+  status: Gtk.Statusbar
   listStore: Gtk.ListStore
   treeView: Gtk.TreeView
   selection: Gtk.TreeSelection
@@ -38,7 +38,6 @@ export class NotebookTab {
     *
    */
   buildUI() {
-    var bold, key, normal, readonly, value
     this.listStore = new Gtk.ListStore()
     this.listStore.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_STRING])
     this.treeView = new Gtk.TreeView({
@@ -50,19 +49,19 @@ export class NotebookTab {
         return this.onSelectionChanged()
     })
     this.grid = new Gtk.Grid()
-    key = new Gtk.TreeViewColumn({
+    const key = new Gtk.TreeViewColumn({
       title: "Key"
     })
-    value = new Gtk.TreeViewColumn({
+    const value = new Gtk.TreeViewColumn({
       title: "Value"
     })
-    readonly = new Gtk.TreeViewColumn({
+    const readonly = new Gtk.TreeViewColumn({
       title: "Readonly"
     })
-    bold = new Gtk.CellRendererText({
+    const bold = new Gtk.CellRendererText({
       weight: Pango.Weight.BOLD
     })
-    normal = new Gtk.CellRendererText()
+    const normal = new Gtk.CellRendererText()
     key.pack_start(bold, true)
     value.pack_start(normal, true)
     readonly.pack_start(normal, true)
@@ -95,9 +94,10 @@ export class NotebookTab {
    */
   onSelectionChanged() {
     let [isSelected, model, iter] = this.selection.get_selected()
-    this.status.push(this.id, this.listStore.get_value(iter, 0) 
-        + " " + this.listStore.get_value(iter, 1) 
-        + " " + this.listStore.get_value(iter, 2))
+    this.status.push(this.id, 
+        this.listStore.get_value(iter, 0) + " " + 
+        this.listStore.get_value(iter, 1) + " " + 
+        this.listStore.get_value(iter, 2))
     return
   }
 

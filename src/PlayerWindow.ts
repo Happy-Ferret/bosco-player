@@ -6,17 +6,25 @@ import {SourceTab} from 'tabs/SourceTab'
 import {PackageTab} from 'tabs/PackageTab'
 import {ResourceTab} from 'tabs/ResourceTab'
 import {AutovalaTab} from 'tabs/AutovalaTab'
-import {parseString} from 'xml2js'
+
+const DATADIR = "share/bosco"
+
+/** 
+ * Interface based on player.ui
+ */
+export interface AppWindow extends Gtk.ApplicationWindow {
+  background: Gtk.Box
+  status: Gtk.Statusbar
+}
 /**
  * Top level Application
  */
 export class PlayerWindow {
-
-  window: any
-  config: any
-  background: any
-  avprj: any
-  entitas: any
+  config: any     /* config hash*/
+  avprj: any      /* autovala hash*/
+  entitas: any    /* ecs hash*/
+  window: AppWindow
+  background: Gtk.Box
   regularCss: Gtk.CssProvider
   logoCss: Gtk.CssProvider
   headerbar: Gtk.HeaderBar
@@ -30,46 +38,39 @@ export class PlayerWindow {
   srcContent: Gtk.Box
   entitasContent: Gtk.Box
 
+  /**
+   * Load the glade template
+   */
   constructor(params) {
-
-    parseString("<root>Hello xml2js!</root>", (err, res) => {
-      print("Parsed")
-      print(JSON.stringify(res, null, 2))
-    })
-
-    //this.params = params
-    this.window = Util.loadTemplate('AppWindow', 
-                                      PREFIX + "/player.ui", 
-                                      ['background', 'status'], 
-                                      params)
+    this.window = Util.loadTemplate('AppWindow',  `${DATADIR}/player.ui`, 
+                                      ['background', 'status'], params) as AppWindow
     this.regularCss = new Gtk.CssProvider()
     this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }")
     this.logoCss = new Gtk.CssProvider()
     this.logoCss.load_from_data("* { font-family: OpenDyslexic;  font-size: 32px }")
   }
 
+  setConfig(config) {
+    this.config = config
+  }
   /** 
    * buildUI
    *   
    * @param config
    */
-  buildUI(config) {
-    this.config = config
+  buildUI() {
     this.headerbar = new Gtk.HeaderBar({
-      title: config.app_name,
+      title: this.config.app_name,
       show_close_button: true
     })
-    this.headerbar.pack_start(this.buildOpen(config))
-    this.headerbar.pack_end(this.buildOptions(config))
+    this.headerbar.pack_start(this.buildOpen())
+    this.headerbar.pack_end(this.buildOptions())
     this.window.background.add(this.buildBackground())
     this.window.set_default_size(1040, 620)
     this.window.set_titlebar(this.headerbar)
-    this.window.set_icon_from_file(PREFIX + "/bosco.png")
+    this.window.set_icon_from_file(`${DATADIR}/bosco.png`)
     return this.window.show_all()
   }
-
-
-
   /**
    * builds the client background
    *   
@@ -86,14 +87,12 @@ export class PlayerWindow {
     background.get_style_context().add_provider(this.logoCss, 0)
     return this.background = background
   }
-
-
   /**
    * build open project button
    *   
    * @param config
    */
-  buildOpen(config) {
+  buildOpen() {
     const openButton = new Gtk.Button()
     openButton.add(new Gtk.Image({
       icon_name: "document-open-symbolic",
@@ -119,8 +118,6 @@ export class PlayerWindow {
     })
     return openButton
   }
-
-
   /**
    * display project
    *   
@@ -161,15 +158,13 @@ export class PlayerWindow {
     this.window.show_all()
     this.notebook.set_current_page(1)
   }
-
-
   /**
    * build notebook
    *
    */
   buildNotebook() {
     const builder = new Gtk.Builder()
-    builder.add_from_file(PREFIX + "/project.glade")
+    builder.add_from_file(`${DATADIR}/project.glade`)
     const notebook = builder.get_object("project") as Gtk.Notebook
     let title = new Gtk.Label({
       label: "Autovala"
@@ -198,14 +193,12 @@ export class PlayerWindow {
     notebook.append_page(this.entitasContent, title)
     return this.notebook = notebook
   }
-
-
   /**
    * build project options editor
    *   
    * @param config
    */
-  buildOptions(config) {
+  buildOptions() {
     const grid = new Gtk.Grid({
       column_spacing: 10,
       row_spacing: 10,
@@ -218,9 +211,9 @@ export class PlayerWindow {
     namelabel.set_halign(Gtk.Align.END)
     const nameentry = new Gtk.Entry()
     nameentry.connect("changed", () => {
-        return config.res_name = nameentry.get_text()
+        return this.config.res_name = nameentry.get_text()
     })
-    nameentry.set_placeholder_text(config.res_name)
+    nameentry.set_placeholder_text(this.config.res_name)
     grid.attach(namelabel, 0, 0, 1, 1)
     grid.attach_next_to(nameentry, namelabel, Gtk.PositionType.RIGHT, 2, 1)
     const prefixlabel = new Gtk.Label({
@@ -228,7 +221,7 @@ export class PlayerWindow {
     })
     prefixlabel.set_halign(Gtk.Align.END)
     const prefixentry = new Gtk.Entry()
-    prefixentry.set_placeholder_text(config.res_prefix)
+    prefixentry.set_placeholder_text(this.config.res_prefix)
 
     prefixentry.connect("changed", () => {
         return prefixentry.get_text()
@@ -249,8 +242,8 @@ export class PlayerWindow {
     const menu = new Gtk.Popover()
     menu.set_relative_to(menubutton)
     menu.connect("show", () => {
-        nameentry.set_text(config.res_name)
-        return prefixentry.set_text(config.res_prefix)
+        nameentry.set_text(this.config.res_name)
+        return prefixentry.set_text(this.config.res_prefix)
     })
 
     menu.connect("closed", () => {
@@ -258,15 +251,15 @@ export class PlayerWindow {
         if (menubutton.get_active()) {
           menubutton.set_active(false)
         }
-        config.res_name = config.res_name || config.res_name
-        res_prefix = res_prefix || config.res_prefix
+        this.config.res_name = this.config.res_name || this.config.res_name
+        res_prefix = res_prefix || this.config.res_prefix
         let write = false
-        if (config.res_name !== config.res_name) {
-          config.res_name = config.res_name
+        if (this.config.res_name !== this.config.res_name) {
+          this.config.res_name = this.config.res_name
           write = true
         }
-        if (config.res_prefix !== res_prefix) {
-          config.res_prefix = res_prefix
+        if (this.config.res_prefix !== res_prefix) {
+          this.config.res_prefix = res_prefix
           write = true
         }
         // if (write) {

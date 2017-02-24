@@ -11,10 +11,10 @@
         "src/decl/gobject.d.ts",
         "src/decl/glib.d.ts",
         "src/decl/gio.d.ts",
+        "src/decl/gdk.d.ts",
         "src/decl/gtk.d.ts",
         "src/decl/pango.d.ts",
         "src/xml2js.d.ts",
-        "src/prefix.ts",
         "src/amd.js",
         "src/bundle.js",
         "src/main.ts"

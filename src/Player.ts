@@ -1,8 +1,8 @@
 import * as GLib from 'GLib'
 import {Application, AboutDialog} from 'Gtk'
 import {ApplicationFlags, Menu, SimpleAction} from 'Gio'
+import {AppWindow, PlayerWindow} from 'PlayerWindow'
 import {Util} from 'Util'
-import {PlayerWindow} from 'PlayerWindow'
 /**
  * Bosco Player 
  *
@@ -12,7 +12,7 @@ export class Player {
 
   application: Application
   appWindow: PlayerWindow
-  window: any
+  window: AppWindow
   path: string
   name: string
 
@@ -23,14 +23,15 @@ export class Player {
         this.appWindow = new PlayerWindow({
           application: this.application
         })
-        this.appWindow.buildUI(this.getConfig())
+        this.appWindow.setConfig(this.getConfig())
+        this.appWindow.buildUI()
         this.window = this.appWindow.window
         this.window.present()
     })
   }
   
   /**
-   * build the Application Menu
+   * build the Gio.Application Menu
    *
    * main app menu
    */
