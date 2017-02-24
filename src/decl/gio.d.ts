@@ -7,6 +7,14 @@ declare module "Gio" {
     import * as GObject from "GObject"
     import * as GLib from "GLib"
     
+    export class AppLaunchContext extends GObject.Object {
+      get_display(info: any, files: any):string
+      get_environment():string[]
+      get_startup_notify_id(info: any, files: any):string
+      launch_failed(startup_notify_id: string):void
+      setenv(variable: string, value: string):void
+      unsetenv(variable: string):void
+    }
     export class Application extends GObject.Object {
         constructor(application_id: string, flags: ApplicationFlags)
         activate():void
