@@ -6,7 +6,119 @@
 declare module "Gdk" {
     import * as GObject from "GObject"
     import * as Gio from "Gio"
+    import * as Pango from "Pango"
 
+    export function add_option_entries_libgtk_only(group: any):void
+    export function atom_intern(atom_name: string, only_if_exists: boolean):any
+    export function atom_intern_static_string(atom_name: string):any
+    export function beep():void
+    export function cairo_create(window: Window):any
+    export function cairo_draw_from_gl(cr: any, window: Window, source: number, source_type: number, buffer_scale: number, x: number, y: number, width: number, height: number):void
+    export function cairo_get_clip_rectangle(cr: any, rect: any):boolean
+    export function cairo_rectangle(cr: any, rectangle: any):void
+    export function cairo_region(cr: any, region: any):void
+    export function cairo_region_create_from_surface(surface: any):any
+    export function cairo_set_source_color(cr: any, color: any):void
+    export function cairo_set_source_pixbuf(cr: any, pixbuf: any, pixbuf_x: number, pixbuf_y: number):void
+    export function cairo_set_source_rgba(cr: any, rgba: any):void
+    export function cairo_set_source_window(cr: any, window: Window, x: number, y: number):void
+    export function cairo_surface_create_from_pixbuf(pixbuf: any, scale: number, for_window: Window):any
+    export function color_parse(spec: string, color: any):boolean
+    export function disable_multidevice():void
+    export function drag_abort(context: DragContext, time_: number):void
+    export function drag_begin(window: Window, targets: any):DragContext
+    export function drag_begin_for_device(window: Window, device: Device, targets: any):DragContext
+    export function drag_drop(context: DragContext, time_: number):void
+    export function drag_drop_succeeded(context: DragContext):boolean
+    export function drag_find_window_for_screen(context: DragContext, drag_window: Window, screen: Screen, x_root: number, y_root: number, dest_window: Window, protocol: DragProtocol):void
+    export function drag_get_selection(context: DragContext):any
+    export function drag_motion(context: DragContext, dest_window: Window, protocol: DragProtocol, x_root: number, y_root: number, suggested_action: DragAction, possible_actions: DragAction, time_: number):boolean
+    export function drag_status(context: DragContext, action: DragAction, time_: number):void
+    export function drop_finish(context: DragContext, success: boolean, time_: number):void
+    export function drop_reply(context: DragContext, accepted: boolean, time_: number):void
+    export function error_trap_pop():number
+    export function error_trap_pop_ignored():void
+    export function error_trap_push():void
+    export function event_get():any
+    export function event_handler_set(func: any, data: any, notify: any):void
+    export function event_peek():any
+    export function event_request_motions(event: any):void
+    export function events_get_angle(event1: any, event2: any, angle: number):boolean
+    export function events_get_center(event1: any, event2: any, x: number, y: number):boolean
+    export function events_get_distance(event1: any, event2: any, distance: number):boolean
+    export function events_pending():boolean
+    export function flush():void
+    export function get_default_root_window():Window
+    export function get_display():string
+    export function get_display_arg_name():string
+    export function get_program_class():string
+    export function get_show_events():boolean
+    export function gl_error_quark():any
+    export function init(argc: number, argv: string[]):void
+    export function init_check(argc: number, argv: string[]):boolean
+    export function keyboard_grab(window: Window, owner_events: boolean, time_: number):GrabStatus
+    export function keyboard_ungrab(time_: number):void
+    export function keyval_convert_case(symbol: number, lower: number, upper: number):void
+    export function keyval_from_name(keyval_name: string):number
+    export function keyval_is_lower(keyval: number):boolean
+    export function keyval_is_upper(keyval: number):boolean
+    export function keyval_name(keyval: number):string
+    export function keyval_to_lower(keyval: number):number
+    export function keyval_to_unicode(keyval: number):number
+    export function keyval_to_upper(keyval: number):number
+    export function list_visuals():any
+    export function notify_startup_complete():void
+    export function notify_startup_complete_with_id(startup_id: string):void
+    export function offscreen_window_get_embedder(window: Window):Window
+    export function offscreen_window_get_surface(window: Window):any
+    export function offscreen_window_set_embedder(window: Window, embedder: Window):void
+    export function pango_context_get():Pango.Context
+    export function pango_context_get_for_screen(screen: Screen):Pango.Context
+    export function pango_layout_get_clip_region(layout: Pango.Layout, x_origin: number, y_origin: number, index_ranges: number, n_ranges: number):any
+    export function pango_layout_line_get_clip_region(line: any, x_origin: number, y_origin: number, index_ranges: number[], n_ranges: number):any
+    export function parse_args(argc: number, argv: string[]):void
+    export function pixbuf_get_from_surface(surface: any, src_x: number, src_y: number, width: number, height: number):any
+    export function pixbuf_get_from_window(window: Window, src_x: number, src_y: number, width: number, height: number):any
+    export function pointer_grab(window: Window, owner_events: boolean, event_mask: EventMask, confine_to: Window, cursor: Cursor, time_: number):GrabStatus
+    export function pointer_is_grabbed():boolean
+    export function pointer_ungrab(time_: number):void
+    export function pre_parse_libgtk_only():void
+    export function property_change(window: Window, property: any, type: any, format: number, mode: PropMode, data: number, nelements: number):void
+    export function property_delete(window: Window, property: any):void
+    export function property_get(window: Window, property: any, type: any, offset: number, length: number, pdelete: number, actual_property_type: any, actual_format: number, actual_length: number, data: number[]):boolean
+    export function query_depths(depths: number[], count: number):void
+    export function query_visual_types(visual_types: VisualType[], count: number):void
+    export function selection_convert(requestor: Window, selection: any, target: any, time_: number):void
+    export function selection_owner_get(selection: any):Window
+    export function selection_owner_get_for_display(display: Display, selection: any):Window
+    export function selection_owner_set(owner: Window, selection: any, time_: number, send_event: boolean):boolean
+    export function selection_owner_set_for_display(display: Display, owner: Window, selection: any, time_: number, send_event: boolean):boolean
+    export function selection_property_get(requestor: Window, data: number, prop_type: any, prop_format: number):number
+    export function selection_send_notify(requestor: Window, selection: any, target: any, property: any, time_: number):void
+    export function selection_send_notify_for_display(display: Display, requestor: Window, selection: any, target: any, property: any, time_: number):void
+    export function set_allowed_backends(backends: string):void
+    export function set_double_click_time(msec: number):void
+    export function set_program_class(program_class: string):void
+    export function set_show_events(show_events: boolean):void
+    export function setting_get(name: string, value: any):boolean
+    export function synthesize_window_state(window: Window, unset_flags: WindowState, set_flags: WindowState):void
+    export function test_render_sync(window: Window):void
+    export function test_simulate_button(window: Window, x: number, y: number, button: number, modifiers: ModifierType, button_pressrelease: EventType):boolean
+    export function test_simulate_key(window: Window, x: number, y: number, keyval: number, modifiers: ModifierType, key_pressrelease: EventType):boolean
+    export function text_property_to_utf8_list_for_display(display: Display, encoding: any, format: number, text: number[], length: number, list: string[]):number
+    export function threads_add_idle(function_: any, data: any):number
+    export function threads_add_idle_full(priority: number, function_: any, data: any, notify: any):number
+    export function threads_add_timeout(interval: number, function_: any, data: any):number
+    export function threads_add_timeout_full(priority: number, interval: number, function_: any, data: any, notify: any):number
+    export function threads_add_timeout_seconds(interval: number, function_: any, data: any):number
+    export function threads_add_timeout_seconds_full(priority: number, interval: number, function_: any, data: any, notify: any):number
+    export function threads_enter():void
+    export function threads_init():void
+    export function threads_leave():void
+    export function threads_set_lock_functions(enter_fn: any, leave_fn: any):void
+    export function unicode_to_keyval(wc: number):number
+    export function utf8_to_string_target(str: string):string
+ 
     export class AppLaunchContext extends Gio.AppLaunchContext {
         set_desktop(desktop: number):void
         set_display(display: Display):void

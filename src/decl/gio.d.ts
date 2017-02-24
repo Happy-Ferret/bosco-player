@@ -6,6 +6,138 @@
 declare module "Gio" {
     import * as GObject from "GObject"
     import * as GLib from "GLib"
+
+    export function action_name_is_valid(action_name: string):boolean
+    export function action_parse_detailed_name(detailed_name: string, action_name: string, target_value: any):boolean
+    export function action_print_detailed_name(action_name: string, target_value: any):string
+    export function app_info_create_from_commandline(commandline: string, application_name: string, flags: AppInfoCreateFlags):any
+    export function app_info_get_all():any
+    export function app_info_get_all_for_type(content_type: string):any
+    export function app_info_get_default_for_type(content_type: string, must_support_uris: boolean):any
+    export function app_info_get_default_for_uri_scheme(uri_scheme: string):any
+    export function app_info_get_fallback_for_type(content_type: string):any
+    export function app_info_get_recommended_for_type(content_type: string):any
+    export function app_info_launch_default_for_uri(uri: string, launch_context: AppLaunchContext):boolean
+    export function app_info_reset_type_associations(content_type: string):void
+    export function async_initable_newv_async(object_type: number, n_parameters: number, parameters: any, io_priority: number, cancellable: Cancellable, callback: any, user_data: any):void
+    export function bus_get(bus_type: BusType, cancellable: Cancellable, callback: any, user_data: any):void
+    export function bus_get_finish(res: any):any
+    export function bus_get_sync(bus_type: BusType, cancellable: Cancellable):any
+    export function bus_own_name(bus_type: BusType, name: string, flags: BusNameOwnerFlags, bus_acquired_handler: any, name_acquired_handler: any, name_lost_handler: any, user_data: any, user_data_free_func: any):number
+    export function bus_own_name_on_connection(connection: any, name: string, flags: BusNameOwnerFlags, name_acquired_handler: any, name_lost_handler: any, user_data: any, user_data_free_func: any):number
+    export function bus_own_name_on_connection_with_closures(connection: any, name: string, flags: BusNameOwnerFlags, name_acquired_closure: any, name_lost_closure: any):number
+    export function bus_own_name_with_closures(bus_type: BusType, name: string, flags: BusNameOwnerFlags, bus_acquired_closure: any, name_acquired_closure: any, name_lost_closure: any):number
+    export function bus_unown_name(owner_id: number):void
+    export function bus_unwatch_name(watcher_id: number):void
+    export function bus_watch_name(bus_type: BusType, name: string, flags: BusNameWatcherFlags, name_appeared_handler: any, name_vanished_handler: any, user_data: any, user_data_free_func: any):number
+    export function bus_watch_name_on_connection(connection: any, name: string, flags: BusNameWatcherFlags, name_appeared_handler: any, name_vanished_handler: any, user_data: any, user_data_free_func: any):number
+    export function bus_watch_name_on_connection_with_closures(connection: any, name: string, flags: BusNameWatcherFlags, name_appeared_closure: any, name_vanished_closure: any):number
+    export function bus_watch_name_with_closures(bus_type: BusType, name: string, flags: BusNameWatcherFlags, name_appeared_closure: any, name_vanished_closure: any):number
+    export function content_type_can_be_executable(type: string):boolean
+    export function content_type_equals(type1: string, type2: string):boolean
+    export function content_type_from_mime_type(mime_type: string):string
+    export function content_type_get_description(type: string):string
+    export function content_type_get_generic_icon_name(type: string):string
+    export function content_type_get_icon(type: string):any
+    export function content_type_get_mime_type(type: string):string
+    export function content_type_get_symbolic_icon(type: string):any
+    export function content_type_guess(filename: string, data: number[], data_size: number, result_uncertain: boolean):string
+    export function content_type_guess_for_tree(root: File):string[]
+    export function content_type_is_a(type: string, supertype: string):boolean
+    export function content_type_is_unknown(type: string):boolean
+    export function content_types_get_registered():any
+    export function dbus_address_escape_value(string: string):string
+    export function dbus_address_get_for_bus_sync(bus_type: BusType, cancellable: Cancellable):string
+    export function dbus_address_get_stream(address: string, cancellable: Cancellable, callback: any, user_data: any):void
+    export function dbus_address_get_stream_finish(res: any, out_guid: string):any
+    export function dbus_address_get_stream_sync(address: string, out_guid: string, cancellable: Cancellable):any
+    export function dbus_annotation_info_lookup(annotations: any[], name: string):string
+    export function dbus_error_encode_gerror(error: any):string
+    export function dbus_error_get_remote_error(error: any):string
+    export function dbus_error_is_remote_error(error: any):boolean
+    export function dbus_error_new_for_dbus_error(dbus_error_name: string, dbus_error_message: string):any
+    export function dbus_error_quark():any
+    export function dbus_error_register_error(error_domain: any, error_code: number, dbus_error_name: string):boolean
+    export function dbus_error_register_error_domain(error_domain_quark_name: string, quark_volatile: number, entries: any, num_entries: number):void
+    export function dbus_error_strip_remote_error(error: any):boolean
+    export function dbus_error_unregister_error(error_domain: any, error_code: number, dbus_error_name: string):boolean
+    export function dbus_generate_guid():string
+    export function dbus_gvalue_to_gvariant(gvalue: any, type: any):any
+    export function dbus_gvariant_to_gvalue(value: any, out_gvalue: any):void
+    export function dbus_is_address(string: string):boolean
+    export function dbus_is_guid(string: string):boolean
+    export function dbus_is_interface_name(string: string):boolean
+    export function dbus_is_member_name(string: string):boolean
+    export function dbus_is_name(string: string):boolean
+    export function dbus_is_supported_address(string: string):boolean
+    export function dbus_is_unique_name(string: string):boolean
+    export function file_new_for_commandline_arg(arg: string):File
+    export function file_new_for_commandline_arg_and_cwd(arg: string, cwd: string):File
+    export function file_new_for_path(path: string):File
+    export function file_new_for_uri(uri: string):File
+    export function file_new_tmp(tmpl: string, iostream: any):File
+    export function file_parse_name(parse_name: string):File
+    export function icon_deserialize(value: any):any
+    export function icon_hash(icon: any):number
+    export function icon_new_for_string(str: string):any
+    export function initable_newv(object_type: number, n_parameters: number, parameters: any[], cancellable: Cancellable):GObject.Object
+    export function io_error_from_errno(err_no: number):IOErrorEnum
+    export function io_error_quark():any
+    export function io_extension_point_implement(extension_point_name: string, type: number, extension_name: string, priority: number):any
+    export function io_extension_point_lookup(name: string):any
+    export function io_extension_point_register(name: string):any
+    export function io_modules_load_all_in_directory(dirname: string):any
+    export function io_modules_load_all_in_directory_with_scope(dirname: string, scope: any):any
+    export function io_modules_scan_all_in_directory(dirname: string):void
+    export function io_modules_scan_all_in_directory_with_scope(dirname: string, scope: any):void
+    export function io_scheduler_cancel_all_jobs():void
+    export function io_scheduler_push_job(job_func: any, user_data: any, notify: any, io_priority: number, cancellable: Cancellable):void
+    export function network_monitor_get_default():any
+    export function networking_init():void
+    export function pollable_source_new(pollable_stream: GObject.Object):any
+    export function pollable_source_new_full(pollable_stream: GObject.Object, child_source: any, cancellable: Cancellable):any
+    export function pollable_stream_read(stream: any, buffer: number[], count: number, blocking: boolean, cancellable: Cancellable):number
+    export function pollable_stream_write(stream: any, buffer: number[], count: number, blocking: boolean, cancellable: Cancellable):number
+    export function pollable_stream_write_all(stream: any, buffer: number[], count: number, blocking: boolean, bytes_written: number, cancellable: Cancellable):boolean
+    export function proxy_get_default_for_protocol(protocol: string):any
+    export function proxy_resolver_get_default():any
+    export function resolver_error_quark():any
+    export function resource_error_quark():any
+    export function resource_load(filename: string):any
+    export function resources_enumerate_children(path: string, lookup_flags: ResourceLookupFlags):string[]
+    export function resources_get_info(path: string, lookup_flags: ResourceLookupFlags, size: number, flags: number):boolean
+    export function resources_lookup_data(path: string, lookup_flags: ResourceLookupFlags):any
+    export function resources_open_stream(path: string, lookup_flags: ResourceLookupFlags):any
+    export function resources_register(resource: any):void
+    export function resources_unregister(resource: any):void
+    export function settings_schema_source_get_default():any
+    export function simple_async_report_error_in_idle(object: GObject.Object, callback: any, user_data: any, domain: any, code: number, format: string, ...args: any[]):void
+    export function simple_async_report_gerror_in_idle(object: GObject.Object, callback: any, user_data: any, error: any):void
+    export function simple_async_report_take_gerror_in_idle(object: GObject.Object, callback: any, user_data: any, error: any):void
+    export function srv_target_list_sort(targets: any):any
+    export function tls_backend_get_default():any
+    export function tls_client_connection_new(base_io_stream: any, server_identity: any):any
+    export function tls_error_quark():any
+    export function tls_file_database_new(anchors: string):any
+    export function tls_server_connection_new(base_io_stream: any, certificate: any):any
+    export function unix_is_mount_path_system_internal(mount_path: string):boolean
+    export function unix_mount_at(mount_path: string, time_read: number):any
+    export function unix_mount_compare(mount1: any, mount2: any):number
+    export function unix_mount_free(mount_entry: any):void
+    export function unix_mount_get_device_path(mount_entry: any):string
+    export function unix_mount_get_fs_type(mount_entry: any):string
+    export function unix_mount_get_mount_path(mount_entry: any):string
+    export function unix_mount_guess_can_eject(mount_entry: any):boolean
+    export function unix_mount_guess_icon(mount_entry: any):any
+    export function unix_mount_guess_name(mount_entry: any):string
+    export function unix_mount_guess_should_display(mount_entry: any):boolean
+    export function unix_mount_guess_symbolic_icon(mount_entry: any):any
+    export function unix_mount_is_readonly(mount_entry: any):boolean
+    export function unix_mount_is_system_internal(mount_entry: any):boolean
+    export function unix_mount_points_changed_since(time: number):boolean
+    export function unix_mount_points_get(time_read: number):any
+    export function unix_mounts_changed_since(time: number):boolean
+    export function unix_mounts_get(time_read: number):any
     
     export class AppLaunchContext extends GObject.Object {
       get_display(info: any, files: any):string

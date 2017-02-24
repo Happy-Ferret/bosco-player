@@ -11,6 +11,201 @@ declare module "Gtk" {
     import * as Atk from "Atk"
     import * as Pango from "Pango"
     
+    export function accel_groups_activate(object: GObject.Object, accel_key: number, accel_mods: Gdk.ModifierType):boolean
+    export function accel_groups_from_object(object: GObject.Object):any
+    export function accelerator_get_default_mod_mask():Gdk.ModifierType
+    export function accelerator_get_label(accelerator_key: number, accelerator_mods: Gdk.ModifierType):string
+    export function accelerator_get_label_with_keycode(display: Gdk.Display, accelerator_key: number, keycode: number, accelerator_mods: Gdk.ModifierType):string
+    export function accelerator_name(accelerator_key: number, accelerator_mods: Gdk.ModifierType):string
+    export function accelerator_name_with_keycode(display: Gdk.Display, accelerator_key: number, keycode: number, accelerator_mods: Gdk.ModifierType):string
+    export function accelerator_parse(accelerator: string, accelerator_key: number, accelerator_mods: Gdk.ModifierType):void
+    export function accelerator_parse_with_keycode(accelerator: string, accelerator_key: number, accelerator_codes: number[], accelerator_mods: Gdk.ModifierType):void
+    export function accelerator_set_default_mod_mask(default_mod_mask: Gdk.ModifierType):void
+    export function accelerator_valid(keyval: number, modifiers: Gdk.ModifierType):boolean
+    export function alternative_dialog_button_order(screen: Gdk.Screen):boolean
+    export function binding_entry_add_signal_from_string(binding_set: any, signal_desc: string):GLib.TokenType
+    export function binding_entry_add_signall(binding_set: any, keyval: number, modifiers: Gdk.ModifierType, signal_name: string, binding_args: any):void
+    export function binding_entry_remove(binding_set: any, keyval: number, modifiers: Gdk.ModifierType):void
+    export function binding_entry_skip(binding_set: any, keyval: number, modifiers: Gdk.ModifierType):void
+    export function binding_set_by_class(object_class: any):any
+    export function binding_set_find(set_name: string):any
+    export function binding_set_new(set_name: string):any
+    export function bindings_activate(object: GObject.Object, keyval: number, modifiers: Gdk.ModifierType):boolean
+    export function bindings_activate_event(object: GObject.Object, event: any):boolean
+    export function builder_error_quark():any
+    export function cairo_should_draw_window(cr: any, window: Gdk.Window):boolean
+    export function cairo_transform_to_window(cr: any, widget: Widget, window: Gdk.Window):void
+    export function check_version(required_major: number, required_minor: number, required_micro: number):string
+    export function css_provider_error_quark():any
+    export function device_grab_add(widget: Widget, device: Gdk.Device, block_others: boolean):void
+    export function device_grab_remove(widget: Widget, device: Gdk.Device):void
+    export function disable_setlocale():void
+    export function distribute_natural_allocation(extra_space: number, n_requested_sizes: number, sizes: any):number
+    export function drag_cancel(context: Gdk.DragContext):void
+    export function drag_finish(context: Gdk.DragContext, success: boolean, del: boolean, time_: number):void
+    export function drag_get_source_widget(context: Gdk.DragContext):Widget
+    export function drag_set_icon_default(context: Gdk.DragContext):void
+    export function drag_set_icon_gicon(context: Gdk.DragContext, icon: any, hot_x: number, hot_y: number):void
+    export function drag_set_icon_name(context: Gdk.DragContext, icon_name: string, hot_x: number, hot_y: number):void
+    export function drag_set_icon_pixbuf(context: Gdk.DragContext, pixbuf: any, hot_x: number, hot_y: number):void
+    export function drag_set_icon_stock(context: Gdk.DragContext, stock_id: string, hot_x: number, hot_y: number):void
+    export function drag_set_icon_surface(context: Gdk.DragContext, surface: any):void
+    export function drag_set_icon_widget(context: Gdk.DragContext, widget: Widget, hot_x: number, hot_y: number):void
+    export function draw_insertion_cursor(widget: Widget, cr: any, location: any, is_primary: boolean, direction: TextDirection, draw_arrow: boolean):void
+    export function events_pending():boolean
+    export function _false():boolean
+    export function file_chooser_error_quark():any
+    export function get_binary_age():number
+    export function get_current_event():any
+    export function get_current_event_device():Gdk.Device
+    export function get_current_event_state(state: Gdk.ModifierType):boolean
+    export function get_current_event_time():number
+    export function get_debug_flags():number
+    export function get_default_language():any
+    export function get_event_widget(event: any):Widget
+    export function get_interface_age():number
+    export function get_locale_direction():TextDirection
+    export function get_major_version():number
+    export function get_micro_version():number
+    export function get_minor_version():number
+    export function get_option_group(open_default_display: boolean):any
+    export function grab_get_current():Widget
+    export function icon_size_from_name(name: string):number
+    export function icon_size_get_name(size: number):string
+    export function icon_size_lookup(size: number, width: number, height: number):boolean
+    export function icon_size_lookup_for_settings(settings: Settings, size: number, width: number, height: number):boolean
+    export function icon_size_register(name: string, width: number, height: number):number
+    export function icon_size_register_alias(alias: string, target: number):void
+    export function icon_theme_error_quark():any
+    export function init(argc: number, argv: string[]):void
+    export function init_check(argc: number, argv: string[]):boolean
+    export function init_with_args(argc: number, argv: string[], parameter_string: string, entries: any[], translation_domain: string):boolean
+    export function key_snooper_install(snooper: any, func_data: any):number
+    export function key_snooper_remove(snooper_handler_id: number):void
+    export function main():void
+    export function main_do_event(event: any):void
+    export function main_iteration():boolean
+    export function main_iteration_do(blocking: boolean):boolean
+    export function main_level():number
+    export function main_quit():void
+    export function paint_arrow(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, arrow_type: ArrowType, fill: boolean, x: number, y: number, width: number, height: number):void
+    export function paint_box(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_box_gap(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number, gap_side: PositionType, gap_x: number, gap_width: number):void
+    export function paint_check(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_diamond(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_expander(style: Style, cr: any, state_type: StateType, widget: Widget, detail: string, x: number, y: number, expander_style: ExpanderStyle):void
+    export function paint_extension(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number, gap_side: PositionType):void
+    export function paint_flat_box(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_focus(style: Style, cr: any, state_type: StateType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_handle(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number, orientation: Orientation):void
+    export function paint_hline(style: Style, cr: any, state_type: StateType, widget: Widget, detail: string, x1: number, x2: number, y: number):void
+    export function paint_layout(style: Style, cr: any, state_type: StateType, use_text: boolean, widget: Widget, detail: string, x: number, y: number, layout: Pango.Layout):void
+    export function paint_option(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_resize_grip(style: Style, cr: any, state_type: StateType, widget: Widget, detail: string, edge: Gdk.WindowEdge, x: number, y: number, width: number, height: number):void
+    export function paint_shadow(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_shadow_gap(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number, gap_side: PositionType, gap_x: number, gap_width: number):void
+    export function paint_slider(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number, orientation: Orientation):void
+    export function paint_spinner(style: Style, cr: any, state_type: StateType, widget: Widget, detail: string, step: number, x: number, y: number, width: number, height: number):void
+    export function paint_tab(style: Style, cr: any, state_type: StateType, shadow_type: ShadowType, widget: Widget, detail: string, x: number, y: number, width: number, height: number):void
+    export function paint_vline(style: Style, cr: any, state_type: StateType, widget: Widget, detail: string, y1_: number, y2_: number, x: number):void
+    export function paper_size_get_default():string
+    export function paper_size_get_paper_sizes(include_custom: boolean):any
+    export function parse_args(argc: number, argv: string[]):boolean
+    export function print_error_quark():any
+    export function print_run_page_setup_dialog(parent: Window, page_setup: PageSetup, settings: PrintSettings):PageSetup
+    export function print_run_page_setup_dialog_async(parent: Window, page_setup: PageSetup, settings: PrintSettings, done_cb: any, data: any):void
+    export function propagate_event(widget: Widget, event: any):void
+    export function rc_add_default_file(filename: string):void
+    export function rc_find_module_in_path(module_file: string):string
+    export function rc_find_pixmap_in_path(settings: Settings, scanner:  string, pixmap_file: string):string
+    export function rc_get_default_files():string[]
+    export function rc_get_im_module_file():string
+    export function rc_get_im_module_path():string
+    export function rc_get_module_dir():string
+    export function rc_get_style(widget: Widget):Style
+    export function rc_get_style_by_paths(settings: Settings, widget_path: string, class_path: string, type: number):Style
+    export function rc_get_theme_dir():string
+    export function rc_parse(filename: string):void
+    export function rc_parse_color(scanner:  string, color: any):number
+    export function rc_parse_color_full(scanner:  string, style: RcStyle, color: any):number
+    export function rc_parse_priority(scanner:  string, priority: PathPriorityType):number
+    export function rc_parse_state(scanner:  string, state: StateType):number
+    export function rc_parse_string(rc_string: string):void
+    export function rc_property_parse_border(pspec:  string, gstring:  string, property_value:  string):boolean
+    export function rc_property_parse_color(pspec:  string, gstring:  string, property_value:  string):boolean
+    export function rc_property_parse_enum(pspec:  string, gstring:  string, property_value:  string):boolean
+    export function rc_property_parse_flags(pspec:  string, gstring:  string, property_value:  string):boolean
+    export function rc_property_parse_requisition(pspec:  string, gstring:  string, property_value:  string):boolean
+    export function rc_reparse_all():boolean
+    export function rc_reparse_all_for_settings(settings: Settings, force_load: boolean):boolean
+    export function rc_reset_styles(settings: Settings):void
+    export function rc_scanner_new(): string
+    export function rc_set_default_files(filenames: string[]):void
+    export function recent_chooser_error_quark():any
+    export function recent_manager_error_quark():any
+    export function render_activity(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_arrow(context: StyleContext, cr: any, angle: number, x: number, y: number, size: number):void
+    export function render_background(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_check(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_expander(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_extension(context: StyleContext, cr: any, x: number, y: number, width: number, height: number, gap_side: PositionType):void
+    export function render_focus(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_frame(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_frame_gap(context: StyleContext, cr: any, x: number, y: number, width: number, height: number, gap_side: PositionType, xy0_gap: number, xy1_gap: number):void
+    export function render_handle(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_icon(context: StyleContext, cr: any, pixbuf: any, x: number, y: number):void
+    export function render_icon_pixbuf(context: StyleContext, source: any, size: number):any
+    export function render_icon_surface(context: StyleContext, cr: any, surface: any, x: number, y: number):void
+    export function render_insertion_cursor(context: StyleContext, cr: any, x: number, y: number, layout: Pango.Layout, index: number, direction: Pango.Direction):void
+    export function render_layout(context: StyleContext, cr: any, x: number, y: number, layout: Pango.Layout):void
+    export function render_line(context: StyleContext, cr: any, x0: number, y0: number, x1: number, y1: number):void
+    export function render_option(context: StyleContext, cr: any, x: number, y: number, width: number, height: number):void
+    export function render_slider(context: StyleContext, cr: any, x: number, y: number, width: number, height: number, orientation: Orientation):void
+    export function rgb_to_hsv(r: number, g: number, b: number, h: number, s: number, v: number):void
+    export function selection_add_target(widget: Widget, selection: any, target: any, info: number):void
+    export function selection_add_targets(widget: Widget, selection: any, targets: any[], ntargets: number):void
+    export function selection_clear_targets(widget: Widget, selection: any):void
+    export function selection_convert(widget: Widget, selection: any, target: any, time_: number):boolean
+    export function selection_owner_set(widget: Widget, selection: any, time_: number):boolean
+    export function selection_owner_set_for_display(display: Gdk.Display, widget: Widget, selection: any, time_: number):boolean
+    export function selection_remove_all(widget: Widget):void
+    export function set_debug_flags(flags: number):void
+    export function show_about_dialog(parent: Window, first_property_name: string, ...args: any[]):void
+    export function show_uri(screen: Gdk.Screen, uri: string, timestamp: number):boolean
+    export function stock_add(items: any[], n_items: number):void
+    export function stock_add_static(items: any[], n_items: number):void
+    export function stock_list_ids():any
+    export function stock_lookup(stock_id: string, item: any):boolean
+    export function stock_set_translate_func(domain: string, func: any, data: any, notify: any):void
+    export function target_table_free(targets: any[], n_targets: number):void
+    export function target_table_new_from_list(list: any, n_targets: number):any[]
+    export function targets_include_image(targets: any[], n_targets: number, writable: boolean):boolean
+    export function targets_include_rich_text(targets: any[], n_targets: number, buffer: TextBuffer):boolean
+    export function targets_include_text(targets: any[], n_targets: number):boolean
+    export function targets_include_uri(targets: any[], n_targets: number):boolean
+    export function test_create_simple_window(window_title: string, dialog_text: string):Widget
+    export function test_create_widget(widget_type: number, first_property_name: string, ...args: any[]):Widget
+    export function test_display_button_window(window_title: string, dialog_text: string, ...args: any[]):Widget
+    export function test_find_label(widget: Widget, label_pattern: string):Widget
+    export function test_find_sibling(base_widget: Widget, widget_type: number):Widget
+    export function test_find_widget(widget: Widget, label_pattern: string, widget_type: number):Widget
+    export function test_init(argcp: number, argvp: string[], ...args: any[]):void
+    export function test_list_all_types(n_types: number):number[]
+    export function test_register_all_types():void
+    export function test_slider_get_value(widget: Widget):number
+    export function test_slider_set_perc(widget: Widget, percentage: number):void
+    export function test_spin_button_click(spinner: SpinButton, button: number, upwards: boolean):boolean
+    export function test_text_get(widget: Widget):string
+    export function test_text_set(widget: Widget, string: string):void
+    export function test_widget_click(widget: Widget, button: number, modifiers: Gdk.ModifierType):boolean
+    export function test_widget_send_key(widget: Widget, keyval: number, modifiers: Gdk.ModifierType):boolean
+    export function test_widget_wait_for_draw(widget: Widget):void
+    export function tree_get_row_drag_data(selection_data: any, tree_model: any, path: any):boolean
+    export function tree_row_reference_deleted(proxy: GObject.Object, path: any):void
+    export function tree_row_reference_inserted(proxy: GObject.Object, path: any):void
+    export function tree_row_reference_reordered(proxy: GObject.Object, path: any, iter: any, new_order: number[]):void
+    export function tree_set_row_drag_data(selection_data: any, tree_model: any, path: any):boolean
+    export function _true():boolean
     export class AboutDialog extends Dialog {
         constructor()
       add_credit_section(section_name: string, people: string[]):void

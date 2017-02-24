@@ -14,9 +14,9 @@
             "source": "/usr/share/gir-1.0/cairo-1.0.gir",
             "patch": "",
             "types": {
-                "enum": ["*"],
-                "function": ["*"],
-                "class": ["*"]
+                "enum": [],
+                "function": [],
+                "class": []
             }
 
         },
@@ -64,9 +64,9 @@
             "source": "/usr/share/gir-1.0/Gdk-3.0.gir",
             "patch": "",
             "types": {
-                "enum": [],
-                "function": [],
-                "class": []
+                "enum": ["*"],
+                "function": ["*"],
+                "class": ["*"]
             }
 
         },

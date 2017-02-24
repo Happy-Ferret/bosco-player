@@ -5,8 +5,44 @@
  */
 declare module "Atk" {
     import * as GObject from "GObject"
-    // import * as GLib from "GLib"
-    // import * as Gio from "Gio"
+
+    export function add_focus_tracker(focus_tracker: EventListener):number
+    export function add_global_event_listener(listener: any, event_type: string):number
+    export function add_key_event_listener(listener: any, data: any):number
+    export function attribute_set_free(attrib_set: any):void
+    export function focus_tracker_init(init: any):void
+    export function focus_tracker_notify(object: Object):void
+    export function get_binary_age():number
+    export function get_default_registry():Registry
+    export function get_focus_object():Object
+    export function get_interface_age():number
+    export function get_major_version():number
+    export function get_micro_version():number
+    export function get_minor_version():number
+    export function get_root():Object
+    export function get_toolkit_name():string
+    export function get_toolkit_version():string
+    export function get_version():string
+    export function relation_type_for_name(name: string):RelationType
+    export function relation_type_get_name(type: RelationType):string
+    export function relation_type_register(name: string):RelationType
+    export function remove_focus_tracker(tracker_id: number):void
+    export function remove_global_event_listener(listener_id: number):void
+    export function remove_key_event_listener(listener_id: number):void
+    export function role_for_name(name: string):Role
+    export function role_get_localized_name(role: Role):string
+    export function role_get_name(role: Role):string
+    export function role_register(name: string):Role
+    export function state_type_for_name(name: string):StateType
+    export function state_type_get_name(type: StateType):string
+    export function state_type_register(name: string):StateType
+    export function text_attribute_for_name(name: string):TextAttribute
+    export function text_attribute_get_name(attr: TextAttribute):string
+    export function text_attribute_get_value(attr: TextAttribute, index_: number):string
+    export function text_attribute_register(name: string):TextAttribute
+    export function text_free_ranges(ranges: any[]):void
+    export function value_type_get_localized_name(value_type: ValueType):string
+    export function value_type_get_name(value_type: ValueType):string
 
     export class GObjectAccessible extends Object {
         get_object():GObject.Object
