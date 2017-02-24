@@ -11,7 +11,7 @@
         {
             "isBuildCommand": true,
             "taskName": "build",
-            "args": ["tsc"]
+            "args": ["/usr/bin/time tsc"]
         }
     ]
 }
