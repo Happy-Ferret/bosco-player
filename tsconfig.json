@@ -1,25 +1,25 @@
 {
     "compilerOptions": {
-        "target": "es5",                // es5 compatability for gjs
-        "module": "amd",                // pack using amd module format
-        "rootDir": "src",               // maodule names based from src
-        "allowJs": true,                // amd loader & nodejs modules are js
-        "outFile": "bin/bosco-player"   // the target executable
+        "target": "es5",                    // es5 compatability for gjs
+        "module": "amd",                    // pack using amd module format
+        "rootDir": "src",                   // maodule names based from src
+        "allowJs": true,                    // amd loader & nodejs modules are js
+        "outFile": "bin/bosco-player"       // the target executable
     },
     "files": [
-        "node_modules/gjs/gjs.d.ts",        // Gjs
-        "node_modules/gjs/gobject.d.ts",    // GObject
-        "node_modules/gjs/atk.d.ts",        // Atk
-        "node_modules/gjs/glib.d.ts",       // GLib
-        "node_modules/gjs/gio.d.ts",        // Gio
-        "node_modules/gjs/gdk.d.ts",        // Gdk
-        "node_modules/gjs/gtk.d.ts",        // Gtk
-        "node_modules/gjs/pango.d.ts",      // Pango
-        "node_modules/gjs/gjs.js",          // module loader
+        "node_modules/gjsdts/gjs.d.ts",     // Gjs
+        "node_modules/gjsdts/gobject.d.ts", // GObject
+        "node_modules/gjsdts/atk.d.ts",     // Atk
+        "node_modules/gjsdts/glib.d.ts",    // GLib
+        "node_modules/gjsdts/gio.d.ts",     // Gio
+        "node_modules/gjsdts/gdk.d.ts",     // Gdk
+        "node_modules/gjsdts/gtk.d.ts",     // Gtk
+        "node_modules/gjsdts/pango.d.ts",   // Pango
+        "node_modules/gjsdts/gjs.js",       // module loader
         
-        "src/common.d.ts",     // nodejs: xml2js
-        "src/common.js",       // browserify bundle
-        "src/main.ts"          // main program entry point
+        "src/common.d.ts",                  // nodejs: xml2js
+        "src/common.js",                    // browserify bundle
+        "src/main.ts"                       // main program entry point
         
     ]
 }
