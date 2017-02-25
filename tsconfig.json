@@ -7,18 +7,18 @@
         "outFile": "bin/bosco-player"   // the target executable
     },
     "files": [
-        "gjs/gjs.d.ts",         // Gjs
-        "gjs/gobject.d.ts",     // GObject
-        "gjs/atk.d.ts",         // Atk
-        "gjs/glib.d.ts",        // GLib
-        "gjs/gio.d.ts",         // Gio
-        "gjs/gdk.d.ts",         // Gdk
-        "gjs/gtk.d.ts",         // Gtk
-        "gjs/pango.d.ts",       // Pango
-        "gjs/gjs.js",           // module loader
+        "node_modules/gjs/gjs.d.ts",        // Gjs
+        "node_modules/gjs/gobject.d.ts",    // GObject
+        "node_modules/gjs/atk.d.ts",        // Atk
+        "node_modules/gjs/glib.d.ts",       // GLib
+        "node_modules/gjs/gio.d.ts",        // Gio
+        "node_modules/gjs/gdk.d.ts",        // Gdk
+        "node_modules/gjs/gtk.d.ts",        // Gtk
+        "node_modules/gjs/pango.d.ts",      // Pango
+        "node_modules/gjs/gjs.js",          // module loader
         
-        "src/xml2js.d.ts",     // nodejs: xml2js
-        "src/bundle.js",       // browserify bundle
+        "src/common.d.ts",     // nodejs: xml2js
+        "src/common.js",       // browserify bundle
         "src/main.ts"          // main program entry point
         
     ]

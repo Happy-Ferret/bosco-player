@@ -23,12 +23,12 @@ Object.defineProperties(window, {
             }
         }
     }({          /* builtin modules */
+        Lang:    { id: 'Lang',    exports: imports.lang },
         Gio:     { id: 'Gio',     exports: imports.gi.Gio },
         Atk:     { id: 'Atk',     exports: imports.gi.Atk },
         Gdk:     { id: 'Gdk',     exports: imports.gi.Gdk },
         Gtk:     { id: 'Gtk',     exports: imports.gi.Gtk },
         GLib:    { id: 'GLib',    exports: imports.gi.GLib },
-        Lang:    { id: 'Lang',    exports: imports.lang },
         Pango:   { id: 'Pango',   exports: imports.gi.Pango },
         GObject: { id: 'GObject', exports: imports.gi.GObject }
     }))},
@@ -43,5 +43,4 @@ Object.defineProperties(define, {
 Object.defineProperties(String.prototype, {
     format: { value: imports.format.format } 
 })
-
 
