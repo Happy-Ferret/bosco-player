@@ -3,13 +3,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-const m = imports.misc.util
-print(JSON.stringify(m, null, 2))
 /**
  *  Copyright 2017 darkoverlordofdata
  *
- * Module loader for gjs
- * normalized access to amd, commonjs and imports modules
+ * Module loader/gjs helper
+ * normalized access to amd, commonjs and gjs imports
  *
  */
 Object.defineProperties(window, {
