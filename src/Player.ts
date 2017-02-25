@@ -37,9 +37,9 @@ export class Player {
    */
   buildUI() {
     let menu = new Menu()
-    menu.append("New", 'app.new')
-    menu.append("About", 'app.about')
-    menu.append("Quit", 'app.quit')
+    menu.append(_("New"), 'app.new')
+    menu.append(_("About"), 'app.about')
+    menu.append(_("Quit"), 'app.quit')
 
     this.application.set_app_menu(menu)
     let newAction = new SimpleAction({
@@ -86,8 +86,8 @@ export class Player {
   showAbout() {
     let about = new AboutDialog()
     about.set_transient_for(this.window)
-    about.set_program_name("Bosco Player")
-    about.set_version("1.0")
+    about.set_program_name(_("Bosco Player"))
+    about.set_version(_("1.0"))
     about.set_comments("If it's not dark, it's not data")
     about.set_website("")
     about.set_website_label("Dark Overlord of Data")

@@ -23,4 +23,14 @@ npm install
 tsc 
 ./install
 ```
+#### gjs issues
+@see http://stackoverflow.com/questions/18947442/what-is-imported-using-the-gjs-imports-statement
+
+unfortunately, this is mostly missing or undefined:
+
+const _ = imports.gettext.gettext
+
+imports.ui.* -> /usr/share/cinnamon/js/ui/*
+imports.misc.* -> /usr/share/cinnamon/js/misc/*
+imports.[cairo, dbus, format, gettext, jsUnit, lang, promise, signals] -> /usr/share/gjs-1.0/
 

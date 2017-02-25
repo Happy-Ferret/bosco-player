@@ -16,15 +16,16 @@ export interface AppWindow extends Gtk.ApplicationWindow {
   background: Gtk.Box
   status: Gtk.Statusbar
 }
+
 /**
- * Returns an anonymous class implementing the AppWindow interface
+ * Returns an anonymous implemention of the AppWindow interface
  */
 function AppWindow() {
   return Util.loadTemplate({
     name: 'AppWindow',
-    path: `${DATADIR}/AppWindow.ui`,
-    superclass: Gtk.ApplicationWindow,
-    children: ['background', 'status'],
+    extends: Gtk.ApplicationWindow,
+    fields: ['background', 'status'],
+    path: `${DATADIR}/AppWindow.ui`
   })
 }
 
@@ -75,7 +76,6 @@ export class PlayerWindow {
       show_close_button: true
     })
     this.headerbar.pack_start(this.buildOpen())
-    this.headerbar.pack_end(this.buildOptions())
     this.window.background.add(this.buildBackground())
     this.window.set_default_size(1040, 620)
     this.window.set_titlebar(this.headerbar)
@@ -92,11 +92,46 @@ export class PlayerWindow {
     background.set_vexpand(true)
     background.set_hexpand(true)
     const label = new Gtk.Label({
-      label: "Bosco Player"
+      label: _("Bosco Player")
     })
     background.set_center_widget(label)
     background.get_style_context().add_provider(this.logoCss, 0)
     return this.background = background
+  }
+  /**
+   * build notebook
+   *
+   */
+  buildNotebook() {
+    const builder = new Gtk.Builder()
+    builder.add_from_file(`${DATADIR}/project.glade`)
+    const notebook = builder.get_object("project") as Gtk.Notebook
+    let title = new Gtk.Label({
+      label: _("Autovala")
+    })
+    this.avContent = new Gtk.Box()
+    notebook.append_page(this.avContent, title)
+    title = new Gtk.Label({
+      label: _("GResources")
+    })
+    this.resContent = new Gtk.Box()
+    notebook.append_page(this.resContent, title)
+    title = new Gtk.Label({
+      label: _("Packages")
+    })
+    this.pkContent = new Gtk.Box()
+    notebook.append_page(this.pkContent, title)
+    title = new Gtk.Label({
+      label: _("Source")
+    })
+    this.srcContent = new Gtk.Box()
+    notebook.append_page(this.srcContent, title)
+    title = new Gtk.Label({
+      label: _("Entitas")
+    })
+    this.entitasContent = new Gtk.Box()
+    notebook.append_page(this.entitasContent, title)
+    return this.notebook = notebook
   }
   /**
    * build open project button
@@ -111,14 +146,14 @@ export class PlayerWindow {
     }))
     openButton.connect("clicked", () => {
         const chooser = new Gtk.FileChooserDialog({
-          title: "Select Project File",
+          title: _("Select Project File"),
           action: Gtk.FileChooserAction.OPEN,
           transient_for: this.window,
           modal: true
         })
         chooser.set_select_multiple(false)
-        chooser.add_button("Open", Gtk.ResponseType.OK)
-        chooser.add_button("Cancel", Gtk.ResponseType.CANCEL)
+        chooser.add_button(_("Open"), Gtk.ResponseType.OK)
+        chooser.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
         chooser.set_default_response(Gtk.ResponseType.OK)
         chooser.connect("response", (dialog, response) => {
           this.projectPath = dialog.get_filenames()[0]
@@ -168,127 +203,6 @@ export class PlayerWindow {
     this.srcContent.get_style_context().add_provider(this.regularCss, 0)
     this.window.show_all()
     this.notebook.set_current_page(1)
-  }
-  /**
-   * build notebook
-   *
-   */
-  buildNotebook() {
-    const builder = new Gtk.Builder()
-    builder.add_from_file(`${DATADIR}/project.glade`)
-    const notebook = builder.get_object("project") as Gtk.Notebook
-    let title = new Gtk.Label({
-      label: "Autovala"
-    })
-    this.avContent = new Gtk.Box()
-    notebook.append_page(this.avContent, title)
-    title = new Gtk.Label({
-      label: "GResources"
-    })
-    this.resContent = new Gtk.Box()
-    notebook.append_page(this.resContent, title)
-    title = new Gtk.Label({
-      label: "Packages"
-    })
-    this.pkContent = new Gtk.Box()
-    notebook.append_page(this.pkContent, title)
-    title = new Gtk.Label({
-      label: "Source"
-    })
-    this.srcContent = new Gtk.Box()
-    notebook.append_page(this.srcContent, title)
-    title = new Gtk.Label({
-      label: "Entitas"
-    })
-    this.entitasContent = new Gtk.Box()
-    notebook.append_page(this.entitasContent, title)
-    return this.notebook = notebook
-  }
-  /**
-   * build project options editor
-   *   
-   * @param config
-   */
-  buildOptions() {
-    const grid = new Gtk.Grid({
-      column_spacing: 10,
-      row_spacing: 10,
-      margin: 10
-    })
-    grid.set_column_homogeneous(true)
-    const namelabel = new Gtk.Label({
-      label: "File name:"
-    })
-    namelabel.set_halign(Gtk.Align.END)
-    const nameentry = new Gtk.Entry()
-    nameentry.connect("changed", () => {
-        return this.config.res_name = nameentry.get_text()
-    })
-    nameentry.set_placeholder_text(this.config.res_name)
-    grid.attach(namelabel, 0, 0, 1, 1)
-    grid.attach_next_to(nameentry, namelabel, Gtk.PositionType.RIGHT, 2, 1)
-    const prefixlabel = new Gtk.Label({
-      label: "Resource prefix:"
-    })
-    prefixlabel.set_halign(Gtk.Align.END)
-    const prefixentry = new Gtk.Entry()
-    prefixentry.set_placeholder_text(this.config.res_prefix)
-
-    prefixentry.connect("changed", () => {
-        return prefixentry.get_text()
-    })
-    grid.attach(prefixlabel, 0, 1, 1, 1)
-    grid.attach_next_to(prefixentry, prefixlabel, Gtk.PositionType.RIGHT, 2, 1)
-    const menubutton = new Gtk.ToggleButton()
-    menubutton.add(new Gtk.Image({
-      icon_name: "open-menu-symbolic",
-      icon_size: Gtk.IconSize.SMALL_TOOLBAR
-    }))
-
-    menubutton.connect("clicked", () => {
-        if (menubutton.get_active()) {
-          menu.show_all()
-      }
-    })
-    const menu = new Gtk.Popover()
-    menu.set_relative_to(menubutton)
-    menu.connect("show", () => {
-        nameentry.set_text(this.config.res_name)
-        return prefixentry.set_text(this.config.res_prefix)
-    })
-
-    menu.connect("closed", () => {
-        let outputstream, parent, res_prefix
-        if (menubutton.get_active()) {
-          menubutton.set_active(false)
-        }
-        this.config.res_name = this.config.res_name || this.config.res_name
-        res_prefix = res_prefix || this.config.res_prefix
-        let write = false
-        if (this.config.res_name !== this.config.res_name) {
-          this.config.res_name = this.config.res_name
-          write = true
-        }
-        if (this.config.res_prefix !== res_prefix) {
-          this.config.res_prefix = res_prefix
-          write = true
-        }
-        // if (write) {
-        //   parent = config_file.get_parent()
-        //   if (parent.query_exists(null)) {
-        //     if (config_file.query_exists(null)) {
-        //       config_file["delete"](null)
-        //     }
-        //   } else {
-        //     parent.make_directory_with_parents(null)
-        //   }
-        //   outputstream = config_file.create(FileCreateFlags.REPLACE_DESTINATION, null)
-        //   outputstream.write_all(JSON.stringify(config), null)
-        //   outputstream.close(null)
-        // }
-    })
-    menu.add(grid)
-    return menubutton
   }
 
 }

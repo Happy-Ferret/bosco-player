@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "es5",                // es5 compatability for gjs
+        "module": "amd",                // pack using amd module format
+        "rootDir": "src",               // strips 'src/' from the packed module name
+        "allowJs": true,                // amd loader & nodejs modules are js
+        // "listFiles": true,
+        "outFile": "bin/bosco-player"   // the target executable
+    },
+    "files": [
+        "src/builtin/gjs.d.ts",         // Gjs
+        "src/builtin/gobject.d.ts",     // GObject
+        "src/builtin/atk.d.ts",         // Atk
+        "src/builtin/glib.d.ts",        // GLib
+        "src/builtin/gio.d.ts",         // Gio
+        "src/builtin/gdk.d.ts",         // Gdk
+        "src/builtin/gtk.d.ts",         // Gtk
+        "src/builtin/pango.d.ts",       // Pango
+        "src/xml2js.d.ts",              // nodejs: xml2js
+        "src/gjs.js",                   // module loader
+        "src/bundle.js",                // browserify bundle
+        "src/main.ts"                   // main program entry point
+    ]
+}

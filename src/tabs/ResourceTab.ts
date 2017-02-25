@@ -1,3 +1,4 @@
+import * as Gtk from 'Gtk'
 import {Util} from 'Util'
 import {parseString} from 'xml2js'
 import {NotebookTab} from 'tabs/NotebookTab'
@@ -10,6 +11,7 @@ export class ResourceTab extends NotebookTab {
 
   buildUI() {
     super.buildUI()
+    // TODO: 
 
     if (this.prj.data.gresource != null) {
       for (let item of this.prj.data.gresource) {

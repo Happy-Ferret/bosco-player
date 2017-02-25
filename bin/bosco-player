@@ -6,43 +6,48 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  *  Copyright 2017 darkoverlordofdata
  *
- * UMD loader for gjs
- * allows mixture of amd & commonjs modules
- *
- * ties together:
- * * builtin gir modules
- * * node modules (via browserify)
- * * local project modules
+ * Module loader for gjs
+ * normalized access to amd, commonjs and imports modules
  *
  */
-var define = (function (modules) {
-    return function (name, deps, callback) {
-        if (typeof name !== 'string') {
-            var bundle = deps();
-            for (name in bundle)
-                modules[name] = { id: name, exports: bundle[name] };
-        }
-        else {
-            modules[name] = { id: name, exports: {} };
-            var args = [function (name) { return modules[name].exports; }, modules[name].exports];
-            for (var i = 2; i < deps.length; i++)
-                args.push(modules[deps[i]].exports);
-            callback.apply(modules[name].exports, args);
-        }
-    };
-}({
-    Gio: { id: 'Gio', exports: imports.gi.Gio },
-    Atk: { id: 'Atk', exports: imports.gi.Atk },
-    Gdk: { id: 'Gdk', exports: imports.gi.Gdk },
-    Gtk: { id: 'Gtk', exports: imports.gi.Gtk },
-    GLib: { id: 'GLib', exports: imports.gi.GLib },
-    Lang: { id: 'Lang', exports: imports.lang },
-    Pango: { id: 'Pango', exports: imports.gi.Pango },
-    GObject: { id: 'GObject', exports: imports.gi.GObject }
-}));
-define.amd = true;
-define.version = '0.0.1';
-Object.freeze(define);
+Object.defineProperties(window, {
+    define: { value: (function (modules) {
+            return function (name, deps, callback) {
+                if (typeof name !== 'string') {
+                    var bundle = deps();
+                    for (name in bundle)
+                        modules[name] = { id: name, exports: bundle[name] };
+                }
+                else {
+                    modules[name] = { id: name, exports: {} };
+                    var args = [function (name) { return modules[name] ? modules[name].exports : imports[name]; },
+                        modules[name].exports];
+                    for (var i = 2; i < deps.length; i++)
+                        args.push(modules[deps[i]].exports);
+                    callback.apply(modules[name].exports, args);
+                }
+            };
+        }({
+            Gio: { id: 'Gio', exports: imports.gi.Gio },
+            Atk: { id: 'Atk', exports: imports.gi.Atk },
+            Gdk: { id: 'Gdk', exports: imports.gi.Gdk },
+            Gtk: { id: 'Gtk', exports: imports.gi.Gtk },
+            GLib: { id: 'GLib', exports: imports.gi.GLib },
+            Lang: { id: 'Lang', exports: imports.lang },
+            Pango: { id: 'Pango', exports: imports.gi.Pango },
+            GObject: { id: 'GObject', exports: imports.gi.GObject }
+        })) },
+    _: { value: imports.gettext.gettext }
+});
+Object.defineProperties(define, {
+    amd: { value: true },
+    version: { value: '0.0.1' },
+    path: { value: function (path) { return imports.searchPath.unshift(path); } },
+    plugin: { value: function (name, context) { return imports[name].attach(context); } }
+});
+Object.defineProperties(String.prototype, {
+    format: { value: imports.format.format }
+});
 (function (f) { if (typeof exports === "object" && typeof module !== "undefined") {
     module.exports = f();
 }
@@ -11586,7 +11591,7 @@ else {
                 module.exports = toString;
             }, { "./_baseToString": 97 }] }, {}, [28])(28);
 });
-define("Util", ["require", "exports", "Gio", "Lang"], function (require, exports, Gio, Lang) {
+define("src/Util", ["require", "exports", "Gio", "Lang"], function (require, exports, Gio, Lang) {
     "use strict";
     var Util = (function () {
         function Util() {
@@ -11604,9 +11609,9 @@ define("Util", ["require", "exports", "Gio", "Lang"], function (require, exports
         Util.loadTemplate = function (template) {
             return Lang.Class({
                 Name: template.name,
-                Extends: template.superclass,
+                Extends: template.extends,
                 Template: Util.readFile(template.path),
-                Children: template.children,
+                Children: template.fields,
                 _init: function (params) {
                     return this.parent(params);
                 }
@@ -11616,7 +11621,7 @@ define("Util", ["require", "exports", "Gio", "Lang"], function (require, exports
     }());
     exports.Util = Util;
 });
-define("Project", ["require", "exports"], function (require, exports) {
+define("src/Project", ["require", "exports"], function (require, exports) {
     "use strict";
     /**
      *
@@ -11686,7 +11691,7 @@ define("Project", ["require", "exports"], function (require, exports) {
     }());
     exports.Project = Project;
 });
-define("tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"], function (require, exports, Gtk, GObject, Pango) {
+define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"], function (require, exports, Gtk, GObject, Pango) {
     "use strict";
     /**
      *
@@ -11776,7 +11781,7 @@ define("tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"], fu
     }());
     exports.NotebookTab = NotebookTab;
 });
-define("tabs/SourceTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_1) {
+define("src/tabs/SourceTab", ["require", "exports", "src/tabs/NotebookTab"], function (require, exports, NotebookTab_1) {
     "use strict";
     /**
      *
@@ -11804,7 +11809,7 @@ define("tabs/SourceTab", ["require", "exports", "tabs/NotebookTab"], function (r
     }(NotebookTab_1.NotebookTab));
     exports.SourceTab = SourceTab;
 });
-define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_2) {
+define("src/tabs/PackageTab", ["require", "exports", "src/tabs/NotebookTab"], function (require, exports, NotebookTab_2) {
     "use strict";
     /**
      *
@@ -11831,7 +11836,7 @@ define("tabs/PackageTab", ["require", "exports", "tabs/NotebookTab"], function (
     }(NotebookTab_2.NotebookTab));
     exports.PackageTab = PackageTab;
 });
-define("tabs/ResourceTab", ["require", "exports", "Util", "xml2js", "tabs/NotebookTab"], function (require, exports, Util_1, xml2js_1, NotebookTab_3) {
+define("src/tabs/ResourceTab", ["require", "exports", "src/Util", "xml2js", "src/tabs/NotebookTab"], function (require, exports, Util_1, xml2js_1, NotebookTab_3) {
     "use strict";
     /**
      *
@@ -11845,6 +11850,7 @@ define("tabs/ResourceTab", ["require", "exports", "Util", "xml2js", "tabs/Notebo
         }
         ResourceTab.prototype.buildUI = function () {
             _super.prototype.buildUI.call(this);
+            // TODO: 
             if (this.prj.data.gresource != null) {
                 for (var _i = 0, _a = this.prj.data.gresource; _i < _a.length; _i++) {
                     var item = _a[_i];
@@ -11865,7 +11871,7 @@ define("tabs/ResourceTab", ["require", "exports", "Util", "xml2js", "tabs/Notebo
     }(NotebookTab_3.NotebookTab));
     exports.ResourceTab = ResourceTab;
 });
-define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function (require, exports, NotebookTab_4) {
+define("src/tabs/AutovalaTab", ["require", "exports", "src/tabs/NotebookTab"], function (require, exports, NotebookTab_4) {
     "use strict";
     /**
      *
@@ -11894,18 +11900,18 @@ define("tabs/AutovalaTab", ["require", "exports", "tabs/NotebookTab"], function 
     }(NotebookTab_4.NotebookTab));
     exports.AutovalaTab = AutovalaTab;
 });
-define("PlayerWindow", ["require", "exports", "Gtk", "Gio", "Util", "Project", "tabs/SourceTab", "tabs/PackageTab", "tabs/ResourceTab", "tabs/AutovalaTab"], function (require, exports, Gtk, Gio_1, Util_2, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
+define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src/Project", "src/tabs/SourceTab", "src/tabs/PackageTab", "src/tabs/ResourceTab", "src/tabs/AutovalaTab"], function (require, exports, Gtk, Gio_1, Util_2, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
     "use strict";
     var DATADIR = "share/bosco";
     /**
-     * Returns an anonymous class implementing the AppWindow interface
+     * Returns an anonymous implemention of the AppWindow interface
      */
     function AppWindow() {
         return Util_2.Util.loadTemplate({
             name: 'AppWindow',
-            path: DATADIR + "/AppWindow.ui",
-            superclass: Gtk.ApplicationWindow,
-            children: ['background', 'status'],
+            extends: Gtk.ApplicationWindow,
+            fields: ['background', 'status'],
+            path: DATADIR + "/AppWindow.ui"
         });
     }
     /**
@@ -11936,7 +11942,6 @@ define("PlayerWindow", ["require", "exports", "Gtk", "Gio", "Util", "Project", "
                 show_close_button: true
             });
             this.headerbar.pack_start(this.buildOpen());
-            this.headerbar.pack_end(this.buildOptions());
             this.window.background.add(this.buildBackground());
             this.window.set_default_size(1040, 620);
             this.window.set_titlebar(this.headerbar);
@@ -11953,11 +11958,46 @@ define("PlayerWindow", ["require", "exports", "Gtk", "Gio", "Util", "Project", "
             background.set_vexpand(true);
             background.set_hexpand(true);
             var label = new Gtk.Label({
-                label: "Bosco Player"
+                label: _("Bosco Player")
             });
             background.set_center_widget(label);
             background.get_style_context().add_provider(this.logoCss, 0);
             return this.background = background;
+        };
+        /**
+         * build notebook
+         *
+         */
+        PlayerWindow.prototype.buildNotebook = function () {
+            var builder = new Gtk.Builder();
+            builder.add_from_file(DATADIR + "/project.glade");
+            var notebook = builder.get_object("project");
+            var title = new Gtk.Label({
+                label: _("Autovala")
+            });
+            this.avContent = new Gtk.Box();
+            notebook.append_page(this.avContent, title);
+            title = new Gtk.Label({
+                label: _("GResources")
+            });
+            this.resContent = new Gtk.Box();
+            notebook.append_page(this.resContent, title);
+            title = new Gtk.Label({
+                label: _("Packages")
+            });
+            this.pkContent = new Gtk.Box();
+            notebook.append_page(this.pkContent, title);
+            title = new Gtk.Label({
+                label: _("Source")
+            });
+            this.srcContent = new Gtk.Box();
+            notebook.append_page(this.srcContent, title);
+            title = new Gtk.Label({
+                label: _("Entitas")
+            });
+            this.entitasContent = new Gtk.Box();
+            notebook.append_page(this.entitasContent, title);
+            return this.notebook = notebook;
         };
         /**
          * build open project button
@@ -11973,14 +12013,14 @@ define("PlayerWindow", ["require", "exports", "Gtk", "Gio", "Util", "Project", "
             }));
             openButton.connect("clicked", function () {
                 var chooser = new Gtk.FileChooserDialog({
-                    title: "Select Project File",
+                    title: _("Select Project File"),
                     action: Gtk.FileChooserAction.OPEN,
                     transient_for: _this.window,
                     modal: true
                 });
                 chooser.set_select_multiple(false);
-                chooser.add_button("Open", Gtk.ResponseType.OK);
-                chooser.add_button("Cancel", Gtk.ResponseType.CANCEL);
+                chooser.add_button(_("Open"), Gtk.ResponseType.OK);
+                chooser.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
                 chooser.set_default_response(Gtk.ResponseType.OK);
                 chooser.connect("response", function (dialog, response) {
                     _this.projectPath = dialog.get_filenames()[0];
@@ -12032,130 +12072,11 @@ define("PlayerWindow", ["require", "exports", "Gtk", "Gio", "Util", "Project", "
             this.notebook.set_current_page(1);
             var _b;
         };
-        /**
-         * build notebook
-         *
-         */
-        PlayerWindow.prototype.buildNotebook = function () {
-            var builder = new Gtk.Builder();
-            builder.add_from_file(DATADIR + "/project.glade");
-            var notebook = builder.get_object("project");
-            var title = new Gtk.Label({
-                label: "Autovala"
-            });
-            this.avContent = new Gtk.Box();
-            notebook.append_page(this.avContent, title);
-            title = new Gtk.Label({
-                label: "GResources"
-            });
-            this.resContent = new Gtk.Box();
-            notebook.append_page(this.resContent, title);
-            title = new Gtk.Label({
-                label: "Packages"
-            });
-            this.pkContent = new Gtk.Box();
-            notebook.append_page(this.pkContent, title);
-            title = new Gtk.Label({
-                label: "Source"
-            });
-            this.srcContent = new Gtk.Box();
-            notebook.append_page(this.srcContent, title);
-            title = new Gtk.Label({
-                label: "Entitas"
-            });
-            this.entitasContent = new Gtk.Box();
-            notebook.append_page(this.entitasContent, title);
-            return this.notebook = notebook;
-        };
-        /**
-         * build project options editor
-         *
-         * @param config
-         */
-        PlayerWindow.prototype.buildOptions = function () {
-            var _this = this;
-            var grid = new Gtk.Grid({
-                column_spacing: 10,
-                row_spacing: 10,
-                margin: 10
-            });
-            grid.set_column_homogeneous(true);
-            var namelabel = new Gtk.Label({
-                label: "File name:"
-            });
-            namelabel.set_halign(Gtk.Align.END);
-            var nameentry = new Gtk.Entry();
-            nameentry.connect("changed", function () {
-                return _this.config.res_name = nameentry.get_text();
-            });
-            nameentry.set_placeholder_text(this.config.res_name);
-            grid.attach(namelabel, 0, 0, 1, 1);
-            grid.attach_next_to(nameentry, namelabel, Gtk.PositionType.RIGHT, 2, 1);
-            var prefixlabel = new Gtk.Label({
-                label: "Resource prefix:"
-            });
-            prefixlabel.set_halign(Gtk.Align.END);
-            var prefixentry = new Gtk.Entry();
-            prefixentry.set_placeholder_text(this.config.res_prefix);
-            prefixentry.connect("changed", function () {
-                return prefixentry.get_text();
-            });
-            grid.attach(prefixlabel, 0, 1, 1, 1);
-            grid.attach_next_to(prefixentry, prefixlabel, Gtk.PositionType.RIGHT, 2, 1);
-            var menubutton = new Gtk.ToggleButton();
-            menubutton.add(new Gtk.Image({
-                icon_name: "open-menu-symbolic",
-                icon_size: Gtk.IconSize.SMALL_TOOLBAR
-            }));
-            menubutton.connect("clicked", function () {
-                if (menubutton.get_active()) {
-                    menu.show_all();
-                }
-            });
-            var menu = new Gtk.Popover();
-            menu.set_relative_to(menubutton);
-            menu.connect("show", function () {
-                nameentry.set_text(_this.config.res_name);
-                return prefixentry.set_text(_this.config.res_prefix);
-            });
-            menu.connect("closed", function () {
-                var outputstream, parent, res_prefix;
-                if (menubutton.get_active()) {
-                    menubutton.set_active(false);
-                }
-                _this.config.res_name = _this.config.res_name || _this.config.res_name;
-                res_prefix = res_prefix || _this.config.res_prefix;
-                var write = false;
-                if (_this.config.res_name !== _this.config.res_name) {
-                    _this.config.res_name = _this.config.res_name;
-                    write = true;
-                }
-                if (_this.config.res_prefix !== res_prefix) {
-                    _this.config.res_prefix = res_prefix;
-                    write = true;
-                }
-                // if (write) {
-                //   parent = config_file.get_parent()
-                //   if (parent.query_exists(null)) {
-                //     if (config_file.query_exists(null)) {
-                //       config_file["delete"](null)
-                //     }
-                //   } else {
-                //     parent.make_directory_with_parents(null)
-                //   }
-                //   outputstream = config_file.create(FileCreateFlags.REPLACE_DESTINATION, null)
-                //   outputstream.write_all(JSON.stringify(config), null)
-                //   outputstream.close(null)
-                // }
-            });
-            menu.add(grid);
-            return menubutton;
-        };
         return PlayerWindow;
     }());
     exports.PlayerWindow = PlayerWindow;
 });
-define("Player", ["require", "exports", "GLib", "Gtk", "Gio", "PlayerWindow", "Util"], function (require, exports, GLib, Gtk_1, Gio_2, PlayerWindow_1, Util_3) {
+define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWindow", "src/Util"], function (require, exports, GLib, Gtk_1, Gio_2, PlayerWindow_1, Util_3) {
     "use strict";
     /**
      * Bosco Player
@@ -12185,9 +12106,9 @@ define("Player", ["require", "exports", "GLib", "Gtk", "Gio", "PlayerWindow", "U
         Player.prototype.buildUI = function () {
             var _this = this;
             var menu = new Gio_2.Menu();
-            menu.append("New", 'app.new');
-            menu.append("About", 'app.about');
-            menu.append("Quit", 'app.quit');
+            menu.append(_("New"), 'app.new');
+            menu.append(_("About"), 'app.about');
+            menu.append(_("Quit"), 'app.quit');
             this.application.set_app_menu(menu);
             var newAction = new Gio_2.SimpleAction({
                 name: 'new'
@@ -12223,8 +12144,8 @@ define("Player", ["require", "exports", "GLib", "Gtk", "Gio", "PlayerWindow", "U
         Player.prototype.showAbout = function () {
             var about = new Gtk_1.AboutDialog();
             about.set_transient_for(this.window);
-            about.set_program_name("Bosco Player");
-            about.set_version("1.0");
+            about.set_program_name(_("Bosco Player"));
+            about.set_version(_("1.0"));
             about.set_comments("If it's not dark, it's not data");
             about.set_website("");
             about.set_website_label("Dark Overlord of Data");
@@ -12250,7 +12171,23 @@ define("Player", ["require", "exports", "GLib", "Gtk", "Gio", "PlayerWindow", "U
     }());
     exports.Player = Player;
 });
-define("main", ["require", "exports", "Player"], function (require, exports, Player_1) {
+define("src/main", ["require", "exports", "src/Player"], function (require, exports, Player_1) {
     "use strict";
+    print("define version %s".format(define.version));
+    // class Frodo implements IPlugin {
+    //     name: string
+    //     attach(name)  {
+    //         this.name = name
+    //         print('attach flintstone, '+this.name)
+    //     }
+    //     detach()  {
+    //         print('detach flintstone, '+this.name)
+    //     } 
+    // }
+    // define.path('share/bosco')
+    // let plugin = define.plugin('flintstone', new Frodo()) 
+    // print('version = '+plugin.version)
+    // print(JSON.stringify(plugin._context, null, 2))
+    // plugin.detach()
     new Player_1.Player().application.run(ARGV);
 });

@@ -18,9 +18,9 @@ export class Util {
   static loadTemplate(template) {
     return Lang.Class({
       Name: template.name,
-      Extends: template.superclass,
+      Extends: template.extends,
       Template: Util.readFile(template.path),
-      Children: template.children,
+      Children: template.fields,
       _init: function(params) {
         return this.parent(params)
       }
