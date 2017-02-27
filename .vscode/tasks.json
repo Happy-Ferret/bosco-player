@@ -11,7 +11,7 @@
         {
             "isBuildCommand": true,
             "taskName": "build",
-            "args": ["/usr/bin/time tsc"]
+            "args": ["/usr/bin/time browserify --standalone bundle src/lib.js -o src/common.js && /usr/bin/time tsc"]
         }
     ]
 }

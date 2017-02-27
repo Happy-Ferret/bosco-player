@@ -1,5 +1,5 @@
 import * as GLib from 'GLib'
-import {Application, AboutDialog} from 'Gtk'
+import {Application, AboutDialog, Settings} from 'Gtk'
 import {ApplicationFlags, Menu, SimpleAction} from 'Gio'
 import {AppWindow, PlayerWindow} from 'PlayerWindow'
 import {Util} from 'Util'
@@ -26,6 +26,7 @@ export class Player {
         this.appWindow.setConfig(this.getConfig())
         this.appWindow.buildUI()
         this.window = this.appWindow.window
+        
         this.window.present()
     })
   }
@@ -36,6 +37,10 @@ export class Player {
    * main app menu
    */
   buildUI() {
+
+    let gtkSettings = Settings.get_default()
+    gtkSettings.gtk_application_prefer_dark_theme = true
+    
     let menu = new Menu()
     menu.append(_("New"), 'app.new')
     menu.append(_("About"), 'app.about')
