@@ -1,21 +1,22 @@
 import {NotebookTab} from 'tabs/NotebookTab'
 /**
  *
- * ProjectViewer class - 
+ * SourceTab class - 
  *
- * view autovala data
+ * view source code
+ * http://www.bravegnu.org/gtktext/
  *
  */
 export class SourceTab extends NotebookTab {
 
   buildUI() {
-    super.buildUI()
+    let panes = super.buildUI()
     
     if (this.prj.data.gresource != null) {
       for (let item of this.prj.data.vala_source) {
             this.add(item.value, "", item.readonly)
       }
     }
-    return this.grid
+    return panes
   }
 }

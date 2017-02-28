@@ -13042,8 +13042,11 @@ module.exports = toString;
  *
  *  browserify --standalone bundle src/lib.js -o src/common.js
  * 
+ * I just want xml2js, but we may as well expose it's dependancies.
  */
+//exports.lodash = require('lodash') but not _, it's reserved
+exports.sax = require('sax')
 exports.xml2js = require('xml2js')
-
-},{"xml2js":171}]},{},[189])(189)
+exports.xmlbuilder = require('xmlbuilder')
+},{"sax":168,"xml2js":171,"xmlbuilder":188}]},{},[189])(189)
 });

@@ -1,4 +1,5 @@
 import * as GLib from 'GLib'
+import * as Gtk from 'Gtk'
 import {Application, AboutDialog, Settings} from 'Gtk'
 import {ApplicationFlags, Menu, SimpleAction} from 'Gio'
 import {AppWindow, PlayerWindow} from 'PlayerWindow'
@@ -40,7 +41,7 @@ export class Player {
 
     let gtkSettings = Settings.get_default()
     gtkSettings.gtk_application_prefer_dark_theme = true
-    
+    gtkSettings.gtk_theme_name = 'elementary'
     let menu = new Menu()
     menu.append(_("New"), 'app.new')
     menu.append(_("About"), 'app.about')
@@ -90,6 +91,7 @@ export class Player {
    */
   showAbout() {
     let about = new AboutDialog()
+    about.set_logo_icon_name(null)
     about.set_transient_for(this.window)
     about.set_program_name(_("Bosco Player"))
     about.set_version(_("1.0"))

@@ -4,30 +4,29 @@ import {parseString} from 'xml2js'
 import {NotebookTab} from 'tabs/NotebookTab'
 /**
  *
- * GResource data view
+ * ResourceTab class
+ * 
+ * view the resource.xml data
  *
  */
 export class ResourceTab extends NotebookTab {
 
   buildUI() {
-    super.buildUI()
+    let panes = super.buildUI()
     // TODO: 
 
     if (this.prj.data.gresource != null) {
       for (let item of this.prj.data.gresource) {
         let [name, path] = String(item.value).split(' ')
         this.add(name, path, item.readonly)
-        //print(`${this.prj.path}/${path}`)
-        parseString(Util.readFile(`${this.prj.path}/${path}`), (err, res) => {
-          let pfx = res.gresources.gresource[0].$['prefix']
-          let files = res.gresources.gresource[0].file
-          //print(`Prefix: ${pfx}\nFiles:\n`)
-          //print(JSON.stringify(files, null, 2))
 
-        })
+        let text = String(Util.readFile(`${this.prj.path}/${path}`))
+        this.text.get_buffer().set_text(text, text.length)
+
+
       }
     }
-    return this.grid
+    return panes
   }
 
 

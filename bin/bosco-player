@@ -35,7 +35,6 @@ Object.defineProperties(window, {
             Gtk: { id: 'Gtk', exports: imports.gi.Gtk },
             GLib: { id: 'GLib', exports: imports.gi.GLib },
             Pango: { id: 'Pango', exports: imports.gi.Pango },
-            WebKit: { id: 'WebKit', exports: imports.gi.WebKit },
             GObject: { id: 'GObject', exports: imports.gi.GObject }
         })) },
     _: { value: imports.gettext.gettext }
@@ -44,7 +43,8 @@ Object.defineProperties(define, {
     amd: { value: true },
     version: { value: '0.0.1' },
     path: { value: function (path) { return imports.searchPath.unshift(path); } },
-    plugin: { value: function (name, context) { return imports[name].attach(context); } }
+    plugin: { value: function (name, context) { return imports[name].attach(context); } },
+    imports: { value: function (libs) { return define([], function () { return libs; }); } }
 });
 Object.defineProperties(String.prototype, {
     format: { value: imports.format.format }
@@ -11593,10 +11593,20 @@ else {
                  *
                  *  browserify --standalone bundle src/lib.js -o src/common.js
                  *
+                 * I just want xml2js, but we may as well expose it's dependancies.
                  */
+                //exports.lodash = require('lodash') but not _, it's reserved
+                exports.sax = require('sax');
                 exports.xml2js = require('xml2js');
-            }, { "xml2js": 171 }] }, {}, [189])(189);
+                exports.xmlbuilder = require('xmlbuilder');
+            }, { "sax": 168, "xml2js": 171, "xmlbuilder": 188 }] }, {}, [189])(189);
 });
+// relocatable data base url
+var DATADIR = "share/bosco";
+// application icon
+var ICON = DATADIR + "/bosco.png";
+// optional imports
+define.imports({ GtkSource: imports.gi.GtkSource });
 define("src/Util", ["require", "exports", "Gio", "Lang"], function (require, exports, Gio, Lang) {
     "use strict";
     var Util = (function () {
@@ -11697,13 +11707,14 @@ define("src/Project", ["require", "exports"], function (require, exports) {
     }());
     exports.Project = Project;
 });
-define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"], function (require, exports, Gtk, GObject, Pango) {
+define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango", "GtkSource"], function (require, exports, Gtk, GObject, Pango, GtkSource) {
     "use strict";
     /**
      *
      * Abstract Class ProjectViewer -
      *
      * view autovala data
+     * notebook with 2 pane explorer style tabs
      *
      */
     var NotebookTab = (function () {
@@ -11736,7 +11747,6 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"]
             this.selection.connect('changed', function () {
                 return _this.onSelectionChanged();
             });
-            this.grid = new Gtk.Grid();
             var key = new Gtk.TreeViewColumn({
                 title: "Key"
             });
@@ -11744,7 +11754,7 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"]
                 title: "Value"
             });
             var readonly = new Gtk.TreeViewColumn({
-                title: "Readonly"
+                title: ""
             });
             var bold = new Gtk.CellRendererText({
                 weight: Pango.Weight.BOLD
@@ -11759,12 +11769,32 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango"]
             this.treeView.insert_column(key, 0);
             this.treeView.insert_column(value, 1);
             this.treeView.insert_column(readonly, 2);
-            this.scrollView = new Gtk.ScrolledWindow({
+            this.text = new GtkSource.View();
+            this.text.set_show_line_numbers(true);
+            var text = "this\nis\na\ntest";
+            this.text.get_buffer().set_text(text, text.length);
+            /** make the left pane */
+            this.leftPane = new Gtk.Grid();
+            this.leftScroll = new Gtk.ScrolledWindow({
                 hscrollbar_policy: Gtk.PolicyType.NEVER,
                 vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
             });
-            this.scrollView.add(this.treeView);
-            return this.grid.attach(this.scrollView, 0, 0, 1, 1);
+            /** make the right pane */
+            this.rightPane = new Gtk.Box();
+            this.rightScroll = new Gtk.ScrolledWindow({
+                hscrollbar_policy: Gtk.PolicyType.NEVER,
+                vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
+            });
+            /** put the panes together */
+            this.leftScroll.add(this.treeView);
+            this.leftPane.attach(this.leftScroll, 0, 0, 1, 1);
+            this.rightScroll.add(this.text);
+            this.rightPane.pack_start(this.rightScroll, true, true, 5);
+            this.panes = new Gtk.Paned();
+            this.panes.set_direction(Gtk.Orientation.HORIZONTAL);
+            this.panes.add1(this.leftPane);
+            this.panes.add2(this.rightPane);
+            return this.panes;
         };
         /**
           * Add data to the list store
@@ -11802,14 +11832,14 @@ define("src/tabs/SourceTab", ["require", "exports", "src/tabs/NotebookTab"], fun
             return _super !== null && _super.apply(this, arguments) || this;
         }
         SourceTab.prototype.buildUI = function () {
-            _super.prototype.buildUI.call(this);
+            var panes = _super.prototype.buildUI.call(this);
             if (this.prj.data.gresource != null) {
                 for (var _i = 0, _a = this.prj.data.vala_source; _i < _a.length; _i++) {
                     var item = _a[_i];
                     this.add(item.value, "", item.readonly);
                 }
             }
-            return this.grid;
+            return panes;
         };
         return SourceTab;
     }(NotebookTab_1.NotebookTab));
@@ -11831,18 +11861,18 @@ define("src/tabs/PackageTab", ["require", "exports", "src/tabs/NotebookTab"], fu
         }
         PackageTab.prototype.buildUI = function () {
             // var i, item, len, ref
-            _super.prototype.buildUI.call(this);
+            var panes = _super.prototype.buildUI.call(this);
             for (var _i = 0, _a = this.prj.data.vala_check_package; _i < _a.length; _i++) {
                 var item = _a[_i];
                 this.add(item.value, "", item.readonly);
             }
-            return this.grid;
+            return this.panes;
         };
         return PackageTab;
     }(NotebookTab_2.NotebookTab));
     exports.PackageTab = PackageTab;
 });
-define("src/tabs/ResourceTab", ["require", "exports", "src/Util", "xml2js", "src/tabs/NotebookTab"], function (require, exports, Util_1, xml2js_1, NotebookTab_3) {
+define("src/tabs/ResourceTab", ["require", "exports", "src/Util", "src/tabs/NotebookTab"], function (require, exports, Util_1, NotebookTab_3) {
     "use strict";
     /**
      *
@@ -11855,23 +11885,18 @@ define("src/tabs/ResourceTab", ["require", "exports", "src/Util", "xml2js", "src
             return _super !== null && _super.apply(this, arguments) || this;
         }
         ResourceTab.prototype.buildUI = function () {
-            _super.prototype.buildUI.call(this);
+            var panes = _super.prototype.buildUI.call(this);
             // TODO: 
             if (this.prj.data.gresource != null) {
                 for (var _i = 0, _a = this.prj.data.gresource; _i < _a.length; _i++) {
                     var item = _a[_i];
                     var _b = String(item.value).split(' '), name_1 = _b[0], path = _b[1];
                     this.add(name_1, path, item.readonly);
-                    //print(`${this.prj.path}/${path}`)
-                    xml2js_1.parseString(Util_1.Util.readFile(this.prj.path + "/" + path), function (err, res) {
-                        var pfx = res.gresources.gresource[0].$['prefix'];
-                        var files = res.gresources.gresource[0].file;
-                        //print(`Prefix: ${pfx}\nFiles:\n`)
-                        //print(JSON.stringify(files, null, 2))
-                    });
+                    var text = String(Util_1.Util.readFile(this.prj.path + "/" + path));
+                    this.text.get_buffer().set_text(text, text.length);
                 }
             }
-            return this.grid;
+            return panes;
         };
         return ResourceTab;
     }(NotebookTab_3.NotebookTab));
@@ -11892,7 +11917,7 @@ define("src/tabs/AutovalaTab", ["require", "exports", "src/tabs/NotebookTab"], f
             return _super !== null && _super.apply(this, arguments) || this;
         }
         AutovalaTab.prototype.buildUI = function () {
-            _super.prototype.buildUI.call(this);
+            var panes = _super.prototype.buildUI.call(this);
             var data = this.prj.data;
             for (var key in data) {
                 var item = data[key];
@@ -11900,7 +11925,7 @@ define("src/tabs/AutovalaTab", ["require", "exports", "src/tabs/NotebookTab"], f
                     this.add(key, item.value, item.readonly);
                 }
             }
-            return this.grid;
+            return panes;
         };
         return AutovalaTab;
     }(NotebookTab_4.NotebookTab));
@@ -11908,7 +11933,6 @@ define("src/tabs/AutovalaTab", ["require", "exports", "src/tabs/NotebookTab"], f
 });
 define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src/Project", "src/tabs/SourceTab", "src/tabs/PackageTab", "src/tabs/ResourceTab", "src/tabs/AutovalaTab"], function (require, exports, Gtk, Gio_1, Util_2, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
     "use strict";
-    var DATADIR = "share/bosco";
     /**
      * Returns an anonymous implemention of the AppWindow interface
      */
@@ -11933,6 +11957,7 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
             this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }");
             this.logoCss = new Gtk.CssProvider();
             this.logoCss.load_from_data("* { font-family: OpenDyslexic;  font-size: 32px }");
+            Gtk.Window.set_default_icon_from_file(ICON);
         }
         PlayerWindow.prototype.setConfig = function (config) {
             this.config = config;
@@ -11949,9 +11974,9 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
             });
             this.headerbar.pack_start(this.buildOpen());
             this.window.background.add(this.buildBackground());
-            this.window.set_default_size(1040, 620);
+            this.window.set_default_size(1040, 740);
             this.window.set_titlebar(this.headerbar);
-            this.window.set_icon_from_file(DATADIR + "/bosco.png");
+            this.window.set_icon_from_file(ICON);
             return this.window.show_all();
         };
         /**
@@ -12113,6 +12138,7 @@ define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWin
             var _this = this;
             var gtkSettings = Gtk_1.Settings.get_default();
             gtkSettings.gtk_application_prefer_dark_theme = true;
+            gtkSettings.gtk_theme_name = 'elementary';
             var menu = new Gio_2.Menu();
             menu.append(_("New"), 'app.new');
             menu.append(_("About"), 'app.about');
@@ -12151,6 +12177,7 @@ define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWin
          */
         Player.prototype.showAbout = function () {
             var about = new Gtk_1.AboutDialog();
+            about.set_logo_icon_name(null);
             about.set_transient_for(this.window);
             about.set_program_name(_("Bosco Player"));
             about.set_version(_("1.0"));

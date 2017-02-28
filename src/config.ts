@@ -1,2 +1,10 @@
-//#!/usr/bin/env gjs
-const DATADIR = "/home/bruce/gjs/bosco/share/bosco" /* data location */
+
+// relocatable data base url
+const DATADIR = "share/bosco"
+
+// application icon
+const ICON = `${DATADIR}/bosco.png`
+
+// optional imports
+define.imports({GtkSource: imports.gi.GtkSource })
+

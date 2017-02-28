@@ -7,8 +7,6 @@ import {PackageTab} from 'tabs/PackageTab'
 import {ResourceTab} from 'tabs/ResourceTab'
 import {AutovalaTab} from 'tabs/AutovalaTab'
 
-const DATADIR = "share/bosco"
-
 /** 
  * Interface for the template: AppWindow.ui
  */
@@ -60,6 +58,7 @@ export class PlayerWindow {
     this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }")
     this.logoCss = new Gtk.CssProvider()
     this.logoCss.load_from_data("* { font-family: OpenDyslexic;  font-size: 32px }")
+    Gtk.Window.set_default_icon_from_file(ICON)
   }
 
   setConfig(config) {
@@ -77,9 +76,9 @@ export class PlayerWindow {
     })
     this.headerbar.pack_start(this.buildOpen())
     this.window.background.add(this.buildBackground())
-    this.window.set_default_size(1040, 620)
+    this.window.set_default_size(1040, 740)
     this.window.set_titlebar(this.headerbar)
-    this.window.set_icon_from_file(`${DATADIR}/bosco.png`)
+    this.window.set_icon_from_file(ICON)
     return this.window.show_all()
   }
   /**

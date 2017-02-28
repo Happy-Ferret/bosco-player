@@ -3,7 +3,7 @@ import * as GObject from 'GObject'
 import {NotebookTab} from 'tabs/NotebookTab'
 /**
  *
- * ProjectViewer class - 
+ * AutovalaTab class - 
  *
  * view autovala data
  *
@@ -11,7 +11,7 @@ import {NotebookTab} from 'tabs/NotebookTab'
 export class AutovalaTab extends NotebookTab {
  
   buildUI() {
-    super.buildUI()
+    let panes = super.buildUI()
     let data = this.prj.data
     for (let key in data) {
       let item = data[key]
@@ -19,7 +19,7 @@ export class AutovalaTab extends NotebookTab {
         this.add(key, item.value, item.readonly)
       }
     }
-    return this.grid
+    return panes
   }
 
 }

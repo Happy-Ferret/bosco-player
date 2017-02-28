@@ -1,13 +1,12 @@
 import * as Gtk from 'Gtk'
 import * as GObject from 'GObject'
 import * as Pango from 'Pango'
-import * as GtkSource from 'GtkSource'
+
 /**
  *
  * Abstract Class ProjectViewer - 
  *
  * view autovala data
- * notebook with 2 pane explorer style tabs
  *
  */
 export abstract class NotebookTab {
@@ -18,12 +17,9 @@ export abstract class NotebookTab {
   listStore: Gtk.ListStore
   treeView: Gtk.TreeView
   selection: Gtk.TreeSelection
-  leftPane: Gtk.Grid
-  rightPane: Gtk.Box
-  panes: Gtk.Paned
-  leftScroll: Gtk.ScrolledWindow
-  rightScroll: Gtk.ScrolledWindow
-  text: GtkSource.View
+  grid: Gtk.Grid
+  scrollView: Gtk.ScrolledWindow
+
   /**
     * set the autovala project data 
     * @param prj:Project
@@ -52,6 +48,7 @@ export abstract class NotebookTab {
     this.selection.connect('changed', () => {
         return this.onSelectionChanged()
     })
+    this.grid = new Gtk.Grid()
     const key = new Gtk.TreeViewColumn({
       title: "Key"
     })
@@ -59,7 +56,7 @@ export abstract class NotebookTab {
       title: "Value"
     })
     const readonly = new Gtk.TreeViewColumn({
-      title: ""
+      title: "Readonly"
     })
     const bold = new Gtk.CellRendererText({
       weight: Pango.Weight.BOLD
@@ -74,42 +71,12 @@ export abstract class NotebookTab {
     this.treeView.insert_column(key, 0)
     this.treeView.insert_column(value, 1)
     this.treeView.insert_column(readonly, 2)
-
-
-    this.text = new GtkSource.View()
-    this.text.set_show_line_numbers(true)
-  
-    let text = "this\nis\na\ntest"
-    this.text.get_buffer().set_text(text, text.length)
-
-
-    /** make the left pane */
-    this.leftPane = new Gtk.Grid()
-    this.leftScroll = new Gtk.ScrolledWindow({
+    this.scrollView = new Gtk.ScrolledWindow({
       hscrollbar_policy: Gtk.PolicyType.NEVER,
       vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
     })
-    
-    /** make the right pane */
-    this.rightPane = new Gtk.Box()
-    this.rightScroll = new Gtk.ScrolledWindow({
-      hscrollbar_policy: Gtk.PolicyType.NEVER,
-      vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
-    })
-
-    
-    /** put the panes together */
-
-    this.leftScroll.add(this.treeView)
-    this.leftPane.attach(this.leftScroll, 0, 0, 1, 1)
-    this.rightScroll.add(this.text)
-    this.rightPane.pack_start(this.rightScroll, true, true, 5)
-    
-    this.panes = new Gtk.Paned()
-    this.panes.set_direction(Gtk.Orientation.HORIZONTAL)
-    this.panes.add1(this.leftPane)
-    this.panes.add2(this.rightPane)
-    return this.panes
+    this.scrollView.add(this.treeView)
+    return this.grid.attach(this.scrollView, 0, 0, 1, 1)
   }
 
 
