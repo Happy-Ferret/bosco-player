@@ -22,8 +22,8 @@ export class PackageTab extends NotebookTab {
 
   buildUI() {
     let panes = super.buildUI()
-    if (this.prj.data.gresource != null) 
-      for (let item of this.prj.data.vala_source) 
+    if (this.prj.data.vala_check_package != null) 
+      for (let item of this.prj.data.vala_check_package) 
             this.add(item.value, "", item.readonly)
 
     let lm = new GtkSource.LanguageManager()

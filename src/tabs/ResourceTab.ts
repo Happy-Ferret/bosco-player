@@ -15,8 +15,8 @@ export class ResourceTab extends NotebookTab {
   buildUI() {
     let panes = super.buildUI()
     if (this.prj.data.gresource != null) 
-      for (let item of this.prj.data.vala_source) 
-            this.add(item.value, "", item.readonly)
+      for (let item of this.prj.data.gresource) 
+            this.add(item.value.split(' ')[0], item.value.split(' ')[1], item.readonly)
 
     let lm = new GtkSource.LanguageManager()
     let buff = this.text.get_buffer() as GtkSource.Buffer
@@ -31,7 +31,7 @@ export class ResourceTab extends NotebookTab {
     let [isSelected, model, iter] = super.onSelectionChanged()
 
     if (isSelected) {
-      let text = String(Util.readFile(`${this.prj.path}/${model.get_value(iter, 1)}` ))
+      let text = String(Util.readFile(`${this.prj.path}/${model.get_value(iter, 1)}`))
       this.text.get_buffer().set_text(text, text.length)
     }
 

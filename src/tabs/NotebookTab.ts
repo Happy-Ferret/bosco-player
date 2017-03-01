@@ -52,30 +52,24 @@ export abstract class NotebookTab {
       model: this.listStore
     })
     this.selection = this.treeView.get_selection()
-    this.selection.connect('changed', () => {
-        return this.onSelectionChanged()
-    })
-    const key = new Gtk.TreeViewColumn({
-      title: "Key"
-    })
-    const value = new Gtk.TreeViewColumn({
-      title: "Value"
-    })
-    const readonly = new Gtk.TreeViewColumn({
-      title: ""
-    })
-    const bold = new Gtk.CellRendererText({
-      weight: Pango.Weight.BOLD
-    })
+    this.selection.connect('changed', () => this.onSelectionChanged())
+
+    const bold = new Gtk.CellRendererText({ weight: Pango.Weight.BOLD })
     const normal = new Gtk.CellRendererText()
+
+    const key = new Gtk.TreeViewColumn({ title: "Key" })
     key.pack_start(bold, true)
-    value.pack_start(normal, true)
-    readonly.pack_start(normal, true)
     key.add_attribute(bold, "text", 0)
-    value.add_attribute(normal, "text", 1)
-    readonly.add_attribute(normal, "text", 2)
     this.treeView.insert_column(key, 0)
+
+    const value = new Gtk.TreeViewColumn({ title: "Value" })
+    value.pack_start(normal, true)
+    value.add_attribute(normal, "text", 1)
     this.treeView.insert_column(value, 1)
+
+    const readonly = new Gtk.TreeViewColumn({ title: "" })
+    readonly.pack_start(normal, true)
+    readonly.add_attribute(normal, "text", 2)
     this.treeView.insert_column(readonly, 2)
 
     this.text = GtkSource.View.new_with_buffer(new GtkSource.Buffer())
@@ -87,7 +81,6 @@ export abstract class NotebookTab {
     let css = new Gtk.CssProvider()
     css.load_from_data("* { font-family: Dejavu;  font-size: large }")
     this.text.get_style_context().add_provider(css, 0)
-
 
     /** make the left pane */
     this.leftPane = new Gtk.Grid()
@@ -102,7 +95,6 @@ export abstract class NotebookTab {
       hscrollbar_policy: Gtk.PolicyType.NEVER,
       vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
     })
-
     
     /** put the panes together */
 
@@ -118,7 +110,6 @@ export abstract class NotebookTab {
     return this.panes
   }
 
-
   /**
     * Add data to the list store
     * call from subclass buildUI
@@ -126,7 +117,6 @@ export abstract class NotebookTab {
   add(p1, p2, p3) {
     return this.listStore.set(this.listStore.append(), [0, 1, 2], [String(p1), String(p2), String(p3)])
   }
-
 
   /**
     * show the current selected row

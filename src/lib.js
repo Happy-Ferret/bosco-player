@@ -9,3 +9,4 @@
 exports.sax = require('sax')
 exports.xml2js = require('xml2js')
 exports.xmlbuilder = require('xmlbuilder')
+exports.liquid = require('liquid.coffee')

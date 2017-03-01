@@ -7,6 +7,7 @@ import {SourceTab} from 'tabs/SourceTab'
 import {PackageTab} from 'tabs/PackageTab'
 import {ResourceTab} from 'tabs/ResourceTab'
 import {AutovalaTab} from 'tabs/AutovalaTab'
+import {EntitasTab} from 'tabs/EntitasTab'
 
 const THEMES = [
   "elementary",
@@ -53,7 +54,7 @@ export class PlayerWindow {
   resContent: Gtk.Box
   pkContent: Gtk.Box
   srcContent: Gtk.Box
-  entitasContent: Gtk.Box
+  ecsContent: Gtk.Box
   parent: Player
 
   /**
@@ -162,6 +163,7 @@ export class PlayerWindow {
     const builder = new Gtk.Builder()
     builder.add_from_file(`${DATADIR}/project.glade`)
     const notebook = builder.get_object("project") as Gtk.Notebook
+    // notebook.remove_page(0)
     let title = new Gtk.Label({
       label: _("Autovala")
     })
@@ -185,8 +187,8 @@ export class PlayerWindow {
     title = new Gtk.Label({
       label: _("Entitas")
     })
-    this.entitasContent = new Gtk.Box()
-    notebook.append_page(this.entitasContent, title)
+    this.ecsContent = new Gtk.Box()
+    notebook.append_page(this.ecsContent, title)
     return this.notebook = notebook
   }
   /**
@@ -248,15 +250,17 @@ export class PlayerWindow {
     } else {
       this.entitas = null
     }
-    this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name)
+    this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.appName)
     this.avContent.pack_start(new AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.avContent.get_style_context().add_provider(this.regularCss, 0)
-    this.resContent.pack_start(new ResourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
-    this.resContent.get_style_context().add_provider(this.regularCss, 0)
     this.pkContent.pack_start(new PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.pkContent.get_style_context().add_provider(this.regularCss, 0)
     this.srcContent.pack_start(new SourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.srcContent.get_style_context().add_provider(this.regularCss, 0)
+    this.resContent.pack_start(new ResourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.resContent.get_style_context().add_provider(this.regularCss, 0)
+    this.ecsContent.pack_start(new EntitasTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.ecsContent.get_style_context().add_provider(this.regularCss, 0)
     this.window.show_all()
     this.notebook.set_current_page(1)
   }
