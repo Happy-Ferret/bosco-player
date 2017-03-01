@@ -11622,6 +11622,14 @@ define("src/Util", ["require", "exports", "Gio", "Lang"], function (require, exp
                 return null;
             }
         };
+        Util.writeFile = function (filename, data) {
+            var file = Gio.file_new_for_path(filename);
+            if (file.query_exists(null))
+                file.delete(null);
+            var file_stream = file.create(Gio.FileCreateFlags.NONE, null);
+            var data_stream = new Gio.DataOutputStream({ base_stream: file_stream });
+            data_stream.put_string(data, null);
+        };
         Util.loadTemplate = function (template) {
             return Lang.Class({
                 Name: template.name,
@@ -11722,7 +11730,8 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango",
           * set the autovala project data
           * @param prj:Project
          */
-        function NotebookTab(prj, status) {
+        function NotebookTab(parent, prj, status) {
+            this.parent = parent;
             this.prj = prj;
             this.status = status;
             this.id = this.status.get_context_id(this.constructor['name']);
@@ -11769,10 +11778,13 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango",
             this.treeView.insert_column(key, 0);
             this.treeView.insert_column(value, 1);
             this.treeView.insert_column(readonly, 2);
-            this.text = new GtkSource.View();
+            this.text = GtkSource.View.new_with_buffer(new GtkSource.Buffer());
             this.text.set_show_line_numbers(true);
-            var text = "this\nis\na\ntest";
+            var text = "";
             this.text.get_buffer().set_text(text, text.length);
+            var css = new Gtk.CssProvider();
+            css.load_from_data("* { font-family: Dejavu;  font-size: large }");
+            this.text.get_style_context().add_provider(css, 0);
             /** make the left pane */
             this.leftPane = new Gtk.Grid();
             this.leftScroll = new Gtk.ScrolledWindow({
@@ -11808,22 +11820,23 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango",
          */
         NotebookTab.prototype.onSelectionChanged = function () {
             var _a = this.selection.get_selected(), isSelected = _a[0], model = _a[1], iter = _a[2];
-            this.status.push(this.id, this.listStore.get_value(iter, 0) + " " +
-                this.listStore.get_value(iter, 1) + " " +
-                this.listStore.get_value(iter, 2));
-            return;
+            var key = model.get_value(iter, 0);
+            var value = model.get_value(iter, 1);
+            this.status.push(this.id, key + (value.length > 0 ? "[" + value + "]" : ''));
+            return [isSelected, model, iter];
         };
         return NotebookTab;
     }());
     exports.NotebookTab = NotebookTab;
 });
-define("src/tabs/SourceTab", ["require", "exports", "src/tabs/NotebookTab"], function (require, exports, NotebookTab_1) {
+define("src/tabs/SourceTab", ["require", "exports", "GtkSource", "src/tabs/NotebookTab", "src/Util"], function (require, exports, GtkSource, NotebookTab_1, Util_1) {
     "use strict";
     /**
      *
-     * ProjectViewer class -
+     * SourceTab class -
      *
-     * view autovala data
+     * view source code
+     * http://www.bravegnu.org/gtktext/
      *
      */
     var SourceTab = (function (_super) {
@@ -11839,44 +11852,85 @@ define("src/tabs/SourceTab", ["require", "exports", "src/tabs/NotebookTab"], fun
                     this.add(item.value, "", item.readonly);
                 }
             }
+            var lm = new GtkSource.LanguageManager();
+            var buff = this.text.get_buffer();
+            buff.set_language(lm.get_language("vala"));
             return panes;
+        };
+        SourceTab.prototype.onSelectionChanged = function () {
+            var _a = _super.prototype.onSelectionChanged.call(this), isSelected = _a[0], model = _a[1], iter = _a[2];
+            if (isSelected) {
+                var text = String(Util_1.Util.readFile(this.prj.path + "/src/" + model.get_value(iter, 0)));
+                this.text.get_buffer().set_text(text, text.length);
+            }
+            return [isSelected, model, iter];
         };
         return SourceTab;
     }(NotebookTab_1.NotebookTab));
     exports.SourceTab = SourceTab;
 });
-define("src/tabs/PackageTab", ["require", "exports", "src/tabs/NotebookTab"], function (require, exports, NotebookTab_2) {
+define("src/tabs/PackageTab", ["require", "exports", "GtkSource", "src/tabs/NotebookTab", "src/Util"], function (require, exports, GtkSource, NotebookTab_2, Util_2) {
     "use strict";
     /**
      *
-     * ProjectViewer class -
+     * PackageTab class -
      *
-     * view autovala data
+     * view pkg-config data:
+     * /usr/share/pkgconfig/
+     * /usr/local/lib/pkgconfig/
      *
      */
+    var LIB_PATHS = [
+        '/usr/share',
+        '/usr/lib',
+        '/usr/lib/x86_64-linux-gnu',
+        '/usr/local/lib'
+    ];
     var PackageTab = (function (_super) {
         __extends(PackageTab, _super);
         function PackageTab() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         PackageTab.prototype.buildUI = function () {
-            // var i, item, len, ref
             var panes = _super.prototype.buildUI.call(this);
             for (var _i = 0, _a = this.prj.data.vala_check_package; _i < _a.length; _i++) {
                 var item = _a[_i];
                 this.add(item.value, "", item.readonly);
             }
+            var lm = new GtkSource.LanguageManager();
+            var buff = this.text.get_buffer();
+            buff.set_language(lm.get_language("sh"));
             return this.panes;
+        };
+        /**
+          * show the current selected row
+         */
+        PackageTab.prototype.onSelectionChanged = function () {
+            var _a = _super.prototype.onSelectionChanged.call(this), isSelected = _a[0], model = _a[1], iter = _a[2];
+            if (isSelected) {
+                for (var p in LIB_PATHS) {
+                    var path = LIB_PATHS[p];
+                    var f1 = Util_2.Util.readFile(path + "/pkgconfig/" + model.get_value(iter, 0) + ".pc");
+                    if (f1 != null) {
+                        var text = String(f1);
+                        this.text.get_buffer().set_text(text, text.length);
+                        break;
+                    }
+                }
+            }
+            return [isSelected, model, iter];
         };
         return PackageTab;
     }(NotebookTab_2.NotebookTab));
     exports.PackageTab = PackageTab;
 });
-define("src/tabs/ResourceTab", ["require", "exports", "src/Util", "src/tabs/NotebookTab"], function (require, exports, Util_1, NotebookTab_3) {
+define("src/tabs/ResourceTab", ["require", "exports", "GtkSource", "src/Util", "src/tabs/NotebookTab"], function (require, exports, GtkSource, Util_3, NotebookTab_3) {
     "use strict";
     /**
      *
-     * GResource data view
+     * ResourceTab class
+     *
+     * view the resource.xml data
      *
      */
     var ResourceTab = (function (_super) {
@@ -11886,17 +11940,28 @@ define("src/tabs/ResourceTab", ["require", "exports", "src/Util", "src/tabs/Note
         }
         ResourceTab.prototype.buildUI = function () {
             var panes = _super.prototype.buildUI.call(this);
-            // TODO: 
             if (this.prj.data.gresource != null) {
                 for (var _i = 0, _a = this.prj.data.gresource; _i < _a.length; _i++) {
                     var item = _a[_i];
                     var _b = String(item.value).split(' '), name_1 = _b[0], path = _b[1];
                     this.add(name_1, path, item.readonly);
-                    var text = String(Util_1.Util.readFile(this.prj.path + "/" + path));
-                    this.text.get_buffer().set_text(text, text.length);
                 }
             }
+            var lm = new GtkSource.LanguageManager();
+            var buff = this.text.get_buffer();
+            buff.set_language(lm.get_language("xml"));
             return panes;
+        };
+        /**
+          * show the current selected row
+         */
+        ResourceTab.prototype.onSelectionChanged = function () {
+            var _a = _super.prototype.onSelectionChanged.call(this), isSelected = _a[0], model = _a[1], iter = _a[2];
+            if (isSelected) {
+                var text = String(Util_3.Util.readFile(this.prj.path + "/" + model.get_value(iter, 1)));
+                this.text.get_buffer().set_text(text, text.length);
+            }
+            return [isSelected, model, iter];
         };
         return ResourceTab;
     }(NotebookTab_3.NotebookTab));
@@ -11906,7 +11971,7 @@ define("src/tabs/AutovalaTab", ["require", "exports", "src/tabs/NotebookTab"], f
     "use strict";
     /**
      *
-     * ProjectViewer class -
+     * AutovalaTab class -
      *
      * view autovala data
      *
@@ -11931,13 +11996,17 @@ define("src/tabs/AutovalaTab", ["require", "exports", "src/tabs/NotebookTab"], f
     }(NotebookTab_4.NotebookTab));
     exports.AutovalaTab = AutovalaTab;
 });
-define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src/Project", "src/tabs/SourceTab", "src/tabs/PackageTab", "src/tabs/ResourceTab", "src/tabs/AutovalaTab"], function (require, exports, Gtk, Gio_1, Util_2, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
+define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src/Project", "src/tabs/SourceTab", "src/tabs/PackageTab", "src/tabs/ResourceTab", "src/tabs/AutovalaTab"], function (require, exports, Gtk, Gio_1, Util_4, Project_1, SourceTab_1, PackageTab_1, ResourceTab_1, AutovalaTab_1) {
     "use strict";
+    var THEMES = [
+        "elementary",
+        "Adwaita"
+    ];
     /**
      * Returns an anonymous implemention of the AppWindow interface
      */
     function AppWindow() {
-        return Util_2.Util.loadTemplate({
+        return Util_4.Util.loadTemplate({
             name: 'AppWindow',
             extends: Gtk.ApplicationWindow,
             fields: ['background', 'status'],
@@ -11951,7 +12020,8 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
         /**
          * Load the glade template
          */
-        function PlayerWindow(params) {
+        function PlayerWindow(params, parent) {
+            this.parent = parent;
             this.window = new (AppWindow())(params);
             this.regularCss = new Gtk.CssProvider();
             this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }");
@@ -11969,15 +12039,54 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
          */
         PlayerWindow.prototype.buildUI = function () {
             this.headerbar = new Gtk.HeaderBar({
-                title: this.config.app_name,
+                title: this.config.appName,
                 show_close_button: true
             });
             this.headerbar.pack_start(this.buildOpen());
+            this.headerbar.pack_start(this.buildPreferences());
             this.window.background.add(this.buildBackground());
             this.window.set_default_size(1040, 740);
             this.window.set_titlebar(this.headerbar);
             this.window.set_icon_from_file(ICON);
             return this.window.show_all();
+        };
+        PlayerWindow.prototype.buildPreferences = function () {
+            var _this = this;
+            // Add options to set the name and the prefix
+            var grid = new Gtk.Grid({
+                column_spacing: 10,
+                row_spacing: 10,
+                margin: 10
+            });
+            grid.set_column_homogeneous(true);
+            var darkLabel = new Gtk.Label({ label: "Dark theme:" });
+            darkLabel.set_halign(Gtk.Align.END);
+            var darkEntry = new Gtk.Switch({
+                state: this.config.darkTheme === 'true',
+                valign: Gtk.Align.CENTER
+            });
+            darkEntry.connect('state-set', function () { return _this.parent.setConfigValue('darkTheme', darkEntry.get_active().toString()); });
+            grid.attach(darkLabel, 0, 0, 1, 1);
+            grid.attach_next_to(darkEntry, darkLabel, Gtk.PositionType.RIGHT, 2, 1);
+            var themeLabel = new Gtk.Label({ label: "Theme name:" });
+            themeLabel.set_halign(Gtk.Align.END);
+            var themeSelect = new Gtk.ComboBoxText();
+            THEMES.forEach(function (theme, i) { return themeSelect.insert(i, theme, theme); });
+            themeSelect.set_active_id(this.config.themeName);
+            themeSelect.connect('changed', function () { return _this.parent.setConfigValue('themeName', themeSelect.get_active_text()); });
+            grid.attach(themeLabel, 0, 1, 1, 1);
+            grid.attach_next_to(themeSelect, themeLabel, Gtk.PositionType.RIGHT, 2, 1);
+            var menubutton = new Gtk.ToggleButton();
+            menubutton.add(new Gtk.Image({
+                icon_name: "open-menu-symbolic",
+                icon_size: Gtk.IconSize.SMALL_TOOLBAR
+            }));
+            var menu = new Gtk.Popover();
+            menu.set_relative_to(menubutton);
+            menu.connect("closed", function () { return menubutton.get_active() ? menubutton.set_active(false) : null; });
+            menubutton.connect("clicked", function () { return menubutton.get_active() ? menu.show_all() : null; });
+            menu.add(grid);
+            return menubutton;
         };
         /**
          * builds the client background
@@ -12091,13 +12200,13 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
                 this.entitas = null;
             }
             this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name);
-            this.avContent.pack_start(new AutovalaTab_1.AutovalaTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.avContent.pack_start(new AutovalaTab_1.AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
             this.avContent.get_style_context().add_provider(this.regularCss, 0);
-            this.resContent.pack_start(new ResourceTab_1.ResourceTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.resContent.pack_start(new ResourceTab_1.ResourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
             this.resContent.get_style_context().add_provider(this.regularCss, 0);
-            this.pkContent.pack_start(new PackageTab_1.PackageTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.pkContent.pack_start(new PackageTab_1.PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
             this.pkContent.get_style_context().add_provider(this.regularCss, 0);
-            this.srcContent.pack_start(new SourceTab_1.SourceTab(this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.srcContent.pack_start(new SourceTab_1.SourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
             this.srcContent.get_style_context().add_provider(this.regularCss, 0);
             this.window.show_all();
             this.notebook.set_current_page(1);
@@ -12107,8 +12216,15 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
     }());
     exports.PlayerWindow = PlayerWindow;
 });
-define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWindow", "src/Util"], function (require, exports, GLib, Gtk_1, Gio_2, PlayerWindow_1, Util_3) {
+define("src/Player", ["require", "exports", "GLib", "Gtk", "Gtk", "Gio", "src/PlayerWindow", "src/Util"], function (require, exports, GLib, Gtk, Gtk_1, Gio_2, PlayerWindow_1, Util_5) {
     "use strict";
+    var darkTheme_default = "true";
+    var themeName_default = "elementary";
+    var config_default = {
+        appName: "BoscoPlayer",
+        darkTheme: darkTheme_default,
+        themeName: themeName_default
+    };
     /**
      * Bosco Player
      *
@@ -12119,10 +12235,10 @@ define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWin
             var _this = this;
             this.application = new Gtk_1.Application({ flags: Gio_2.ApplicationFlags.FLAGS_NONE });
             this.application.connect('activate', function () {
-                _this.buildUI();
                 _this.appWindow = new PlayerWindow_1.PlayerWindow({
-                    application: _this.application
-                });
+                    application: _this.application,
+                }, _this);
+                _this.buildUI();
                 _this.appWindow.setConfig(_this.getConfig());
                 _this.appWindow.buildUI();
                 _this.window = _this.appWindow.window;
@@ -12136,9 +12252,6 @@ define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWin
          */
         Player.prototype.buildUI = function () {
             var _this = this;
-            var gtkSettings = Gtk_1.Settings.get_default();
-            gtkSettings.gtk_application_prefer_dark_theme = true;
-            gtkSettings.gtk_theme_name = 'elementary';
             var menu = new Gio_2.Menu();
             menu.append(_("New"), 'app.new');
             menu.append(_("About"), 'app.about');
@@ -12192,15 +12305,52 @@ define("src/Player", ["require", "exports", "GLib", "Gtk", "Gio", "src/PlayerWin
          * load configuration
          */
         Player.prototype.getConfig = function () {
-            var res_name_default = "custom.gresource";
-            var res_prefix_default = "/com/darkoverlordofdata/custom";
-            var data = Util_3.Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json");
-            var config = data != null ? JSON.parse(data) : {};
-            config.app_name = "Player";
-            var ref;
-            config.res_name = (ref = config.res_name) != null ? ref : res_name_default;
-            config.res_prefix = (ref = config.res_prefix) != null ? ref : res_prefix_default;
+            var data = Util_5.Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json");
+            var isNew = data == null;
+            var config = isNew ? config_default : JSON.parse(data);
+            if (isNew)
+                this.setConfig(config);
+            var gtkSettings = Gtk.Settings.get_default();
+            gtkSettings.gtk_application_prefer_dark_theme = config.darkTheme === 'true';
+            gtkSettings.gtk_theme_name = config.themeName;
             return config;
+        };
+        /**
+         * setConfig
+         *
+         * @config new values
+         */
+        Player.prototype.setConfig = function (config) {
+            Util_5.Util.writeFile(GLib.get_user_data_dir() + "/bosco/config.json", JSON.stringify(config, null, 2));
+        };
+        /**
+         * setConfigValue
+         *
+         * @name property name
+         * @value new value
+         */
+        Player.prototype.setConfigValue = function (name, value) {
+            if (value === "")
+                return;
+            var data = Util_5.Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json");
+            var config = data == null ? config_default : JSON.parse(data);
+            if (config[name] === value)
+                return;
+            var gtkSettings = Gtk.Settings.get_default();
+            switch (name) {
+                case 'darkTheme':
+                    gtkSettings.gtk_application_prefer_dark_theme = value === 'true';
+                    config[name] = value;
+                    this.setConfig(config);
+                    this.appWindow.setConfig(config);
+                    break;
+                case 'themeName':
+                    gtkSettings.gtk_theme_name = value;
+                    config[name] = value;
+                    this.setConfig(config);
+                    this.appWindow.setConfig(config);
+                    break;
+            }
         };
         return Player;
     }());

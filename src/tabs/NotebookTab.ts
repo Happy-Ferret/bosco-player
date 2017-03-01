@@ -2,6 +2,7 @@ import * as Gtk from 'Gtk'
 import * as GObject from 'GObject'
 import * as Pango from 'Pango'
 import * as GtkSource from 'GtkSource'
+import {PlayerWindow} from 'PlayerWindow'
 /**
  *
  * Abstract Class ProjectViewer - 
@@ -24,11 +25,13 @@ export abstract class NotebookTab {
   leftScroll: Gtk.ScrolledWindow
   rightScroll: Gtk.ScrolledWindow
   text: GtkSource.View
+  parent: PlayerWindow
   /**
     * set the autovala project data 
     * @param prj:Project
    */
-  constructor(prj, status) {
+  constructor(parent, prj, status) {
+    this.parent = parent
     this.prj = prj
     this.status = status
     this.id = this.status.get_context_id(this.constructor['name'])
@@ -75,12 +78,15 @@ export abstract class NotebookTab {
     this.treeView.insert_column(value, 1)
     this.treeView.insert_column(readonly, 2)
 
-
-    this.text = new GtkSource.View()
+    this.text = GtkSource.View.new_with_buffer(new GtkSource.Buffer())
     this.text.set_show_line_numbers(true)
   
-    let text = "this\nis\na\ntest"
+    let text = ""
     this.text.get_buffer().set_text(text, text.length)
+
+    let css = new Gtk.CssProvider()
+    css.load_from_data("* { font-family: Dejavu;  font-size: large }")
+    this.text.get_style_context().add_provider(css, 0)
 
 
     /** make the left pane */
@@ -127,11 +133,11 @@ export abstract class NotebookTab {
    */
   onSelectionChanged() {
     let [isSelected, model, iter] = this.selection.get_selected()
-    this.status.push(this.id, 
-        this.listStore.get_value(iter, 0) + " " + 
-        this.listStore.get_value(iter, 1) + " " + 
-        this.listStore.get_value(iter, 2))
-    return
+    let key = model.get_value(iter, 0)
+    let value = model.get_value(iter, 1)
+    this.status.push(this.id, key + (value.length>0 ? `[${value}]` : '' ))
+
+    return [isSelected, model, iter]
   }
 
 }

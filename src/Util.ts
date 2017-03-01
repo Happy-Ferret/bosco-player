@@ -5,7 +5,7 @@ import * as Lang from 'Lang'
 
 export class Util {
 
-  static readFile(filename) {
+  static readFile(filename: string) {
     const file = Gio.file_new_for_path(filename)
     if (file.query_exists(null)) {
       let [success, data, length] = file.load_contents(null)
@@ -13,6 +13,16 @@ export class Util {
     } else {
       return null
     }
+  }
+
+  static writeFile(filename: string, data: string) {
+    const file = Gio.file_new_for_path(filename)
+
+    if (file.query_exists(null)) file.delete(null)
+    
+    let file_stream = file.create(Gio.FileCreateFlags.NONE, null)     
+    let data_stream = new Gio.DataOutputStream({base_stream: file_stream})
+    data_stream.put_string(data, null)
   }
 
   static loadTemplate(template) {

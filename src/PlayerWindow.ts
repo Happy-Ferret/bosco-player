@@ -2,11 +2,16 @@ import * as Gtk from 'Gtk'
 import {File} from 'Gio'
 import {Util} from 'Util'
 import {Project} from 'Project'
+import {Player} from 'Player'
 import {SourceTab} from 'tabs/SourceTab'
 import {PackageTab} from 'tabs/PackageTab'
 import {ResourceTab} from 'tabs/ResourceTab'
 import {AutovalaTab} from 'tabs/AutovalaTab'
 
+const THEMES = [
+  "elementary",
+  "Adwaita"
+]
 /** 
  * Interface for the template: AppWindow.ui
  */
@@ -37,6 +42,7 @@ export class PlayerWindow {
   window: AppWindow
   background: Gtk.Box
   regularCss: Gtk.CssProvider
+  textCss: Gtk.CssProvider
   logoCss: Gtk.CssProvider
   headerbar: Gtk.HeaderBar
   projectPath: string
@@ -48,11 +54,13 @@ export class PlayerWindow {
   pkContent: Gtk.Box
   srcContent: Gtk.Box
   entitasContent: Gtk.Box
+  parent: Player
 
   /**
    * Load the glade template
    */
-  constructor(params) {
+  constructor(params, parent) {
+    this.parent = parent
     this.window = new (AppWindow())(params) as AppWindow
     this.regularCss = new Gtk.CssProvider()
     this.regularCss.load_from_data("* { font-family: Dejavu;  font-size: medium }")
@@ -71,15 +79,64 @@ export class PlayerWindow {
    */
   buildUI() {
     this.headerbar = new Gtk.HeaderBar({
-      title: this.config.app_name,
+      title: this.config.appName,
       show_close_button: true
     })
     this.headerbar.pack_start(this.buildOpen())
+    this.headerbar.pack_start(this.buildPreferences())
     this.window.background.add(this.buildBackground())
     this.window.set_default_size(1040, 740)
     this.window.set_titlebar(this.headerbar)
     this.window.set_icon_from_file(ICON)
     return this.window.show_all()
+  }
+
+  buildPreferences() {
+
+    // Add options to set the name and the prefix
+    let grid = new Gtk.Grid({
+        column_spacing: 10,
+        row_spacing: 10,
+        margin: 10
+    })
+
+    grid.set_column_homogeneous(true)
+
+    let darkLabel = new Gtk.Label({ label: "Dark theme:" })
+    darkLabel.set_halign(Gtk.Align.END)
+
+    let darkEntry = new Gtk.Switch({
+      state: this.config.darkTheme === 'true', 
+      valign: Gtk.Align.CENTER
+    })
+    darkEntry.connect('state-set', () => this.parent.setConfigValue('darkTheme', darkEntry.get_active().toString()))
+
+    grid.attach(darkLabel, 0, 0, 1, 1)
+    grid.attach_next_to(darkEntry, darkLabel, Gtk.PositionType.RIGHT, 2, 1)
+
+    let themeLabel = new Gtk.Label({label: "Theme name:"})
+    themeLabel.set_halign(Gtk.Align.END)
+
+    let themeSelect = new Gtk.ComboBoxText()
+    THEMES.forEach((theme, i) => themeSelect.insert(i, theme, theme))
+    themeSelect.set_active_id(this.config.themeName)
+    themeSelect.connect('changed', () => this.parent.setConfigValue('themeName', themeSelect.get_active_text()))
+
+    grid.attach(themeLabel, 0, 1, 1, 1)
+    grid.attach_next_to(themeSelect, themeLabel, Gtk.PositionType.RIGHT, 2, 1)
+
+    let menubutton = new Gtk.ToggleButton()
+    menubutton.add(new Gtk.Image({
+      icon_name: "open-menu-symbolic",
+      icon_size: Gtk.IconSize.SMALL_TOOLBAR
+    }))
+
+    let menu = new Gtk.Popover()
+    menu.set_relative_to(menubutton)
+    menu.connect("closed", () => menubutton.get_active() ? menubutton.set_active(false) : null)
+    menubutton.connect("clicked", () => menubutton.get_active() ? menu.show_all() : null)
+    menu.add(grid)
+    return menubutton
   }
   /**
    * builds the client background
@@ -192,13 +249,13 @@ export class PlayerWindow {
       this.entitas = null
     }
     this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.app_name)
-    this.avContent.pack_start(new AutovalaTab(this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.avContent.pack_start(new AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.avContent.get_style_context().add_provider(this.regularCss, 0)
-    this.resContent.pack_start(new ResourceTab(this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.resContent.pack_start(new ResourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.resContent.get_style_context().add_provider(this.regularCss, 0)
-    this.pkContent.pack_start(new PackageTab(this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.pkContent.pack_start(new PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.pkContent.get_style_context().add_provider(this.regularCss, 0)
-    this.srcContent.pack_start(new SourceTab(this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.srcContent.pack_start(new SourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.srcContent.get_style_context().add_provider(this.regularCss, 0)
     this.window.show_all()
     this.notebook.set_current_page(1)

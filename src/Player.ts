@@ -4,6 +4,15 @@ import {Application, AboutDialog, Settings} from 'Gtk'
 import {ApplicationFlags, Menu, SimpleAction} from 'Gio'
 import {AppWindow, PlayerWindow} from 'PlayerWindow'
 import {Util} from 'Util'
+
+const darkTheme_default = "true"
+const themeName_default = "elementary"
+
+const config_default = {
+  appName: "BoscoPlayer",
+  darkTheme: darkTheme_default,
+  themeName: themeName_default
+}
 /**
  * Bosco Player 
  *
@@ -20,10 +29,10 @@ export class Player {
   constructor() {
     this.application = new Application({flags: ApplicationFlags.FLAGS_NONE})
     this.application.connect('activate', () => {
-        this.buildUI()
         this.appWindow = new PlayerWindow({
-          application: this.application
-        })
+          application: this.application,
+        }, this)
+        this.buildUI()
         this.appWindow.setConfig(this.getConfig())
         this.appWindow.buildUI()
         this.window = this.appWindow.window
@@ -38,10 +47,6 @@ export class Player {
    * main app menu
    */
   buildUI() {
-
-    let gtkSettings = Settings.get_default()
-    gtkSettings.gtk_application_prefer_dark_theme = true
-    gtkSettings.gtk_theme_name = 'elementary'
     let menu = new Menu()
     menu.append(_("New"), 'app.new')
     menu.append(_("About"), 'app.about')
@@ -108,17 +113,55 @@ export class Player {
    * load configuration
    */
   getConfig() {
-    const res_name_default = "custom.gresource"
-    const res_prefix_default = "/com/darkoverlordofdata/custom"
 
     let data = Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json")
-    let config = data != null ? JSON.parse(data) : {}
-    config.app_name = "Player"
-    let ref
-    config.res_name = (ref = config.res_name) != null ? ref : res_name_default
-    config.res_prefix = (ref = config.res_prefix) != null ? ref : res_prefix_default
+    let isNew = data == null 
+    let config = isNew ? config_default : JSON.parse(data)
+    if (isNew) this.setConfig(config)
+
+    let gtkSettings = Gtk.Settings.get_default()
+    gtkSettings.gtk_application_prefer_dark_theme = config.darkTheme === 'true'
+    gtkSettings.gtk_theme_name = config.themeName
     return config
   }
 
+  /**
+   * setConfig
+   * 
+   * @config new values
+   */
+  setConfig(config) {
+      Util.writeFile(GLib.get_user_data_dir() + "/bosco/config.json", JSON.stringify(config, null, 2))
+  }
+
+  /**
+   * setConfigValue
+   * 
+   * @name property name
+   * @value new value
+   */
+  setConfigValue(name: string, value: string) {
+    if (value === "") return
+    let data = Util.readFile(GLib.get_user_data_dir() + "/bosco/config.json")
+    let config = data == null ? config_default : JSON.parse(data)
+    if (config[name] === value) return
+    let gtkSettings = Gtk.Settings.get_default()
+    switch(name) {
+      case 'darkTheme':
+        gtkSettings.gtk_application_prefer_dark_theme = value === 'true'
+        config[name] = value
+        this.setConfig(config)
+        this.appWindow.setConfig(config)
+        break
+
+      case 'themeName':
+        gtkSettings.gtk_theme_name = value
+        config[name] = value
+        this.setConfig(config)
+        this.appWindow.setConfig(config)
+        break
+
+    }
+  }
 
 }
