@@ -14291,8 +14291,9 @@ else {
                 exports.liquid = require('liquid.coffee');
             }, { "liquid.coffee": 30, "sax": 206, "xml2js": 210, "xmlbuilder": 227 }] }, {}, [228])(228);
 });
-// relocatable data base url
+// relocatable base url
 var DATADIR = "share/bosco";
+var VERSION = "0.0.1";
 // application icon
 var ICON = DATADIR + "/bosco.png";
 // optional imports
@@ -14382,18 +14383,23 @@ define("src/Project", ["require", "exports"], function (require, exports) {
         Project.prototype.isArray = function (key) {
             return Array.isArray(this.data[key]);
         };
+        Project.prototype.isNull = function (key) {
+            return this.data[key] == null;
+        };
         Project.prototype.count = function (key) {
             return this.data[key].length;
         };
         Project.prototype.get = function (key, i) {
+            if (i === void 0) { i = null; }
             if (i == null) {
-                return this.data[key].value;
+                return Array.isArray(this.data[key]) ? this.data[key] : this.data[key].value;
             }
             else {
                 return this.data[key][i].value;
             }
         };
         Project.prototype.readonly = function (key, i) {
+            if (i === void 0) { i = null; }
             if (i == null) {
                 return this.data[key].readonly;
             }
@@ -14460,8 +14466,6 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango",
             this.treeView.insert_column(readonly, 2);
             this.text = GtkSource.View.new_with_buffer(new GtkSource.Buffer());
             this.text.set_show_line_numbers(true);
-            var text = "";
-            this.text.get_buffer().set_text(text, text.length);
             var css = new Gtk.CssProvider();
             css.load_from_data("* { font-family: Dejavu;  font-size: large }");
             this.text.get_style_context().add_provider(css, 0);
@@ -14474,7 +14478,7 @@ define("src/tabs/NotebookTab", ["require", "exports", "Gtk", "GObject", "Pango",
             /** make the right pane */
             this.rightPane = new Gtk.Box();
             this.rightScroll = new Gtk.ScrolledWindow({
-                hscrollbar_policy: Gtk.PolicyType.NEVER,
+                hscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
                 vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
             });
             /** put the panes together */
@@ -14525,22 +14529,25 @@ define("src/tabs/SourceTab", ["require", "exports", "GtkSource", "src/tabs/Noteb
             return _super !== null && _super.apply(this, arguments) || this;
         }
         SourceTab.prototype.buildUI = function () {
+            var _this = this;
             var panes = _super.prototype.buildUI.call(this);
-            if (this.prj.data.gresource != null)
-                for (var _i = 0, _a = this.prj.data.vala_source; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    this.add(item.value, "", item.readonly);
-                }
-            var lm = new GtkSource.LanguageManager();
+            if (!this.prj.isNull('vala_source'))
+                this.prj.get('vala_source').forEach(function (item, i) {
+                    _this.add(item.value, '', item.readonly);
+                });
             var buff = this.text.get_buffer();
-            buff.set_language(lm.get_language("vala"));
+            var lang = new GtkSource.LanguageManager();
+            buff.set_language(lang.get_language("vala"));
             return panes;
         };
+        /**
+          * show the Vala source code
+         */
         SourceTab.prototype.onSelectionChanged = function () {
             var _a = _super.prototype.onSelectionChanged.call(this), isSelected = _a[0], model = _a[1], iter = _a[2];
             if (isSelected) {
                 var text = String(Util_1.Util.readFile(this.prj.path + "/src/" + model.get_value(iter, 0)));
-                this.text.get_buffer().set_text(text, text.length);
+                this.text['buffer']['text'] = text;
             }
             return [isSelected, model, iter];
         };
@@ -14571,19 +14578,19 @@ define("src/tabs/PackageTab", ["require", "exports", "GtkSource", "src/tabs/Note
             return _super !== null && _super.apply(this, arguments) || this;
         }
         PackageTab.prototype.buildUI = function () {
+            var _this = this;
             var panes = _super.prototype.buildUI.call(this);
-            if (this.prj.data.vala_check_package != null)
-                for (var _i = 0, _a = this.prj.data.vala_check_package; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    this.add(item.value, "", item.readonly);
-                }
-            var lm = new GtkSource.LanguageManager();
+            if (!this.prj.isNull('vala_check_package'))
+                this.prj.get('vala_check_package').forEach(function (item, i) {
+                    _this.add(item.value, '', item.readonly);
+                });
             var buff = this.text.get_buffer();
-            buff.set_language(lm.get_language("sh"));
+            var lang = new GtkSource.LanguageManager();
+            buff.set_language(lang.get_language("sh"));
             return this.panes;
         };
         /**
-          * show the current selected row
+          * show the pkg-config data
          */
         PackageTab.prototype.onSelectionChanged = function () {
             var _a = _super.prototype.onSelectionChanged.call(this), isSelected = _a[0], model = _a[1], iter = _a[2];
@@ -14619,28 +14626,23 @@ define("src/tabs/ResourceTab", ["require", "exports", "GtkSource", "src/Util", "
             return _super !== null && _super.apply(this, arguments) || this;
         }
         ResourceTab.prototype.buildUI = function () {
+            var _this = this;
             var panes = _super.prototype.buildUI.call(this);
-            if (this.prj.data.gresource != null)
-                for (var _i = 0, _a = this.prj.data.gresource; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    this.add(item.value.split(' ')[0], item.value.split(' ')[1], item.readonly);
-                }
-            var lm = new GtkSource.LanguageManager();
+            if (!this.prj.isNull('gresource'))
+                this.prj.get('gresource').forEach(function (item, i) {
+                    _this.add(item.value.split(' ')[0], item.value.split(' ')[1], item.readonly);
+                });
             var buff = this.text.get_buffer();
-            buff.set_language(lm.get_language("xml"));
+            var lang = new GtkSource.LanguageManager();
+            buff.set_language(lang.get_language("xml"));
             return panes;
         };
         /**
-          * show the current selected row
+          * show the GResource xml
          */
         ResourceTab.prototype.onSelectionChanged = function () {
             var _a = _super.prototype.onSelectionChanged.call(this), isSelected = _a[0], model = _a[1], iter = _a[2];
             if (isSelected) {
-                print("===========================");
-                print("1 " + this.prj.path + "/" + model.get_value(iter, 0));
-                print("2 " + this.prj.path + "/" + model.get_value(iter, 1));
-                print("3 " + this.prj.path + "/" + model.get_value(iter, 2));
-                print("===========================");
                 var text = String(Util_3.Util.readFile(this.prj.path + "/" + model.get_value(iter, 1)));
                 this.text.get_buffer().set_text(text, text.length);
             }
@@ -14819,40 +14821,18 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
             return this.background = background;
         };
         /**
-         * build notebook
+         * load notebook
          *
          */
-        PlayerWindow.prototype.buildNotebook = function () {
+        PlayerWindow.prototype.loadNotebookUI = function () {
             var builder = new Gtk.Builder();
             builder.add_from_file(DATADIR + "/project.glade");
-            var notebook = builder.get_object("project");
-            // notebook.remove_page(0)
-            var title = new Gtk.Label({
-                label: _("Autovala")
-            });
-            this.avContent = new Gtk.Box();
-            notebook.append_page(this.avContent, title);
-            title = new Gtk.Label({
-                label: _("GResources")
-            });
-            this.resContent = new Gtk.Box();
-            notebook.append_page(this.resContent, title);
-            title = new Gtk.Label({
-                label: _("Packages")
-            });
-            this.pkContent = new Gtk.Box();
-            notebook.append_page(this.pkContent, title);
-            title = new Gtk.Label({
-                label: _("Source")
-            });
-            this.srcContent = new Gtk.Box();
-            notebook.append_page(this.srcContent, title);
-            title = new Gtk.Label({
-                label: _("Entitas")
-            });
-            this.ecsContent = new Gtk.Box();
-            notebook.append_page(this.ecsContent, title);
-            return this.notebook = notebook;
+            this.autContent = builder.get_object("autContent");
+            this.resContent = builder.get_object("resContent");
+            this.pkgContent = builder.get_object("pkgContent");
+            this.srcContent = builder.get_object("srcContent");
+            this.ecsContent = builder.get_object("ecsContent");
+            return this.notebook = builder.get_object("project");
         };
         /**
          * build open project button
@@ -14902,7 +14882,7 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
             else {
                 this.window.background.remove(this.background);
             }
-            this.window.background.add(this.buildNotebook());
+            this.window.background.add(this.loadNotebookUI());
             var _a = this.projectFile.load_contents(null), success = _a[0], data = _a[1], length = _a[2];
             this.avprj = new Project_1.Project(path, String(data));
             path = path.substring(0, path.lastIndexOf("/"));
@@ -14915,10 +14895,10 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
                 this.entitas = null;
             }
             this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.appName);
-            this.avContent.pack_start(new AutovalaTab_1.AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
-            this.avContent.get_style_context().add_provider(this.regularCss, 0);
-            this.pkContent.pack_start(new PackageTab_1.PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
-            this.pkContent.get_style_context().add_provider(this.regularCss, 0);
+            this.autContent.pack_start(new AutovalaTab_1.AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.autContent.get_style_context().add_provider(this.regularCss, 0);
+            this.pkgContent.pack_start(new PackageTab_1.PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
+            this.pkgContent.get_style_context().add_provider(this.regularCss, 0);
             this.srcContent.pack_start(new SourceTab_1.SourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
             this.srcContent.get_style_context().add_provider(this.regularCss, 0);
             this.resContent.pack_start(new ResourceTab_1.ResourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
@@ -14926,7 +14906,6 @@ define("src/PlayerWindow", ["require", "exports", "Gtk", "Gio", "src/Util", "src
             this.ecsContent.pack_start(new EntitasTab_1.EntitasTab(this, this.avprj, this.window.status).buildUI(), true, true, 0);
             this.ecsContent.get_style_context().add_provider(this.regularCss, 0);
             this.window.show_all();
-            this.notebook.set_current_page(1);
             var _b;
         };
         return PlayerWindow;

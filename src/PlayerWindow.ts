@@ -50,9 +50,9 @@ export class PlayerWindow {
   projectFile: File
   entitasFile: File
   notebook: Gtk.Notebook
-  avContent: Gtk.Box
+  autContent: Gtk.Box
   resContent: Gtk.Box
-  pkContent: Gtk.Box
+  pkgContent: Gtk.Box
   srcContent: Gtk.Box
   ecsContent: Gtk.Box
   parent: Player
@@ -156,40 +156,19 @@ export class PlayerWindow {
     return this.background = background
   }
   /**
-   * build notebook
+   * load notebook
    *
    */
-  buildNotebook() {
+  loadNotebookUI() {
     const builder = new Gtk.Builder()
     builder.add_from_file(`${DATADIR}/project.glade`)
-    const notebook = builder.get_object("project") as Gtk.Notebook
-    // notebook.remove_page(0)
-    let title = new Gtk.Label({
-      label: _("Autovala")
-    })
-    this.avContent = new Gtk.Box()
-    notebook.append_page(this.avContent, title)
-    title = new Gtk.Label({
-      label: _("GResources")
-    })
-    this.resContent = new Gtk.Box()
-    notebook.append_page(this.resContent, title)
-    title = new Gtk.Label({
-      label: _("Packages")
-    })
-    this.pkContent = new Gtk.Box()
-    notebook.append_page(this.pkContent, title)
-    title = new Gtk.Label({
-      label: _("Source")
-    })
-    this.srcContent = new Gtk.Box()
-    notebook.append_page(this.srcContent, title)
-    title = new Gtk.Label({
-      label: _("Entitas")
-    })
-    this.ecsContent = new Gtk.Box()
-    notebook.append_page(this.ecsContent, title)
-    return this.notebook = notebook
+
+    this.autContent = builder.get_object("autContent") as Gtk.Box
+    this.resContent = builder.get_object("resContent") as Gtk.Box
+    this.pkgContent = builder.get_object("pkgContent") as Gtk.Box
+    this.srcContent = builder.get_object("srcContent") as Gtk.Box
+    this.ecsContent = builder.get_object("ecsContent") as Gtk.Box
+    return this.notebook = builder.get_object("project") as Gtk.Notebook
   }
   /**
    * build open project button
@@ -237,7 +216,7 @@ export class PlayerWindow {
     } else {
       this.window.background.remove(this.background)
     }
-    this.window.background.add(this.buildNotebook())
+    this.window.background.add(this.loadNotebookUI())
 
     let [success, data, length] = this.projectFile.load_contents(null)
     this.avprj = new Project(path, String(data))
@@ -251,10 +230,10 @@ export class PlayerWindow {
       this.entitas = null
     }
     this.window.set_title((this.avprj.get('project_name')) + " - " + this.config.appName)
-    this.avContent.pack_start(new AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
-    this.avContent.get_style_context().add_provider(this.regularCss, 0)
-    this.pkContent.pack_start(new PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
-    this.pkContent.get_style_context().add_provider(this.regularCss, 0)
+    this.autContent.pack_start(new AutovalaTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.autContent.get_style_context().add_provider(this.regularCss, 0)
+    this.pkgContent.pack_start(new PackageTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
+    this.pkgContent.get_style_context().add_provider(this.regularCss, 0)
     this.srcContent.pack_start(new SourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.srcContent.get_style_context().add_provider(this.regularCss, 0)
     this.resContent.pack_start(new ResourceTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
@@ -262,7 +241,6 @@ export class PlayerWindow {
     this.ecsContent.pack_start(new EntitasTab(this, this.avprj, this.window.status).buildUI(), true, true, 0)
     this.ecsContent.get_style_context().add_provider(this.regularCss, 0)
     this.window.show_all()
-    this.notebook.set_current_page(1)
   }
 
 }

@@ -22,18 +22,19 @@ export class PackageTab extends NotebookTab {
 
   buildUI() {
     let panes = super.buildUI()
-    if (this.prj.data.vala_check_package != null) 
-      for (let item of this.prj.data.vala_check_package) 
-            this.add(item.value, "", item.readonly)
-
-    let lm = new GtkSource.LanguageManager()
+    if (!this.prj.isNull('vala_check_package'))
+      this.prj.get('vala_check_package').forEach((item, i) => {
+        this.add(item.value, '', item.readonly)
+      })
+    
     let buff = this.text.get_buffer() as GtkSource.Buffer
-    buff.set_language(lm.get_language("sh"))
+    let lang = new GtkSource.LanguageManager()
+    buff.set_language(lang.get_language("sh"))
     return this.panes
   }
 
   /**
-    * show the current selected row
+    * show the pkg-config data
    */
   onSelectionChanged() {  
     let [isSelected, model, iter] = super.onSelectionChanged()

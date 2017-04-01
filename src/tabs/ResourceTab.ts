@@ -14,18 +14,20 @@ export class ResourceTab extends NotebookTab {
 
   buildUI() {
     let panes = super.buildUI()
-    if (this.prj.data.gresource != null) 
-      for (let item of this.prj.data.gresource) 
-            this.add(item.value.split(' ')[0], item.value.split(' ')[1], item.readonly)
+    if (!this.prj.isNull('gresource')) 
+      this.prj.get('gresource').forEach((item, i) => {
+        this.add(item.value.split(' ')[0], item.value.split(' ')[1], item.readonly)
+      })
 
-    let lm = new GtkSource.LanguageManager()
     let buff = this.text.get_buffer() as GtkSource.Buffer
-    buff.set_language(lm.get_language("xml"))
+    let lang = new GtkSource.LanguageManager()
+    buff.set_language(lang.get_language("xml"))
+
     return panes
   }
 
   /**
-    * show the current selected row
+    * show the GResource xml
    */
   onSelectionChanged() {  
     let [isSelected, model, iter] = super.onSelectionChanged()

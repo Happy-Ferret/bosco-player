@@ -2,7 +2,7 @@ node_modules
 .bzr
 *~
 *.AppImage
-install
+install/
 build_dir
 # Compiled source #
 ###################

@@ -47,19 +47,23 @@ export class Project  {
     return Array.isArray(this.data[key])
   }
 
+  isNull(key) {
+    return this.data[key] ==  null
+  }
+
   count(key) {
     return this.data[key].length
   }
 
-  get(key, i) {
+  get(key: string, i:number=null) {
     if (i == null) {
-      return this.data[key].value
+      return Array.isArray(this.data[key]) ? this.data[key] : this.data[key].value
     } else {
       return this.data[key][i].value
     }
   }
 
-  readonly(key, i) {
+  readonly(key:string, i:number=null) {
     if (i == null) {
       return this.data[key].readonly
     } else {

@@ -3,6 +3,7 @@ import * as GObject from 'GObject'
 import * as Pango from 'Pango'
 import * as GtkSource from 'GtkSource'
 import {PlayerWindow} from 'PlayerWindow'
+import {Project} from 'Project'
 /**
  *
  * Abstract Class ProjectViewer - 
@@ -13,7 +14,7 @@ import {PlayerWindow} from 'PlayerWindow'
  */
 export abstract class NotebookTab {
 
-  prj: any
+  prj: Project
   id: number
   status: Gtk.Statusbar
   listStore: Gtk.ListStore
@@ -74,9 +75,6 @@ export abstract class NotebookTab {
 
     this.text = GtkSource.View.new_with_buffer(new GtkSource.Buffer())
     this.text.set_show_line_numbers(true)
-  
-    let text = ""
-    this.text.get_buffer().set_text(text, text.length)
 
     let css = new Gtk.CssProvider()
     css.load_from_data("* { font-family: Dejavu;  font-size: large }")
@@ -92,7 +90,7 @@ export abstract class NotebookTab {
     /** make the right pane */
     this.rightPane = new Gtk.Box()
     this.rightScroll = new Gtk.ScrolledWindow({
-      hscrollbar_policy: Gtk.PolicyType.NEVER,
+      hscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
       vscrollbar_policy: Gtk.PolicyType.AUTOMATIC
     })
     

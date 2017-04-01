@@ -13,20 +13,26 @@ export class SourceTab extends NotebookTab {
 
   buildUI() {
     let panes = super.buildUI()
-    if (this.prj.data.gresource != null) 
-      for (let item of this.prj.data.vala_source) 
-            this.add(item.value, "", item.readonly)
+    if (!this.prj.isNull('vala_source'))
+      this.prj.get('vala_source').forEach((item, i) => {
+        this.add(item.value, '', item.readonly)
+      })
 
-    let lm = new GtkSource.LanguageManager()
     let buff = this.text.get_buffer() as GtkSource.Buffer
-    buff.set_language(lm.get_language("vala"))
+    let lang = new GtkSource.LanguageManager()
+    buff.set_language(lang.get_language("vala"))
     return panes
   }
+
+  /**
+    * show the Vala source code
+   */
   onSelectionChanged() {  
     let [isSelected, model, iter] = super.onSelectionChanged()
 
     if (isSelected) {
       let text = String(Util.readFile(`${this.prj.path}/src/${model.get_value(iter, 0)}` ))
+      // this.text['buffer']['text'] = text
       this.text.get_buffer().set_text(text, text.length)
     }
 
