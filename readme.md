@@ -2,6 +2,13 @@
 
 Gtk application written with TypeScript
 
+## status
+An experiment using typescript with Gtk to create a standard desktop app.
+
+bosco displays autovala data for a project.
+
+
+
 ### build
 
 I use vscode. ctrl-b to build, f5 to run
